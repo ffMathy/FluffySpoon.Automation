@@ -7,17 +7,13 @@ using FluffySpoon.Automation.Web.Fluent;
 
 namespace FluffySpoon.Automation.Web
 {
-    public class WebAutomationEngine : IWebAutomationEngine
+    class WebAutomationEngine : IWebAutomationEngine
     {
         private readonly IMethodChainContextFactory _methodChainContextFactory;
         private readonly ICollection<IMethodChainContext> _pendingQueues;
 
-        public WebAutomationEngine() : this(
-            new MethodChainContextFactory())
-        {
-        }
-
-        public WebAutomationEngine(IMethodChainContextFactory methodChainContextFactory)
+        public WebAutomationEngine(
+			IMethodChainContextFactory methodChainContextFactory)
         {
             _pendingQueues = new HashSet<IMethodChainContext>();
 
@@ -29,7 +25,7 @@ namespace FluffySpoon.Automation.Web
             return Task.WhenAll(_pendingQueues.Select(x => x.RunAllAsync())).GetAwaiter();
         }
 
-        public Task ExecuteAsync(IWebAutomationTechnology technology)
+        public Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
             return Task.CompletedTask;
         }

@@ -18,12 +18,12 @@ namespace FluffySpoon.Automation.Web.Fluent
             return MethodChainContext.GetAwaiter();
         }
 
-        public async Task ExecuteAsync(IWebAutomationTechnology technology)
+        public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
-            await OnExecuteAsync(technology);
+            await OnExecuteAsync(framework);
         }
 
-        protected virtual Task OnExecuteAsync(IWebAutomationTechnology technology)
+        protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
             return Task.CompletedTask;
         }

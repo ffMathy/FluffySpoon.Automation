@@ -1,17 +1,20 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
     class MethodChainContextFactory: IMethodChainContextFactory
     {
-        public MethodChainContextFactory()
+		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
+
+		public MethodChainContextFactory(IEnumerable<IWebAutomationFrameworkInstance> frameworks)
         {
-            
-        }
+			_frameworks = frameworks;
+		}
 
         public IMethodChainContext Create()
         {
-            return new MethodChainContext();
+            return new MethodChainContext(_frameworks);
         }
     }
 }

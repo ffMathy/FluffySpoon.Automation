@@ -7,16 +7,16 @@ namespace FluffySpoon.Automation.Web.Fluent
 {
     class MethodChainContext : IMethodChainContext
     {
-        private readonly IEnumerable<IWebAutomationTechnology> _technologies;
+        private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
 
         private readonly Queue<IBaseMethodChainNode> _pendingNodesToRun;
 
         public MethodChainContext(
-            IEnumerable<IWebAutomationTechnology> technologies)
+            IEnumerable<IWebAutomationFrameworkInstance> frameworks)
         {
             _pendingNodesToRun = new Queue<IBaseMethodChainNode>();
             
-            _technologies = technologies;
+            _frameworks = frameworks;
         }
 
         public async Task RunAllAsync()
@@ -28,7 +28,7 @@ namespace FluffySpoon.Automation.Web.Fluent
         public async Task RunNextAsync()
         {
             var next = _pendingNodesToRun.Dequeue();
-            await Task.WhenAll(_technologies.Select(next.ExecuteAsync));
+            await Task.WhenAll(_frameworks.Select(next.ExecuteAsync));
         }
 
         public TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : IBaseMethodChainNode
