@@ -5,17 +5,17 @@ namespace FluffySpoon.Automation.Web.Fluent
 {
     abstract class BaseMethodChainNode : IBaseMethodChainNode
     {
-        protected readonly IMethodChainQueue MethodChainQueue;
+        protected readonly IMethodChainContext MethodChainContext;
 
         public BaseMethodChainNode(
-            IMethodChainQueue methodChainQueue)
+            IMethodChainContext methodChainContext)
         {
-            MethodChainQueue = methodChainQueue;
+            MethodChainContext = methodChainContext;
         }
 
         public TaskAwaiter GetAwaiter()
         {
-            return MethodChainQueue.RunAllAsync().GetAwaiter();
+            return MethodChainContext.GetAwaiter();
         }
 
         public async Task ExecuteAsync(IWebAutomationTechnology technology)

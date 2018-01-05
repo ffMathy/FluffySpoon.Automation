@@ -5,7 +5,5 @@ namespace FluffySpoon.Automation.Web
 {
     public interface IWebAutomationEngine: IDefaultMethodChainNode
     {
-        void Configure(IEnumerable<IWebAutomationTechnology> technologies);
-        void Configure(IWebAutomationTechnology technology);
     }
 }

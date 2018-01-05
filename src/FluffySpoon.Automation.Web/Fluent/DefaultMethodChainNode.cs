@@ -6,14 +6,14 @@ namespace FluffySpoon.Automation.Web.Fluent
     {
 
         public DefaultMethodChainNode(
-            IMethodChainQueue methodChainQueue) : base(methodChainQueue)
+            IMethodChainContext methodChainContext) : base(methodChainContext)
         {
         }
 
         public IOpenMethodChainNode Open(string uri)
         {
-            return MethodChainQueue.Enqueue(new OpenMethodChainNode(
-                MethodChainQueue,
+            return MethodChainContext.Enqueue(new OpenMethodChainNode(
+                MethodChainContext,
                 uri));
         }
 
@@ -34,8 +34,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 
         public IEnterMethodChainNode Enter(string text)
         {
-            return MethodChainQueue.Enqueue(new EnterMethodChainNode(
-                MethodChainQueue,
+            return MethodChainContext.Enqueue(new EnterMethodChainNode(
+                MethodChainContext,
                 text));
         }
 

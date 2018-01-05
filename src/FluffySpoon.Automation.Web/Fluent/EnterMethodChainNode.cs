@@ -5,17 +5,17 @@
         public string TextToEnter { get; }
 
         public EnterMethodChainNode(
-            IMethodChainQueue methodChainQueue,
-            string text) : base(methodChainQueue)
+            IMethodChainContext methodChainContext,
+            string text) : base(methodChainContext)
         {
             TextToEnter = text;
         }
 
         public IDefaultMethodChainNode In(string selector)
         {
-            return MethodChainQueue.Enqueue(new EnterInMethodChainNode(
+            return MethodChainContext.Enqueue(new EnterInMethodChainNode(
                 this,
-                MethodChainQueue,
+                MethodChainContext,
                 selector));
         }
 

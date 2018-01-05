@@ -9,31 +9,19 @@ namespace FluffySpoon.Automation.Web
 {
     public class WebAutomationEngine : IWebAutomationEngine
     {
-        private readonly IMethodChainQueueFactory _methodChainQueueFactory;
-        private readonly ICollection<IMethodChainQueue> _pendingQueues;
-
-        private IEnumerable<IWebAutomationTechnology> _technologies;
+        private readonly IMethodChainContextFactory _methodChainContextFactory;
+        private readonly ICollection<IMethodChainContext> _pendingQueues;
 
         public WebAutomationEngine() : this(
-            new MethodChainQueueFactory())
+            new MethodChainContextFactory())
         {
         }
 
-        public WebAutomationEngine(IMethodChainQueueFactory methodChainQueueFactory)
+        public WebAutomationEngine(IMethodChainContextFactory methodChainContextFactory)
         {
-            _pendingQueues = new HashSet<IMethodChainQueue>();
+            _pendingQueues = new HashSet<IMethodChainContext>();
 
-            _methodChainQueueFactory = methodChainQueueFactory;
-        }
-
-        public void Configure(IWebAutomationTechnology technology)
-        {
-            Configure(new[] { technology });
-        }
-
-        public void Configure(IEnumerable<IWebAutomationTechnology> technologies)
-        {
-            _technologies = technologies;
+            _methodChainContextFactory = methodChainContextFactory;
         }
 
         public TaskAwaiter GetAwaiter()
@@ -48,15 +36,16 @@ namespace FluffySpoon.Automation.Web
 
         public IOpenMethodChainNode Open(string uri)
         {
-            var methodChainQueue = _methodChainQueueFactory.Create();
+            var methodChainQueue = CreateNewQueue();
             return methodChainQueue
                 .Enqueue(new OpenMethodChainNode(
-                    ));
+                    methodChainQueue,
+                    uri));
         }
 
         public IOpenMethodChainNode Open(Uri uri)
         {
-            throw new NotImplementedException();
+            return Open(uri.ToString());
         }
 
         public ISelectMethodChainNode Select(string value)
@@ -71,9 +60,21 @@ namespace FluffySpoon.Automation.Web
 
         public IEnterMethodChainNode Enter(string text)
         {
-            throw new NotImplementedException();
+            var methodChainQueue = CreateNewQueue();
+            return methodChainQueue
+                .Enqueue(new EnterMethodChainNode(
+                    methodChainQueue,
+                    text));
         }
 
         public IExpectMethodChainNode Expect { get; }
+
+        private IMethodChainContext CreateNewQueue()
+        {
+            var methodChainQueue = _methodChainContextFactory.Create();
+            _pendingQueues.Add(methodChainQueue);
+
+            return methodChainQueue;
+        }
     }
 }
