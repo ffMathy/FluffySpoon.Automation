@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -52,29 +53,28 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code)
 		{
-			var domElements = new List<IDomElement>();
-
 			var scriptExecutor = GetScriptExecutor();
 
-			var seleniumElements = (IReadOnlyList<IWebElement>)scriptExecutor.ExecuteScript(code);
-			foreach (var seleniumElement in seleniumElements) {
-				var elementTagString = seleniumElement.GetAttribute(_uniqueSelectorAttribute);
-				if (elementTagString == null)
-				{
-					elementTagString = Guid.NewGuid().ToString();
-					scriptExecutor.ExecuteScript(
-						"arguments[0].setAttribute(arguments[1], arguments[2]);",
-						seleniumElement,
-						_uniqueSelectorAttribute,
-						elementTagString);
-				}
+			var watch = new Stopwatch();
+			watch.Start();
 
-				var inlinedElementTagString = PrepareCssSelectorForInlining(elementTagString);
-				domElements.Add(_domElementFactory.Create(
-					"[" + _uniqueSelectorAttribute + "='" + inlinedElementTagString + "']"));
-			}
+			var prefix = Guid.NewGuid().ToString();
+			var tags = (IReadOnlyList<object>)scriptExecutor.ExecuteScript(@"
+				return (function() { 
+					var elements=(function() {" + code + @"})(); 
+					var tags=[];
+					for(var i=0;i<elements.length;i++) {
+						tags.push(elements[i].getAttribute('" + _uniqueSelectorAttribute + @"')||'" + prefix + @"-'+i);
+						elements[i].setAttribute('" + _uniqueSelectorAttribute + @"',tags[tags.length-1]);
+					}
+					return tags;
+	 			})()");
+				
+			watch.Stop();
 
-			return domElements;
+			return tags
+				.Select(x => _domElementFactory.Create("[" + _uniqueSelectorAttribute + "='" + x.ToString() + "']"))
+				.ToArray();
 		}
 
 		public Task<string> EvaluateJavaScriptAsync(string code)
@@ -91,7 +91,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 			var navigatedWaitHandle = new SemaphoreSlim(0);
 
-			void DriverNavigated(object sender, WebDriverNavigationEventArgs e) {
+			void DriverNavigated(object sender, WebDriverNavigationEventArgs e)
+			{
 				_driver.Navigated -= DriverNavigated;
 				if (e.Url == uri)
 					navigatedWaitHandle.Release();
@@ -113,17 +114,19 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return scriptExecutor;
 		}
 
-		private static string PrepareCssSelectorForInlining(string selector)
-		{
-			return selector.Replace("'", "\\'");
-		}
-
 		private async Task<IReadOnlyList<IWebElement>> GetElementsFromSelectorAsync(string selector)
 		{
+			var watch = new Stopwatch();
+			watch.Start();
+
 			var domElements = await _domSelectorStrategy.GetDomElementsAsync(selector);
-			return domElements
+			var seleniumElements = domElements
 				.Select(e => _driver.FindElement(By.CssSelector(e.CssSelector)))
 				.ToArray();
+			
+			watch.Stop();
+
+			return seleniumElements;
 		}
 	}
 }

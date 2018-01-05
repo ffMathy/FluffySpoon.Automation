@@ -38,7 +38,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 				return;
 
 			var jQueryScriptContents = await _webClient.GetAsync(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
-			await _framework.EvaluateJavaScriptAsync(_uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict();");
+			await _framework.EvaluateJavaScriptAsync(_uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()");
 		}
 
 		private async Task<bool> IsJQueryScriptIncluded()
