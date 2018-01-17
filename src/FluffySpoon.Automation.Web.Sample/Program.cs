@@ -19,7 +19,9 @@ namespace FluffySpoon.Automation.Web.Sample
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver());
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
+
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
+				await automationEngine.InitializeAsync();
 
 				await automationEngine
 					.Open("https://google.com")

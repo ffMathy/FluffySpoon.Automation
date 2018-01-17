@@ -8,7 +8,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 		public static void UseJQueryDomSelector(this ServiceCollection services)
 		{
 			services.UseFluffySpoonAutomationWeb();
-			services.AddTransient<IDomSelectorStrategyFactory, JQueryDomSelectorStrategyFactory>();
+			services.AddSingleton<IDomSelectorStrategy, JQueryDomSelectorStrategy>();
 		}
 	}
 }

@@ -25,14 +25,21 @@ namespace FluffySpoon.Automation.Web
     class WebAutomationEngine : IWebAutomationEngine
     {
         private readonly IMethodChainContextFactory _methodChainContextFactory;
-        private readonly ICollection<IMethodChainContext> _pendingQueues;
+		private readonly IDomSelectorStrategy _domSelectorStrategy;
 
-        public WebAutomationEngine(
-			IMethodChainContextFactory methodChainContextFactory)
+		private readonly ICollection<IMethodChainContext> _pendingQueues;
+
+		private bool _isInitialized;
+		private bool _isInitializing;
+
+		public WebAutomationEngine(
+			IMethodChainContextFactory methodChainContextFactory,
+			IDomSelectorStrategy domSelectorStrategy)
         {
             _pendingQueues = new HashSet<IMethodChainContext>();
 
             _methodChainContextFactory = methodChainContextFactory;
+			_domSelectorStrategy = domSelectorStrategy;
         }
 
         public TaskAwaiter GetAwaiter()
@@ -40,12 +47,23 @@ namespace FluffySpoon.Automation.Web
             return Task.WhenAll(_pendingQueues.Select(x => x.RunAllAsync())).GetAwaiter();
         }
 
-        public Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
+        public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
-            return Task.CompletedTask;
+			await this;
         }
+		
+		public async Task InitializeAsync()
+		{
+			if (_isInitializing || _isInitialized)
+				throw new InvalidOperationException("Can't call initialize twice.");
+				
+			_isInitializing = true;
+			await _domSelectorStrategy.InitializeAsync();
+			_isInitialized = true;
+			_isInitializing = false;
+		}
 
-        public IOpenMethodChainNode Open(string uri)
+		public IOpenMethodChainNode Open(string uri)
         {
             return StartNewSession(new OpenMethodChainNode(uri));
         }
@@ -254,7 +272,14 @@ namespace FluffySpoon.Automation.Web
 
 		public IMethodChainContext MethodChainContext { set => throw new NotImplementedException("The method chain context can't be set on the web automation engine."); }
 
-		private TMethodChainNode StartNewSession<TMethodChainNode>(TMethodChainNode nodeToStart) where TMethodChainNode : IBaseMethodChainNode {
+		private TMethodChainNode StartNewSession<TMethodChainNode>(TMethodChainNode nodeToStart) where TMethodChainNode : IBaseMethodChainNode 
+		{
+			if (_isInitializing) 
+				throw new InvalidOperationException("The web automation engine is not done initializing yet. Remember to await the " + nameof(InitializeAsync) + " call.");
+
+			if (!_isInitialized)
+				throw new InvalidOperationException("Can't automate anything when the web engine is not initialized yet. Call " + nameof(InitializeAsync) + " first.");
+
 			return CreateNewQueue().Enqueue(nodeToStart);
 		}
 

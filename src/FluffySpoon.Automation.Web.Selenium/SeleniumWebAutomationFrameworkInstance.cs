@@ -117,7 +117,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private async Task<IReadOnlyList<IWebElement>> GetElementsFromSelectorAsync(string selector)
 		{
-			var domElements = await _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
+			var domElements = await FindDomElementsAsync(selector);
 			var seleniumElements = domElements
 				.Select(e => _driver.FindElement(By.CssSelector(e.CssSelector)))
 				.ToArray();
