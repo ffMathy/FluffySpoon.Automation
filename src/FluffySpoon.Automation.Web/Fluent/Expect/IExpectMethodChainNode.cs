@@ -1,5 +1,13 @@
 ﻿using System;
 using FluffySpoon.Automation.Web.Dom;
+using FluffySpoon.Automation.Web.Fluent.Expect.Class;
+using FluffySpoon.Automation.Web.Fluent.Expect.Count;
+using FluffySpoon.Automation.Web.Fluent.Expect.Exists;
+using FluffySpoon.Automation.Web.Fluent.Expect.Text;
+using FluffySpoon.Automation.Web.Fluent.Expect.Uri;
+using FluffySpoon.Automation.Web.Fluent.Expect.Value;
+
+using SystemUri = System.Uri;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect
 {
@@ -7,14 +15,16 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect
     {
         IExpectTextMethodChainNode Text(string text);
 
-        IExpectUrlMethodChainNode Url(string url);
-        IExpectUrlMethodChainNode Url(Func<Uri, bool> predicate);
+        IExpectUriMethodChainNode Uri(string uri);
+        IExpectUriMethodChainNode Uri(SystemUri uri);
+		IExpectUriMethodChainNode Uri(Func<SystemUri, bool> predicate);
 
         IExpectClassMethodChainNode Class(string className);
-        
-        IExpectCountMethodChainNode Count(int count);
-        
-        IExpectExistsMethodChainNode Exists(string selector);
+        IExpectClassMethodChainNode Class(Func<string> classNamePredicate);
+
+		IExpectCountMethodChainNode Count(int count);
+
+		IExpectExistsMethodChainNode Exists(string selector);
         IExpectExistsMethodChainNode Exists(IDomElement element);
         
         IExpectValueMethodChainNode Value(int value);

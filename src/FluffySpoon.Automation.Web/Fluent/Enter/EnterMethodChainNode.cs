@@ -6,9 +6,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
     {
         internal string TextToEnter { get; }
 
-        public EnterMethodChainNode(
-            IMethodChainContext methodChainContext,
-            string text) : base(methodChainContext)
+        public EnterMethodChainNode(string text)
         {
             TextToEnter = text;
         }
@@ -17,7 +15,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
         {
             return MethodChainContext.Enqueue(new EnterInMethodChainNode(
                 this,
-                MethodChainContext,
                 selector));
         }
 

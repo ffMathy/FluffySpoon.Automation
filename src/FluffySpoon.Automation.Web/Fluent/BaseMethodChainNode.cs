@@ -1,16 +1,23 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
     abstract class BaseMethodChainNode : IBaseMethodChainNode
     {
-        protected readonly IMethodChainContext MethodChainContext;
+		private Task _currentExecutionTask;
 
-        public BaseMethodChainNode(
-            IMethodChainContext methodChainContext)
+		private readonly SemaphoreSlim _executeSemaphore;
+		
+        public IMethodChainContext MethodChainContext {
+			protected get;
+			set;
+		}
+
+        public BaseMethodChainNode()
         {
-            MethodChainContext = methodChainContext;
+			_executeSemaphore = new SemaphoreSlim(1);
         }
 
         public TaskAwaiter GetAwaiter()
@@ -19,11 +26,21 @@ namespace FluffySpoon.Automation.Web.Fluent
         }
 
         public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
-        {
-            await OnExecuteAsync(framework);
-        }
+		{
+			await _executeSemaphore.WaitAsync();
+			await ExecuteCachedAsync(framework);
+			_executeSemaphore.Release(1);
+		}
 
-        protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		private Task ExecuteCachedAsync(IWebAutomationFrameworkInstance framework)
+		{
+			if (_currentExecutionTask != null)
+				return _currentExecutionTask;
+
+			return _currentExecutionTask = OnExecuteAsync(framework);
+		}
+
+		protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
             return Task.CompletedTask;
         }

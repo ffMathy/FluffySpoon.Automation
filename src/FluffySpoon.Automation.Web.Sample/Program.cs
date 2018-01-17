@@ -23,8 +23,14 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				await automationEngine
 					.Open("https://google.com")
-					.Enter("foobar")
-					.In("input[type=text]");
+					.Enter("foobar").In("input[type=text]")
+					.Expect
+					.Exists(".lsb");
+
+				await automationEngine
+					.Click(".lsb")
+					.Expect
+					.Count(10).Of(".g");
 			}
 			catch (Exception ex) {
 				await Console.Error.WriteLineAsync(ex.ToString());
@@ -39,7 +45,8 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				Proxy = null,
 				PageLoadStrategy = PageLoadStrategy.Normal,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+				
 			});
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
 			return chromeDriver;

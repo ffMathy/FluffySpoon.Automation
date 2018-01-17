@@ -6,9 +6,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Open
 	{
         private readonly string _url;
 
-        public OpenMethodChainNode(
-            IMethodChainContext methodChainContext,
-            string url) : base(methodChainContext)
+        public OpenMethodChainNode(string url)
         {
             _url = url;
         }

@@ -22,7 +22,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 		private readonly string _uniqueSelectorAttribute;
 
 		public SeleniumWebAutomationFrameworkInstance(
-			IDomSelectorStrategyFactory domSelectorStrategyFactory,
+			IDomSelectorStrategy domSelectorStrategy,
 			IDomElementFactory domElementFactory,
 			IWebDriver driver)
 		{
@@ -30,7 +30,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_semaphore = new SemaphoreSlim(1);
 
 			_domElementFactory = domElementFactory;
-			_domSelectorStrategy = domSelectorStrategyFactory.Create(this);
+			_domSelectorStrategy = domSelectorStrategy;
 
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
 		}
@@ -54,10 +54,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code)
 		{
 			var scriptExecutor = GetScriptExecutor();
-
-			var watch = new Stopwatch();
-			watch.Start();
-
+			
 			var prefix = Guid.NewGuid().ToString();
 			var tags = (IReadOnlyList<object>)scriptExecutor.ExecuteScript(@"
 				return (function() { 
@@ -69,8 +66,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 					}
 					return tags;
 	 			})()");
-				
-			watch.Stop();
 
 			return tags
 				.Select(x => _domElementFactory.Create("[" + _uniqueSelectorAttribute + "='" + x.ToString() + "']"))
@@ -83,6 +78,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var result = scriptExecutor.ExecuteScript(code);
 
 			return Task.FromResult(result?.ToString());
+		}
+
+		public async Task<IReadOnlyList<IDomElement>> FindDomElementsAsync(string selector)
+		{
+			return await EvaluateJavaScriptAsDomElementsAsync(
+				_domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector));
 		}
 
 		public async Task OpenAsync(string uri)
@@ -116,16 +117,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private async Task<IReadOnlyList<IWebElement>> GetElementsFromSelectorAsync(string selector)
 		{
-			var watch = new Stopwatch();
-			watch.Start();
-
-			var domElements = await _domSelectorStrategy.GetDomElementsAsync(selector);
+			var domElements = await _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
 			var seleniumElements = domElements
 				.Select(e => _driver.FindElement(By.CssSelector(e.CssSelector)))
 				.ToArray();
 			
-			watch.Stop();
-
 			return seleniumElements;
 		}
 	}

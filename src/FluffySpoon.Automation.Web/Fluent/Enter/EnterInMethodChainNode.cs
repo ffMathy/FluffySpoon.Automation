@@ -10,8 +10,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 
         public EnterInMethodChainNode(
             EnterMethodChainNode parentNode,
-            IMethodChainContext methodChainContext, 
-            string selector) : base(methodChainContext)
+            string selector)
         {
             _parentNode = parentNode;
             _selector = selector;

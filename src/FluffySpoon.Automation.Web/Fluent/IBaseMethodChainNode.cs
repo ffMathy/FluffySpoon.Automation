@@ -4,6 +4,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 {
     public interface IBaseMethodChainNode: IAwaitable
     {
-        Task ExecuteAsync(IWebAutomationFrameworkInstance framework);
+		IMethodChainContext MethodChainContext { set; }
+
+		Task ExecuteAsync(IWebAutomationFrameworkInstance framework);
     }
 }
