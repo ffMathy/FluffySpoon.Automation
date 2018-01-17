@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(new ChromeDriver(Environment.CurrentDirectory));
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver());
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
@@ -22,11 +23,24 @@ namespace FluffySpoon.Automation.Web.Sample
 					.Open("https://google.com")
 					.Enter("foobar")
 					.In("input[type=text]");
-			} catch(Exception ex) {
+			}
+			catch (Exception ex) {
 				await Console.Error.WriteLineAsync(ex.ToString());
 			}
 
 			Console.ReadLine();
         }
-    }
+
+		private static ChromeDriver GetChromeDriver()
+		{
+			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions()
+			{
+				Proxy = null,
+				PageLoadStrategy = PageLoadStrategy.Normal,
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+			});
+			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+			return chromeDriver;
+		}
+	}
 }
