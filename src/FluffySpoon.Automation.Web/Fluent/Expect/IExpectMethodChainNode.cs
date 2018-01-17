@@ -1,7 +1,7 @@
 ﻿using System;
 using FluffySpoon.Automation.Web.Dom;
 
-namespace FluffySpoon.Automation.Web.Fluent
+namespace FluffySpoon.Automation.Web.Fluent.Expect
 {
     public interface IExpectMethodChainNode: IBaseMethodChainNode
     {

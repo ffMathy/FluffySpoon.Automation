@@ -1,8 +1,7 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.JQuery;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FluffySpoon.Automation.Web
+namespace FluffySpoon.Automation.Web.JQuery
 {
 	public static class JQueryRegistrationExtensions
 	{

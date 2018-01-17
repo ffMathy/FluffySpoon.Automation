@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FluffySpoon.Automation.Web.Fluent
+namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
     class EnterInMethodChainNode: DefaultMethodChainNode
     {

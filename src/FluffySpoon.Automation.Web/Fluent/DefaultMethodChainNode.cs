@@ -1,4 +1,8 @@
 ﻿using System;
+using FluffySpoon.Automation.Web.Fluent.Enter;
+using FluffySpoon.Automation.Web.Fluent.Expect;
+using FluffySpoon.Automation.Web.Fluent.Open;
+using FluffySpoon.Automation.Web.Fluent.Select;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
