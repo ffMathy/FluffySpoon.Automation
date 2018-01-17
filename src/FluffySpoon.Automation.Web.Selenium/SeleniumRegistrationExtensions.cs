@@ -1,9 +1,8 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Selenium;
 using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium;
 
-namespace FluffySpoon.Automation.Web
+namespace FluffySpoon.Automation.Web.Selenium
 {
 	public static class SeleniumRegistrationExtensions
 	{

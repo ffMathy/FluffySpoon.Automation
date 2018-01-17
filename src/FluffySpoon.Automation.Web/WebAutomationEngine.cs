@@ -4,6 +4,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Fluent;
+using FluffySpoon.Automation.Web.Fluent.Enter;
+using FluffySpoon.Automation.Web.Fluent.Expect;
+using FluffySpoon.Automation.Web.Fluent.Open;
+using FluffySpoon.Automation.Web.Fluent.Select;
 
 namespace FluffySpoon.Automation.Web
 {

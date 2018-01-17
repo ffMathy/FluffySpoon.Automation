@@ -3,6 +3,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.JQuery;
+using FluffySpoon.Automation.Web.Selenium;
 
 namespace FluffySpoon.Automation.Web.Sample
 {

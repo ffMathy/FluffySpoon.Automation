@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FluffySpoon.Automation.Web.Fluent
+namespace FluffySpoon.Automation.Web.Fluent.Open
 {
     class OpenMethodChainNode: DefaultMethodChainNode, IOpenMethodChainNode
 	{

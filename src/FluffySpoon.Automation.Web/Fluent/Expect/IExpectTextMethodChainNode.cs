@@ -1,6 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 
-namespace FluffySpoon.Automation.Web.Fluent
+namespace FluffySpoon.Automation.Web.Fluent.Expect
 {
     public interface IExpectTextMethodChainNode: IBaseMethodChainNode
     {
