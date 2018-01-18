@@ -6,6 +6,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
@@ -21,7 +22,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 	{
 		protected TNextMethodChainNode Delegate(IReadOnlyCollection<IDomElement> elements)
 		{
-			throw new NotImplementedException();
+			return Delegate(elements
+				.Select(x => x.CssSelector)
+				.Aggregate((a, b) => a + ", " + b));
 		}
 
 		public TNextMethodChainNode In(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);

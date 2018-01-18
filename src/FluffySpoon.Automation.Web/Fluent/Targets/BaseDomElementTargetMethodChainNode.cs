@@ -21,14 +21,16 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 	{
 		protected TNextMethodChainNode Delegate(string selector)
 		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new TNextMethodChainNode(
+				this,
+				selector));
 		}
 
 		protected TNextMethodChainNode Delegate(IDomElement element)
 		{
-			throw new NotImplementedException();
+			return In(new[] { element });
 		}
-		
+
 		public TNextMethodChainNode In(string selector) => Delegate(selector);
 		public TNextMethodChainNode In(IDomElement element) => Delegate(element);
 		

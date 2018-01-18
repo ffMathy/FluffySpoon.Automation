@@ -14,24 +14,5 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
         {
             TextToEnter = text;
         }
-
-        public IEnterInTargetMethodChainNode In(string selector)
-        {
-            return MethodChainContext.Enqueue(new EnterInMethodChainNode(
-                this,
-                selector));
-        }
-
-        public IEnterInTargetMethodChainNode In(IDomElement element)
-        {
-            return In(new[] { element });
-        }
-
-		public IEnterInTargetMethodChainNode In(IReadOnlyCollection<IDomElement> elements)
-		{
-			return In(elements
-				.Select(x => x.CssSelector)
-				.Aggregate((a, b) => a + ", " + b));
-		}
 	}
 }
