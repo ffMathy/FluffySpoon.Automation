@@ -1,10 +1,8 @@
-﻿using FluffySpoon.Automation.Web.Dom;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets.In;
 
 namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
-    public interface IEnterMethodChainNode : IBaseMethodChainNode
+	public interface IEnterMethodChainNode : IDomElementInTargetsMethodChainNode<IEnterInTargetMethodChainNode>
     {
-        IDefaultMethodChainNode In(string selector);
-        IDefaultMethodChainNode In(IDomElement element);
-    }
+	}
 }

@@ -1,7 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Http;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.JQuery

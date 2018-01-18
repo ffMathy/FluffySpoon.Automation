@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using FluffySpoon.Automation.Web.Exceptions;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
@@ -14,14 +11,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 			_selector = selector;
 		}
 
-		public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
+		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			var elements = await framework.FindDomElementsAsync(_selector); 
-		}
-
-		public TaskAwaiter GetAwaiter()
-		{
-			throw new NotImplementedException();
+			var elements = await framework.FindDomElementsAsync(_selector);
+			if (elements.Count == 0)
+				throw ExpectationNotMetException.FromMethodChainNode(this, "No matching elements were found.");
 		}
 	}
 }

@@ -1,19 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using FluffySpoon.Automation.Web.Fluent.Root;
+using System;
+using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Open
 {
-    class OpenMethodChainNode: DefaultMethodChainNode, IOpenMethodChainNode
+    class OpenMethodChainNode: MethodChainRoot, IOpenMethodChainNode
 	{
-        private readonly string _url;
+        private readonly string _uri;
 
-        public OpenMethodChainNode(string url)
+        public OpenMethodChainNode(string uri)
         {
-            _url = url;
+            _uri = uri;
         }
 
-        protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
-            await framework.OpenAsync(_url);
+            await framework.OpenAsync(_uri);
             await base.OnExecuteAsync(framework);
         }
     }

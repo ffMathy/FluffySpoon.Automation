@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Expect.Class;
 using FluffySpoon.Automation.Web.Fluent.Expect.Count;
@@ -9,9 +10,9 @@ using FluffySpoon.Automation.Web.Fluent.Expect.Value;
 
 using SystemUri = System.Uri;
 
-namespace FluffySpoon.Automation.Web.Fluent.Expect
+namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
-    public interface IExpectMethodChainNode: IBaseMethodChainNode
+    public interface IExpectMethodChainRoot: IBaseMethodChainNode
     {
         IExpectTextMethodChainNode Text(string text);
 
@@ -26,8 +27,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect
 
 		IExpectExistsMethodChainNode Exists(string selector);
         IExpectExistsMethodChainNode Exists(IDomElement element);
-        
-        IExpectValueMethodChainNode Value(int value);
+        IExpectExistsMethodChainNode Exists(IReadOnlyCollection<IDomElement> elements);
+
+		IExpectValueMethodChainNode Value(int value);
         IExpectValueMethodChainNode Value(string value);
     }
 }

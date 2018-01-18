@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
-    public interface IExpectCountMethodChainNode : IBaseMethodChainNode
+	public interface IExpectCountMethodChainNode : IDomElementOfTargetsMethodChainNode<IExpectCountOfTargetsMethodChainRoot>
 	{
-		IExpectCountOfMethodChainNode Of(string selector);
     }
 }

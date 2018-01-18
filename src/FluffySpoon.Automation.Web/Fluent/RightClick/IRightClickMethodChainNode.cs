@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluffySpoon.Automation.Web.Fluent.RightClick
+﻿namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
-    public interface IRightClickMethodChainNode : IBaseMethodChainNode
+	public interface IRightClickMethodChainNode : IBaseMethodChainNode
     {
     }
 }

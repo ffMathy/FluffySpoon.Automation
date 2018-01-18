@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using FluffySpoon.Automation.Web.Fluent.Root;
+using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
-    class EnterInMethodChainNode: DefaultMethodChainNode
-    {
+    class EnterInMethodChainNode: MethodChainRoot, IEnterInTargetMethodChainNode
+	{
         private readonly EnterMethodChainNode _parentNode;
 
         private readonly string _selector;

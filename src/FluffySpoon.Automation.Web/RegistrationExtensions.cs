@@ -1,10 +1,9 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent;
+using FluffySpoon.Automation.Web.Fluent.Context;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FluffySpoon.Automation.Web
 {

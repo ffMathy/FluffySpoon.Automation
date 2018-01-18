@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-    public interface ITakeScreenshotMethodChainNode : IBaseMethodChainNode
+	public interface ITakeScreenshotMethodChainNode : IDomElementOfTargetMethodChainNode<ITakeTargetScreenshotMethodChainNode>
 	{
-    }
+	}
 }

@@ -1,6 +1,8 @@
-﻿namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
+﻿using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+
+namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
-	public interface IExpectCountOfMethodChainNode: IExpectMethodChainNode
+	public interface IExpectCountOfMethodChainNode: IExpectMethodChainRoot
 	{
 	}
 }

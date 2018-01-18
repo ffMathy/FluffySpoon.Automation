@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets.On;
 
 namespace FluffySpoon.Automation.Web.Fluent.Click
 {
-    public interface IClickMethodChainNode : IDefaultMethodChainNode
+	public interface IClickMethodChainNode : IBaseMethodChainNode, IMouseOnTargetsMethodChainNode<IClickTargetMethodChainNode>
 	{
     }
 }
