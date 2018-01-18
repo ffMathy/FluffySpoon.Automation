@@ -94,9 +94,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 			void DriverNavigated(object sender, WebDriverNavigationEventArgs e)
 			{
+				if (e.Url != uri) return;
+				
 				_driver.Navigated -= DriverNavigated;
-				if (e.Url == uri)
-					navigatedWaitHandle.Release();
+				EvaluateJavaScriptAsync(_domSelectorStrategy.InitialJavaScriptForEachPage)
+					.ContinueWith(_ => navigatedWaitHandle.Release(1));
 			}
 
 			_driver.Navigated += DriverNavigated;
