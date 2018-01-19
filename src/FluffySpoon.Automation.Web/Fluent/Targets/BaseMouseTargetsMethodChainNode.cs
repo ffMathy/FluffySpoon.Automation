@@ -10,38 +10,34 @@ using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseMouseTargetsMethodChainNode<TNextMethodChainNode> :
-		BaseMouseTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseInTargetsMethodChainNode<TNextMethodChainNode>,
-		IMouseOfTargetsMethodChainNode<TNextMethodChainNode>,
-		IMouseFromTargetsMethodChainNode<TNextMethodChainNode>,
-		IMouseOnTargetsMethodChainNode<TNextMethodChainNode>,
-		IMouseAtTargetsMethodChainNode<TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode
+	abstract class BaseMouseTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseMouseTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseOfTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseOnTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseAtTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
-		public TNextMethodChainNode Delegate(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY)
+		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public TNextMethodChainNode Delegate(IReadOnlyCollection<IDomElement> elements)
-		{
-			throw new NotImplementedException();
-		}
+		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
+		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 
-		public TNextMethodChainNode In(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
-		public TNextMethodChainNode In(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode Of(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
+		public TNextMethodChainNode Of(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 
-		public TNextMethodChainNode Of(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
-		public TNextMethodChainNode Of(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode From(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
+		public TNextMethodChainNode From(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 
-		public TNextMethodChainNode From(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
-		public TNextMethodChainNode From(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode On(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
+		public TNextMethodChainNode On(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 
-		public TNextMethodChainNode On(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
-		public TNextMethodChainNode On(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
-
-		public TNextMethodChainNode At(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
-		public TNextMethodChainNode At(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode At(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
+		public TNextMethodChainNode At(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 	}
 }

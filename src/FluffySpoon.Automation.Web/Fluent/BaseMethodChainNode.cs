@@ -11,10 +11,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 
 		private readonly SemaphoreSlim _executeSemaphore;
 		
-        public IMethodChainContext MethodChainContext {
-			protected get;
-			set;
-		}
+        public IMethodChainContext MethodChainContext { protected get; set; }
+		public IBaseMethodChainNode Parent { protected get; set; }
 
         public BaseMethodChainNode()
         {
@@ -45,5 +43,5 @@ namespace FluffySpoon.Automation.Web.Fluent
         {
             return Task.CompletedTask;
         }
-    }
+	}
 }

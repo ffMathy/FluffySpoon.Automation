@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
+using FluffySpoon.Automation.Web.Fluent;
 using FluffySpoon.Automation.Web.Fluent.Click;
 using FluffySpoon.Automation.Web.Fluent.Context;
 using FluffySpoon.Automation.Web.Fluent.DoubleClick;
@@ -19,6 +20,9 @@ using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Root;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.In;
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
+using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 using FluffySpoon.Automation.Web.Fluent.Wait;
 
@@ -61,8 +65,8 @@ namespace FluffySpoon.Automation.Web
 		}
 
 		public IExpectMethodChainRoot Expect => StartNewSession().Expect;
-		public ITakeScreenshotMethodChainNode TakeScreenshot => StartNewSession().TakeScreenshot;
-		public IClickMethodChainNode Click => StartNewSession().Click;
+		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => StartNewSession().TakeScreenshot;
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click => StartNewSession().Click;
 		public IDoubleClickMethodChainNode DoubleClick => StartNewSession().DoubleClick;
 		public IRightClickMethodChainNode RightClick => StartNewSession().RightClick;
 		public IHoverMethodChainNode Hover => StartNewSession().Hover;
@@ -81,7 +85,7 @@ namespace FluffySpoon.Automation.Web
 
 		public IUploadMethodChainNode Upload(string filePath) => StartNewSession().Upload(filePath);
 
-		public IEnterMethodChainNode Enter(string text) => StartNewSession().Enter(text);
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => StartNewSession().Enter(text);
 
 		private IMethodChainRoot StartNewSession()
 		{

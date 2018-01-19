@@ -38,15 +38,17 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_driver.Quit();
 			_driver.Dispose();
 		}
-
-		public async Task EnterTextInAsync(string text, string selector)
+		
+		public Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
-			var elements = await GetElementsFromSelectorAsync(selector);
-			foreach (var element in elements)
+			var nativeElements = GetWebDriverElementsFromDomElements(elements);
+			foreach (var nativeElement in nativeElements)
 			{
-				element.Clear();
-				element.SendKeys(text);
+				nativeElement.Clear();
+				nativeElement.SendKeys(text);
 			}
+
+			return Task.CompletedTask;
 		}
 
 		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code)
@@ -108,21 +110,20 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private IJavaScriptExecutor GetScriptExecutor()
 		{
-			var scriptExecutor = _driver as IJavaScriptExecutor;
-			if (scriptExecutor == null)
+			if (!(_driver is IJavaScriptExecutor scriptExecutor))
 				throw new InvalidOperationException("The given Selenium web driver does not support JavaScript execution.");
 
 			return scriptExecutor;
 		}
 
-		private async Task<IReadOnlyList<IWebElement>> GetElementsFromSelectorAsync(string selector)
+		private IWebElement[] GetWebDriverElementsFromDomElements(IReadOnlyList<IDomElement> domElements)
 		{
-			var domElements = await FindDomElementsAsync(selector);
-			var seleniumElements = domElements
-				.Select(e => _driver.FindElement(By.CssSelector(e.CssSelector)))
+			var selector = domElements
+				.Select(x => x.CssSelector)
+				.Aggregate((a, b) => $"{a}, {b}");
+			return _driver
+				.FindElements(By.CssSelector(selector))
 				.ToArray();
-			
-			return seleniumElements;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-	public interface ITakeTargetScreenshotMethodChainNode: IMethodChainRoot, IBaseMethodChainNode
+	public interface ITakeScreenshotOfTargetMethodChainNode: IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }

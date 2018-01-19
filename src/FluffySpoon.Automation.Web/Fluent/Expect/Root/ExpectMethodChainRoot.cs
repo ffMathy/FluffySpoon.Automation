@@ -7,6 +7,7 @@ using FluffySpoon.Automation.Web.Fluent.Expect.Exists;
 using FluffySpoon.Automation.Web.Fluent.Expect.Text;
 using FluffySpoon.Automation.Web.Fluent.Expect.Uri;
 using FluffySpoon.Automation.Web.Fluent.Expect.Value;
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
@@ -22,7 +23,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			throw new NotImplementedException();
 		}
 
-		public IExpectCountMethodChainNode Count(int count)
+		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainRoot> Count(int count)
 		{
 			throw new NotImplementedException();
 		}
@@ -37,7 +38,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			throw new NotImplementedException();
 		}
 
-		public IExpectExistsMethodChainNode Exists(IReadOnlyCollection<IDomElement> elements)
+		public IExpectExistsMethodChainNode Exists(IReadOnlyList<IDomElement> elements)
 		{
 			throw new NotImplementedException();
 		}

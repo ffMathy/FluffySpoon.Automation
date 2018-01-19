@@ -2,7 +2,9 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets.From
 {
-	public interface IDomElementFromTargetMethodChainNode<TNextMethodChainNode> : ITargetMethodChainNode where TNextMethodChainNode : IBaseMethodChainNode
+	public interface IDomElementFromTargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : ITargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TCurrentMethodChainNode : IBaseMethodChainNode
     {
 		TNextMethodChainNode From(string selector);
 		TNextMethodChainNode From(IDomElement element);

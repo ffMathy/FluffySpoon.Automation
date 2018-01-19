@@ -12,6 +12,9 @@ using FluffySpoon.Automation.Web.Fluent.Open;
 using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.In;
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
+using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 using FluffySpoon.Automation.Web.Fluent.Wait;
 
@@ -19,8 +22,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 {
 	public interface IMethodChainRoot
 	{
-		ITakeScreenshotMethodChainNode TakeScreenshot { get; }
-		IClickMethodChainNode Click { get; }
+		IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot { get; }
+		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click { get; }
 		IDoubleClickMethodChainNode DoubleClick { get; }
 		IRightClickMethodChainNode RightClick { get; }
 		IHoverMethodChainNode Hover { get; }
@@ -40,6 +43,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		IUploadMethodChainNode Upload(string filePath);
 
-        IEnterMethodChainNode Enter(string text);
+        IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text);
     }
 }

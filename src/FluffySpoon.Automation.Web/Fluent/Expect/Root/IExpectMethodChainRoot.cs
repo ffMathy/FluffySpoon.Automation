@@ -7,7 +7,7 @@ using FluffySpoon.Automation.Web.Fluent.Expect.Exists;
 using FluffySpoon.Automation.Web.Fluent.Expect.Text;
 using FluffySpoon.Automation.Web.Fluent.Expect.Uri;
 using FluffySpoon.Automation.Web.Fluent.Expect.Value;
-
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using SystemUri = System.Uri;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
@@ -23,11 +23,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
         IExpectClassMethodChainNode Class(string className);
         IExpectClassMethodChainNode Class(Func<string> classNamePredicate);
 
-		IExpectCountMethodChainNode Count(int count);
+		IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainRoot> Count(int count);
 
 		IExpectExistsMethodChainNode Exists(string selector);
         IExpectExistsMethodChainNode Exists(IDomElement element);
-        IExpectExistsMethodChainNode Exists(IReadOnlyCollection<IDomElement> elements);
+        IExpectExistsMethodChainNode Exists(IReadOnlyList<IDomElement> elements);
 
 		IExpectValueMethodChainNode Value(int value);
         IExpectValueMethodChainNode Value(string value);

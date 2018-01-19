@@ -11,26 +11,20 @@ using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseDomElementTargetsMethodChainNode<TNextMethodChainNode> :
-		BaseDomElementTargetMethodChainNode<TNextMethodChainNode>,
-		IDomElementInTargetsMethodChainNode<TNextMethodChainNode>,
-		IDomElementOfTargetsMethodChainNode<TNextMethodChainNode>,
-		IDomElementFromTargetsMethodChainNode<TNextMethodChainNode>,
-		IDomElementOnTargetsMethodChainNode<TNextMethodChainNode>,
-		IDomElementAtTargetsMethodChainNode<TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode
+	abstract class BaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementOfTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementOnTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementAtTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
-		protected TNextMethodChainNode Delegate(IReadOnlyCollection<IDomElement> elements)
-		{
-			return Delegate(elements
-				.Select(x => x.CssSelector)
-				.Aggregate((a, b) => a + ", " + b));
-		}
-
-		public TNextMethodChainNode In(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
-		public TNextMethodChainNode Of(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
-		public TNextMethodChainNode From(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
-		public TNextMethodChainNode On(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
-		public TNextMethodChainNode At(IReadOnlyCollection<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode Of(IReadOnlyList<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode From(IReadOnlyList<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode On(IReadOnlyList<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode At(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 	}
 }

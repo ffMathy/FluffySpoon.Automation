@@ -9,17 +9,17 @@ namespace FluffySpoon.Automation.Web
 {
 	public static class RegistrationExtensions
 	{
-		private static readonly HashSet<Func<IServiceProvider, IWebAutomationFrameworkInstance>> WebAutomationFrameworkInstanceConstructors;
+		private static readonly HashSet<Func<IServiceProvider, IWebAutomationFrameworkInstance>> webAutomationFrameworkInstanceConstructors;
 
 		static RegistrationExtensions()
 		{
-			WebAutomationFrameworkInstanceConstructors = new HashSet<Func<IServiceProvider, IWebAutomationFrameworkInstance>>();
+			webAutomationFrameworkInstanceConstructors = new HashSet<Func<IServiceProvider, IWebAutomationFrameworkInstance>>();
 		}
 
 		public static void AddWebAutomationFrameworkInstance(
 			Func<IServiceProvider, IWebAutomationFrameworkInstance> instanceConstructor)
 		{
-			WebAutomationFrameworkInstanceConstructors.Add(instanceConstructor);
+			webAutomationFrameworkInstanceConstructors.Add(instanceConstructor);
 		}
 
 		public static void UseFluffySpoonAutomationWeb(
@@ -29,7 +29,7 @@ namespace FluffySpoon.Automation.Web
 			services.AddTransient<IDomElementFactory, DomElementFactory>();
 			services.AddTransient<IMethodChainContextFactory, MethodChainContextFactory>();
 
-			services.AddTransient(provider => WebAutomationFrameworkInstanceConstructors.Select(constructor => constructor(provider)));
+			services.AddTransient(provider => webAutomationFrameworkInstanceConstructors.Select(constructor => constructor(provider)));
 		}
 	}
 }

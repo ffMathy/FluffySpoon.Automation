@@ -1,6 +1,8 @@
 ﻿namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	public interface ITargetMethodChainNode : IBaseMethodChainNode
+	public interface ITargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : IBaseMethodChainNode
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TCurrentMethodChainNode : IBaseMethodChainNode
     {
     }
 }

@@ -6,29 +6,38 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseDomElementTargetMethodChainNode<TNextMethodChainNode> :
+	abstract class BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
 		BaseMethodChainNode,
-		IDomElementInTargetMethodChainNode<TNextMethodChainNode>,
-		IDomElementOfTargetMethodChainNode<TNextMethodChainNode>,
-		IDomElementFromTargetMethodChainNode<TNextMethodChainNode>,
-		IDomElementOnTargetMethodChainNode<TNextMethodChainNode>,
-		IDomElementAtTargetMethodChainNode<TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode
+		IDomElementInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		protected TNextMethodChainNode Delegate(string selector)
 		{
-			return MethodChainContext.Enqueue(new TNextMethodChainNode(
-				this,
-				selector));
+			throw new NotImplementedException();
 		}
 
 		protected TNextMethodChainNode Delegate(IDomElement element)
 		{
-			return In(new[] { element });
+			return Delegate(new[] { element });
+		}
+
+		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements)
+		{
+			var cssSelector = elements
+				.Select(x => x.CssSelector)
+				.Aggregate((a, b) => a + ", " + b);
+			throw new NotImplementedException();
+			
 		}
 
 		public TNextMethodChainNode In(string selector) => Delegate(selector);

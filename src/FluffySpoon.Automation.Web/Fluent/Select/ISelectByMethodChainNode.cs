@@ -8,6 +8,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 	{
 		IMethodChainRoot From(string selector);
 		IMethodChainRoot From(IDomElement element);
-		IMethodChainRoot From(IReadOnlyCollection<IDomElement> elements);
+		IMethodChainRoot From(IReadOnlyList<IDomElement> elements);
 	}
 }

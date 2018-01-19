@@ -12,6 +12,9 @@ using FluffySpoon.Automation.Web.Fluent.Open;
 using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.In;
+using FluffySpoon.Automation.Web.Fluent.Targets.Of;
+using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 using FluffySpoon.Automation.Web.Fluent.Wait;
 
@@ -20,8 +23,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 	class MethodChainRoot: BaseMethodChainNode, IMethodChainRoot, IBaseMethodChainNode, IAwaitable
 	{
 		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot());
-		public ITakeScreenshotMethodChainNode TakeScreenshot => throw new NotImplementedException();
-		public IClickMethodChainNode Click => throw new NotImplementedException();
+		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => throw new NotImplementedException();
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click => throw new NotImplementedException();
 		public IDoubleClickMethodChainNode DoubleClick => throw new NotImplementedException();
 		public IRightClickMethodChainNode RightClick => throw new NotImplementedException();
 		public IHoverMethodChainNode Hover => throw new NotImplementedException();
@@ -29,7 +32,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
 
-		public IEnterMethodChainNode Enter(string text) => MethodChainContext.Enqueue(new EnterMethodChainNode(text));
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
 		public IFindMethodChainNode Find(string selector)
 		{

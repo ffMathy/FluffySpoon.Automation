@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Click
 {
-	public interface IClickTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	public interface IClickOnTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
 	{
 	}
 }

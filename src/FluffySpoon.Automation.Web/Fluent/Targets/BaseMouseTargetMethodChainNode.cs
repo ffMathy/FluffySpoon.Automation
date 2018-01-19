@@ -10,21 +10,22 @@ using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseMouseTargetMethodChainNode<TNextMethodChainNode> :
-		BaseDomElementTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseInTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseOfTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseFromTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseOnTargetMethodChainNode<TNextMethodChainNode>,
-		IMouseAtTargetMethodChainNode<TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode
+	abstract class BaseMouseTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
-		public TNextMethodChainNode Delegate(int x, int y)
+		protected TNextMethodChainNode Delegate(int x, int y)
 		{
 			throw new NotImplementedException();
 		}
 
-		public TNextMethodChainNode Delegate(IDomElement element, int relativeX, int relativeY)
+		protected TNextMethodChainNode Delegate(IDomElement element, int relativeX, int relativeY)
 		{
 			throw new NotImplementedException();
 		}

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets.In
 {
-	public interface IMouseInTargetsMethodChainNode<TNextMethodChainNode> : 
-		IMouseInTargetMethodChainNode<TNextMethodChainNode>, 
-		IDomElementInTargetsMethodChainNode<TNextMethodChainNode> 
+	public interface IMouseInTargetsMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : 
+		IMouseInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
+		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
 		where TNextMethodChainNode : IBaseMethodChainNode
 	{
-		TNextMethodChainNode In(IReadOnlyCollection<IDomElement> elements, int relativeX, int relativeY);
+		TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY);
 	}
 }

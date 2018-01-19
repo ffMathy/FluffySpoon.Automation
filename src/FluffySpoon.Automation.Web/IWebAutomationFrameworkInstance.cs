@@ -12,6 +12,6 @@ namespace FluffySpoon.Automation.Web
         Task<string> EvaluateJavaScriptAsync(string code);
 
         Task OpenAsync(string uri);
-        Task EnterTextInAsync(string text, string selector);
+        Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
     }
 }
