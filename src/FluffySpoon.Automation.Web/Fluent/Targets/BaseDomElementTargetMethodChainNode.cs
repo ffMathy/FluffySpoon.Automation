@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FluffySpoon.Automation.Web.Fluent.Find;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
@@ -21,9 +22,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
+		protected IReadOnlyList<IDomElement> Elements { get; private set; }
+
 		protected TNextMethodChainNode Delegate(string selector)
 		{
-			throw new NotImplementedException();
+			MethodChainContext.Enqueue(new FindMethodChainNode(selector));
+			return MethodChainContext.Enqueue(new TNextMethodChainNode());
 		}
 
 		protected TNextMethodChainNode Delegate(IDomElement element)
@@ -33,25 +37,23 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements)
 		{
-			var cssSelector = elements
-				.Select(x => x.CssSelector)
-				.Aggregate((a, b) => a + ", " + b);
-			throw new NotImplementedException();
-			
+			Elements = elements;
+			MethodChainContext.Enqueue(this);
+			return MethodChainContext.Enqueue(new TNextMethodChainNode());
 		}
 
 		public TNextMethodChainNode In(string selector) => Delegate(selector);
 		public TNextMethodChainNode In(IDomElement element) => Delegate(element);
-		
+
 		public TNextMethodChainNode Of(string selector) => Delegate(selector);
 		public TNextMethodChainNode Of(IDomElement element) => Delegate(element);
-		
+
 		public TNextMethodChainNode From(string selector) => Delegate(selector);
 		public TNextMethodChainNode From(IDomElement element) => Delegate(element);
-		
+
 		public TNextMethodChainNode On(string selector) => Delegate(selector);
 		public TNextMethodChainNode On(IDomElement element) => Delegate(element);
-		
+
 		public TNextMethodChainNode At(string selector) => Delegate(selector);
 		public TNextMethodChainNode At(IDomElement element) => Delegate(element);
 	}

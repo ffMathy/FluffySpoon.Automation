@@ -81,7 +81,7 @@ namespace FluffySpoon.Automation.Web
 		public IOpenMethodChainNode Open(string uri) => StartNewSession().Open(uri);
 		public IOpenMethodChainNode Open(Uri uri) => StartNewSession().Open(uri);
 
-		public IFindMethodChainNode Find(string selector) => StartNewSession().Find(selector);
+		public IMethodChainRoot Find(string selector) => StartNewSession().Find(selector);
 
 		public IUploadMethodChainNode Upload(string filePath) => StartNewSession().Upload(filePath);
 

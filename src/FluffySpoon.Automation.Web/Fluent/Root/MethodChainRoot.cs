@@ -20,7 +20,17 @@ using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web.Fluent.Root
 {
-	class MethodChainRoot: BaseMethodChainNode, IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	class MethodChainRoot : MethodChainRoot<IBaseMethodChainNode>
+	{
+
+	}
+
+	class MethodChainRoot<TParentMethodChainNode>: 
+		BaseMethodChainNode<TParentMethodChainNode>, 
+		IMethodChainRoot, 
+		IBaseMethodChainNode, 
+		IAwaitable
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot());
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => throw new NotImplementedException();
@@ -34,9 +44,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
-		public IFindMethodChainNode Find(string selector)
+		public IMethodChainRoot Find(string selector)
 		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new FindMethodChainNode(selector));
 		}
 
 		public IOpenMethodChainNode Open(string uri) => MethodChainContext.Enqueue(new OpenMethodChainNode(uri));

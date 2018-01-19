@@ -39,7 +39,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IOpenMethodChainNode Open(string uri);
         IOpenMethodChainNode Open(Uri uri);
 		
-		IFindMethodChainNode Find(string selector);
+		IMethodChainRoot Find(string selector);
 
 		IUploadMethodChainNode Upload(string filePath);
 

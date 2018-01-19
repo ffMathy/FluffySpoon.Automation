@@ -30,6 +30,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 			throw new NotImplementedException();
 		}
 
+		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
+		{
+			throw new NotImplementedException();
+		}
+
 		public TNextMethodChainNode In(int x, int y) => Delegate(x, y);
 		public TNextMethodChainNode In(IDomElement element, int relativeX, int relativeY) => Delegate(element, relativeX, relativeY);
 

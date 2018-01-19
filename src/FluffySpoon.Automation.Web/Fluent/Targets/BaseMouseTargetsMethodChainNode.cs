@@ -20,11 +20,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
-		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
-		{
-			throw new NotImplementedException();
-		}
-
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 

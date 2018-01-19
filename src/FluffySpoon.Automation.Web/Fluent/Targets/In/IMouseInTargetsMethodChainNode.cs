@@ -6,7 +6,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets.In
 	public interface IMouseInTargetsMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : 
 		IMouseInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : IBaseMethodChainNode
+		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY);
 	}

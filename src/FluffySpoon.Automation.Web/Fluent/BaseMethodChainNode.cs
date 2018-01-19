@@ -1,18 +1,22 @@
-﻿using FluffySpoon.Automation.Web.Fluent.Context;
+﻿using System.Collections.Generic;
+using FluffySpoon.Automation.Web.Fluent.Context;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
-    abstract class BaseMethodChainNode : IBaseMethodChainNode
+    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode<TParentMethodChainNode>
+		where TParentMethodChainNode : IBaseMethodChainNode
     {
 		private Task _currentExecutionTask;
 
 		private readonly SemaphoreSlim _executeSemaphore;
 		
         public IMethodChainContext MethodChainContext { protected get; set; }
-		public IBaseMethodChainNode Parent { protected get; set; }
+		public IReadOnlyList<IDomElement> Elements { get; protected set; }
+		public TParentMethodChainNode Parent { protected get; set; }
 
         public BaseMethodChainNode()
         {

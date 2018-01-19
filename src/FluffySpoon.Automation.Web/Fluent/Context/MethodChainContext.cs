@@ -54,7 +54,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			node.MethodChainContext = this;
 
             var linkedListNode = _allNodes.AddLast(node);
-			node.Parent = linkedListNode?.Previous?.Value;
+			if(node is IBaseMethodChainNode<IBaseMethodChainNode> nodeWithParent)
+				nodeWithParent.Parent = linkedListNode?.Previous?.Value;
 
 			_pendingNodesToRun.Enqueue(node);
 
