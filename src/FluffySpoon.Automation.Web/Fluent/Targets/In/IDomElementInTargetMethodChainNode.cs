@@ -4,7 +4,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets.In
 {
 	public interface IDomElementInTargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : 
 		ITargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode
 		where TCurrentMethodChainNode : IBaseMethodChainNode
     {
 		TNextMethodChainNode In(string selector);

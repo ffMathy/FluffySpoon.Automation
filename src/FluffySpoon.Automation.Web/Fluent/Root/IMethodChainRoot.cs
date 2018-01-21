@@ -32,9 +32,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		ISelectMethodChainNode Select { get; }
 		IExpectMethodChainRoot Expect { get; }
 
-		IWaitMethodChainNode Wait(TimeSpan time);
-		IWaitMethodChainNode Wait(int milliseconds);
-		IWaitMethodChainNode Wait(Func<bool> predicate);
+		IMethodChainRoot Wait(TimeSpan time);
+		IMethodChainRoot Wait(int milliseconds);
+		IMethodChainRoot Wait(Func<bool> predicate);
 
 		IOpenMethodChainNode Open(string uri);
         IOpenMethodChainNode Open(Uri uri);

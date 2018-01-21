@@ -11,7 +11,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
-	class ExpectMethodChainRoot : BaseMethodChainNode, IExpectMethodChainRoot
+	class ExpectMethodChainRoot : BaseMethodChainNode<IBaseMethodChainNode>, IExpectMethodChainRoot
 	{
 		public IExpectClassMethodChainNode Class(string className)
 		{

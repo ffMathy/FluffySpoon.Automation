@@ -26,6 +26,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				await automationEngine
 					.Open("https://google.com")
 					.Enter("foobar").In("input[type=text]")
+					.Wait(TimeSpan.FromSeconds(1))
 					.Expect
 					.Exists(".lsb");
 

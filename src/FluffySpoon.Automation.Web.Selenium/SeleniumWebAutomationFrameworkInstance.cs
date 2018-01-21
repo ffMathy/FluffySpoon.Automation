@@ -1,5 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Events;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 	class SeleniumWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
 	{
 		private readonly EventFiringWebDriver _driver;
+		private readonly Actions _actions;
 		private readonly SemaphoreSlim _semaphore;
 
 		private readonly IDomElementFactory _domElementFactory;
@@ -25,6 +27,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			IWebDriver driver)
 		{
 			_driver = new EventFiringWebDriver(driver);
+			_actions = new Actions(driver);
 			_semaphore = new SemaphoreSlim(1);
 
 			_domElementFactory = domElementFactory;
@@ -33,13 +36,26 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
 		}
 
+		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
+		{
+			var nativeElements = GetWebDriverElementsFromDomElements(elements);
+			foreach (var nativeElement in nativeElements)
+			{
+				_actions
+					.MoveToElement(nativeElement, relativeX, relativeY)
+					.Click()
+					.Build()
+					.Perform();
+			}
+		}
+
 		public void Dispose()
 		{
 			_driver.Quit();
 			_driver.Dispose();
 		}
 		
-		public Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
+		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
@@ -47,8 +63,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 				nativeElement.Clear();
 				nativeElement.SendKeys(text);
 			}
-
-			return Task.CompletedTask;
 		}
 
 		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code)

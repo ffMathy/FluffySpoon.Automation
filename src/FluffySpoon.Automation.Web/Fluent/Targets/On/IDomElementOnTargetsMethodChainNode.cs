@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace FluffySpoon.Automation.Web.Fluent.Targets.On
 {
 	public interface IDomElementOnTargetsMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : IDomElementOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode
 		where TCurrentMethodChainNode : IBaseMethodChainNode
     {
 		TNextMethodChainNode On(IReadOnlyList<IDomElement> elements);

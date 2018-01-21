@@ -74,9 +74,9 @@ namespace FluffySpoon.Automation.Web
 		public IFocusMethodChainNode Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;
 
-		public IWaitMethodChainNode Wait(TimeSpan time) => StartNewSession().Wait(time);
-		public IWaitMethodChainNode Wait(int milliseconds) => StartNewSession().Wait(milliseconds);
-		public IWaitMethodChainNode Wait(Func<bool> predicate) => StartNewSession().Wait(predicate);
+		public IMethodChainRoot Wait(TimeSpan time) => StartNewSession().Wait(time);
+		public IMethodChainRoot Wait(int milliseconds) => StartNewSession().Wait(milliseconds);
+		public IMethodChainRoot Wait(Func<bool> predicate) => StartNewSession().Wait(predicate);
 
 		public IOpenMethodChainNode Open(string uri) => StartNewSession().Open(uri);
 		public IOpenMethodChainNode Open(Uri uri) => StartNewSession().Open(uri);

@@ -9,25 +9,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluffySpoon.Automation.Web.Fluent.Find;
+using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
 	abstract class BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseMethodChainNode,
-		IDomElementInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		BaseMethodChainNode<IBaseMethodChainNode>,
+		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
+		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
-		protected IReadOnlyList<IDomElement> Elements { get; private set; }
+		private string _selector;
 
 		protected TNextMethodChainNode Delegate(string selector)
 		{
-			MethodChainContext.Enqueue(new FindMethodChainNode(selector));
-			return MethodChainContext.Enqueue(new TNextMethodChainNode());
+			_selector = selector;
+			return Delegate();
 		}
 
 		protected TNextMethodChainNode Delegate(IDomElement element)
@@ -38,8 +35,28 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements)
 		{
 			Elements = elements;
+			return Delegate();
+		}
+
+		private TNextMethodChainNode Delegate()
+		{
 			MethodChainContext.Enqueue(this);
 			return MethodChainContext.Enqueue(new TNextMethodChainNode());
+		}
+
+		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		{
+			if(Elements == null) {
+				if (_selector == null)
+					throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");
+
+				var findNode = new FindMethodChainNode(_selector);
+				await findNode.ExecuteAsync(framework);
+
+				Elements = findNode.Elements;
+			}
+
+			await base.OnExecuteAsync(framework);
 		}
 
 		public TNextMethodChainNode In(string selector) => Delegate(selector);

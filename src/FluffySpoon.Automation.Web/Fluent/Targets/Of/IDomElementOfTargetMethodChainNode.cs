@@ -3,7 +3,7 @@
 namespace FluffySpoon.Automation.Web.Fluent.Targets.Of
 {
 	public interface IDomElementOfTargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : ITargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode
 		where TCurrentMethodChainNode : IBaseMethodChainNode
     {
 		TNextMethodChainNode Of(string selector);

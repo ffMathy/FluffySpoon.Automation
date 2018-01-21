@@ -3,7 +3,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-	public interface ITakeScreenshotOfTargetMethodChainNode: IMethodChainRoot, IBaseMethodChainNode<IBaseMethodChainNode>
+	public interface ITakeScreenshotOfTargetMethodChainNode: IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }

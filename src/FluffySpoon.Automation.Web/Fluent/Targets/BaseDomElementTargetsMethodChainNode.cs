@@ -12,13 +12,9 @@ using System.Text;
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
 	abstract class BaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementOfTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementOnTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementAtTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
+		IBaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
+		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);

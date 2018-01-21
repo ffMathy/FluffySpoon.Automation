@@ -28,7 +28,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
         public async Task RunAllAsync()
         {
-            while(_allNodes.Count > 0)
+            while(_pendingNodesToRun.Count > 0)
                 await RunNextAsync();
         }
 
@@ -39,8 +39,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			if (_pendingNodesToRun.Count > 0)
 			{
 				var next = _pendingNodesToRun.Dequeue();
-				_allNodes.RemoveFirst();
-
 				await Task.WhenAll(_frameworks.Select(next.ExecuteAsync));
 			}
 
@@ -54,9 +52,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			node.MethodChainContext = this;
 
             var linkedListNode = _allNodes.AddLast(node);
-			if(node is IBaseMethodChainNode<IBaseMethodChainNode> nodeWithParent)
-				nodeWithParent.Parent = linkedListNode?.Previous?.Value;
+			var parentNode = linkedListNode?.Previous?.Value;
+			if(parentNode != null)
+				node.SetParent(parentNode);
 
+			_allNodes.AddLast(node);
 			_pendingNodesToRun.Enqueue(node);
 
 			_semaphore.Release(1);

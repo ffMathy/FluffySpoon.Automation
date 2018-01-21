@@ -34,14 +34,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 	{
 		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot());
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => throw new NotImplementedException();
-		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click => throw new NotImplementedException();
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click => MethodChainContext.Enqueue(new ClickMethodChainNode());
 		public IDoubleClickMethodChainNode DoubleClick => throw new NotImplementedException();
 		public IRightClickMethodChainNode RightClick => throw new NotImplementedException();
 		public IHoverMethodChainNode Hover => throw new NotImplementedException();
 		public IDragMethodChainNode Drag => throw new NotImplementedException();
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
-
+		
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
 		public IMethodChainRoot Find(string selector)
@@ -57,17 +57,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			throw new NotImplementedException();
 		}
 
-		public IWaitMethodChainNode Wait(TimeSpan time)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IWaitMethodChainNode Wait(int milliseconds)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IWaitMethodChainNode Wait(Func<bool> predicate)
+		public IMethodChainRoot Wait(TimeSpan timespan) => MethodChainContext.Enqueue(new WaitMethodChainNode(timespan));
+		public IMethodChainRoot Wait(int milliseconds) => Wait(TimeSpan.FromMilliseconds(milliseconds));
+		public IMethodChainRoot Wait(Func<bool> predicate)
 		{
 			throw new NotImplementedException();
 		}

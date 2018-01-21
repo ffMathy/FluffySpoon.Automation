@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 {
-	class ExpectExistsMethodChainNode : BaseMethodChainNode, IExpectExistsMethodChainNode
+	class ExpectExistsMethodChainNode : BaseMethodChainNode<IBaseMethodChainNode>, IExpectExistsMethodChainNode
 	{
 		private readonly string _selector;
 

@@ -3,7 +3,7 @@
 namespace FluffySpoon.Automation.Web.Fluent.Targets.On
 {
 	public interface IMouseOnTargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> : IDomElementOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>
+		where TNextMethodChainNode : IBaseMethodChainNode
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		TNextMethodChainNode On(int x, int y);

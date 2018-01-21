@@ -7,7 +7,7 @@ using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
-    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode<TParentMethodChainNode>
+    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode, IAwaitable
 		where TParentMethodChainNode : IBaseMethodChainNode
     {
 		private Task _currentExecutionTask;
@@ -16,7 +16,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 		
         public IMethodChainContext MethodChainContext { protected get; set; }
 		public IReadOnlyList<IDomElement> Elements { get; protected set; }
-		public TParentMethodChainNode Parent { protected get; set; }
+
+		protected TParentMethodChainNode Parent { get; private set; }
 
         public BaseMethodChainNode()
         {
@@ -47,5 +48,10 @@ namespace FluffySpoon.Automation.Web.Fluent
         {
             return Task.CompletedTask;
         }
+
+		public void SetParent(IBaseMethodChainNode parent)
+		{
+			Parent = (TParentMethodChainNode)parent;
+		}
 	}
 }

@@ -13,5 +13,6 @@ namespace FluffySpoon.Automation.Web
 
         Task OpenAsync(string uri);
         Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
+		Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY);
     }
 }

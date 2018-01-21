@@ -17,9 +17,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		IMouseFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode<TCurrentMethodChainNode>, new()
+		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
+		public int OffsetX { get; private set; }
+		public int OffsetY { get; private set; }
+
 		protected TNextMethodChainNode Delegate(int x, int y)
 		{
 			throw new NotImplementedException();
@@ -27,12 +30,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		protected TNextMethodChainNode Delegate(IDomElement element, int relativeX, int relativeY)
 		{
-			throw new NotImplementedException();
+			return Delegate(new[] { element }, relativeX, relativeY);
 		}
 
 		protected TNextMethodChainNode Delegate(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			throw new NotImplementedException();
+			OffsetX = relativeX;
+			OffsetY = relativeY;
+			return Delegate(elements);
 		}
 
 		public TNextMethodChainNode In(int x, int y) => Delegate(x, y);
