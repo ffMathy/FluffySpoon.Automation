@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
@@ -13,5 +14,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 		{
 			Count = count;
 		}
-    }
+
+		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		{
+			return base.OnExecuteAsync(framework);
+		}
+	}
 }

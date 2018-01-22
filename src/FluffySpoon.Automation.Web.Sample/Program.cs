@@ -32,24 +32,30 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				await automationEngine
 					.Click.On("#sbtc .lsb:first")
+					.Wait(TimeSpan.FromSeconds(1))
 					.Expect
 					.Count(10).Of(".g");
+
+				Console.WriteLine("Test done!");
 			}
 			catch (Exception ex) {
 				await Console.Error.WriteLineAsync(ex.ToString());
+				Console.ReadLine();
 			}
-
-			Console.ReadLine();
         }
 
 		private static ChromeDriver GetChromeDriver()
 		{
+			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
+			service.EnableVerboseLogging = false;
+			service.HideCommandPromptWindow = true;
+			service.SuppressInitialDiagnosticInformation = true;
+
 			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions()
 			{
 				Proxy = null,
 				PageLoadStrategy = PageLoadStrategy.Normal,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
-				
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept				
 			});
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
 			return chromeDriver;
