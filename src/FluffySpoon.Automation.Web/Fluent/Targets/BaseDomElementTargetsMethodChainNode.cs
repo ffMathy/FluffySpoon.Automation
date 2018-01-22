@@ -14,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 	abstract class BaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
 		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IBaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : IBaseMethodChainNode, new()
+		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);

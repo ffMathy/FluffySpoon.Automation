@@ -13,7 +13,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 	class SeleniumWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
 	{
 		private readonly EventFiringWebDriver _driver;
-		private readonly Actions _actions;
 		private readonly SemaphoreSlim _semaphore;
 
 		private readonly IDomElementFactory _domElementFactory;
@@ -21,13 +20,14 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private readonly string _uniqueSelectorAttribute;
 
+		private Actions Actions => new Actions(_driver);
+
 		public SeleniumWebAutomationFrameworkInstance(
 			IDomSelectorStrategy domSelectorStrategy,
 			IDomElementFactory domElementFactory,
 			IWebDriver driver)
 		{
 			_driver = new EventFiringWebDriver(driver);
-			_actions = new Actions(driver);
 			_semaphore = new SemaphoreSlim(1);
 
 			_domElementFactory = domElementFactory;
@@ -41,7 +41,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
 			{
-				_actions
+				Actions
 					.MoveToElement(nativeElement, relativeX, relativeY)
 					.Click()
 					.Build()

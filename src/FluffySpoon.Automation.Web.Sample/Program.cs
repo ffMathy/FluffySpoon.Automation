@@ -31,7 +31,7 @@ namespace FluffySpoon.Automation.Web.Sample
 					.Exists(".lsb");
 
 				await automationEngine
-					.Click.On("#sbtc .lsb")
+					.Click.On("#sbtc .lsb:first")
 					.Expect
 					.Count(10).Of(".g");
 			}

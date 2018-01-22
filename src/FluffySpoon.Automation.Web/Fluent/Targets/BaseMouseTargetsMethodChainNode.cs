@@ -17,7 +17,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		IMouseFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOnTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseAtTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : IBaseMethodChainNode, new()
+		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 	{
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
