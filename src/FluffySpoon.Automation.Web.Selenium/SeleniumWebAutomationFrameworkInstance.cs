@@ -41,10 +41,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
 			{
+				if (!nativeElement.Displayed)
+					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
+
 				Actions
 					.MoveToElement(nativeElement, relativeX, relativeY)
-					.Click()
-					.Build()
+					.Click(nativeElement)
 					.Perform();
 			}
 		}
