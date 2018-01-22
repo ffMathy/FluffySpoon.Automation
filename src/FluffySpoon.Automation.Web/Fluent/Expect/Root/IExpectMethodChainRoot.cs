@@ -23,7 +23,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
         IExpectClassMethodChainNode Class(string className);
         IExpectClassMethodChainNode Class(Func<string> classNamePredicate);
 
-		IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainRoot> Count(int count);
+		IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainNode> Count(int count);
 
 		IExpectExistsMethodChainNode Exists(string selector);
         IExpectExistsMethodChainNode Exists(IDomElement element);

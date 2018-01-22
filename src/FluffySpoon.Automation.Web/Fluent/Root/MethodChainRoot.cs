@@ -32,9 +32,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IAwaitable
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
-		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot());
+		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => throw new NotImplementedException();
-		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetMethodChainNode> Click => MethodChainContext.Enqueue(new ClickMethodChainNode());
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => MethodChainContext.Enqueue(new ClickMethodChainNode());
 		public IDoubleClickMethodChainNode DoubleClick => throw new NotImplementedException();
 		public IRightClickMethodChainNode RightClick => throw new NotImplementedException();
 		public IHoverMethodChainNode Hover => throw new NotImplementedException();

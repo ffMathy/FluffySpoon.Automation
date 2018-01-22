@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Click
 {
-    class ClickOnTargetMethodChainNode : MethodChainRoot<ClickMethodChainNode>, IClickOnTargetMethodChainNode
+    class ClickOnTargetsMethodChainNode : MethodChainRoot<ClickMethodChainNode>, IClickOnTargetsMethodChainNode
 	{
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{

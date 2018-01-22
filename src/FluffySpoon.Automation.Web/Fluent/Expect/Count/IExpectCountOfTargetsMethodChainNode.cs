@@ -3,7 +3,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
-	public interface IExpectCountOfTargetsMethodChainRoot: IExpectMethodChainRoot, IAwaitable, IBaseExpectMethodChainNode
+	public interface IExpectCountOfTargetsMethodChainNode: IExpectMethodChainRoot, IAwaitable, IBaseExpectMethodChainNode
 	{
 	}
 }

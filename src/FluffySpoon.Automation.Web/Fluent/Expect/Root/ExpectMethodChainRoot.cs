@@ -11,7 +11,8 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
-	class ExpectMethodChainRoot : BaseMethodChainNode<IBaseMethodChainNode>, IExpectMethodChainRoot
+	class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, IExpectMethodChainRoot
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public IExpectClassMethodChainNode Class(string className)
 		{
@@ -23,9 +24,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			throw new NotImplementedException();
 		}
 
-		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainRoot> Count(int count)
+		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainNode> Count(int count)
 		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new ExpectCountMethodChainNode(count));
 		}
 
 		public IExpectExistsMethodChainNode Exists(string selector)
