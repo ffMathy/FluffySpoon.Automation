@@ -38,16 +38,14 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
+			var scriptExecutor = GetScriptExecutor();
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
 			{
 				if (!nativeElement.Displayed)
 					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
 
-				Actions
-					.MoveToElement(nativeElement, relativeX, relativeY)
-					.Click(nativeElement)
-					.Perform();
+				scriptExecutor.ExecuteScript("arguments[0].click()", nativeElement);
 			}
 		}
 

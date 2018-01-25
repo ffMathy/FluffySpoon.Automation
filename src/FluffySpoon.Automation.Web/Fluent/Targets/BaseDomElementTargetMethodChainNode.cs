@@ -40,7 +40,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		private TNextMethodChainNode Delegate()
 		{
-			//MethodChainContext.Enqueue(this);
+			MethodChainContext.Enqueue(this);
 			return MethodChainContext.Enqueue(new TNextMethodChainNode());
 		}
 

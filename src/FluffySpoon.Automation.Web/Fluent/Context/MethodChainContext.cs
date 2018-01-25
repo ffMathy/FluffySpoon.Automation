@@ -73,8 +73,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 				var parentNode = linkedListNode?.Previous?.Value;
 				if (parentNode != null)
 					node.SetParent(parentNode);
-
-				_allNodes.AddLast(node);
+					
 				_pendingNodesToRun.Enqueue(node);
 
 				Log("Queued: " + node.GetType().Name);
