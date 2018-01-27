@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FluffySpoon.Automation.Web.Dom
+﻿namespace FluffySpoon.Automation.Web.Dom
 {
 	public class DomElement : IDomElement
 	{

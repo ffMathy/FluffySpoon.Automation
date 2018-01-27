@@ -1,11 +1,11 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Targets;
 using System.Threading.Tasks;
 
-namespace FluffySpoon.Automation.Web.Fluent.RightClick
+namespace FluffySpoon.Automation.Web.Fluent.Hover
 {
-	class RightClickMethodChainNode : BaseMouseTargetsMethodChainNode<RightClickMethodChainNode, RightClickOnTargetsMethodChainNode>
+	class HoverMethodChainNode : BaseMouseTargetMethodChainNode<HoverMethodChainNode, HoverOnTargetMethodChainNode>
 	{
-		public RightClickMethodChainNode()
+		public HoverMethodChainNode()
 		{
 
 		}

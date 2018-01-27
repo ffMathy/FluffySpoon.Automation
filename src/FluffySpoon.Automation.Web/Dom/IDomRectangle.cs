@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluffySpoon.Automation.Web.Dom
+﻿namespace FluffySpoon.Automation.Web.Dom
 {
 	public interface IDomRectangle
 	{

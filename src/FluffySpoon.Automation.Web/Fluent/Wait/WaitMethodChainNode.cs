@@ -1,12 +1,10 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Root;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Wait
 {
-    class WaitMethodChainNode : MethodChainRoot
+	class WaitMethodChainNode : MethodChainRoot
     {
 		private readonly TimeSpan _timespan;
 

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FluffySpoon.Automation.Web.Dom
 {
-    public class DomAttributes : IDomAttributes
+	public class DomAttributes : IDomAttributes
 	{
 		private readonly ISet<IDomAttribute> _attributes;
 

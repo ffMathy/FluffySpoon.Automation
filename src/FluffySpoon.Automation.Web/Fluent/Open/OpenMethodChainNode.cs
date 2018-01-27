@@ -1,10 +1,9 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Root;
-using System;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Open
 {
-    class OpenMethodChainNode: MethodChainRoot, IOpenMethodChainNode
+	class OpenMethodChainNode: MethodChainRoot, IOpenMethodChainNode
 	{
         private readonly string _uri;
 

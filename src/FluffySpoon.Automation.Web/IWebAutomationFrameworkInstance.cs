@@ -15,8 +15,8 @@ namespace FluffySpoon.Automation.Web
         Task OpenAsync(string uri);
 
         Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
-
-		Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY);
+		Task HoverAsync(IDomElement domElement, int offsetX, int offsetY);
+		Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
 		Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
 		Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
 

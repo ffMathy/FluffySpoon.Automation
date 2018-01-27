@@ -7,7 +7,6 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +34,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_domSelectorStrategy = domSelectorStrategy;
 
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
+		}
+
+		public async Task HoverAsync(IDomElement element, int relativeX, int relativeY)
+		{
+			await PerformOnElementCoordinatesAsync(x => x, new[] { element }, relativeX, relativeY);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)

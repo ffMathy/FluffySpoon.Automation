@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Root;
 
 namespace FluffySpoon.Automation.Web.Fluent.Find
 {
-    class FindMethodChainNode : MethodChainRoot
+	class FindMethodChainNode : MethodChainRoot
     {
 		private readonly string _selector;
 

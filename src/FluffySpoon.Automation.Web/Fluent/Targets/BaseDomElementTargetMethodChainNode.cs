@@ -1,13 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent.Targets.At;
-using FluffySpoon.Automation.Web.Fluent.Targets.From;
-using FluffySpoon.Automation.Web.Fluent.Targets.In;
-using FluffySpoon.Automation.Web.Fluent.Targets.Of;
-using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FluffySpoon.Automation.Web.Fluent.Find;
 using System.Threading.Tasks;
 

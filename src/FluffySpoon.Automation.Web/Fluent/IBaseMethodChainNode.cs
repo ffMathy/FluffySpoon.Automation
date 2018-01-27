@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using FluffySpoon.Automation.Web.Fluent.Context;
+﻿using FluffySpoon.Automation.Web.Fluent.Context;
 using System.Threading.Tasks;
-using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {

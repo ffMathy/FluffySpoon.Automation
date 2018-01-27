@@ -1,13 +1,11 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Root;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
-    class RightClickOnTargetsMethodChainNode : MethodChainRoot<RightClickMethodChainNode>, IRightClickOnTargetsMethodChainNode
+	class RightClickOnTargetsMethodChainNode : MethodChainRoot<RightClickMethodChainNode>, IRightClickOnTargetsMethodChainNode
 	{
 		public override IReadOnlyList<IDomElement> Elements
 		{

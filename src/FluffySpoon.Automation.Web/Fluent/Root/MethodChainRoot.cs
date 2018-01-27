@@ -3,7 +3,6 @@ using FluffySpoon.Automation.Web.Fluent.Click;
 using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
-using FluffySpoon.Automation.Web.Fluent.Expect;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
 using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
@@ -40,14 +39,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => 
 			MethodChainContext.Enqueue(new ClickMethodChainNode());
-
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick =>
 			MethodChainContext.Enqueue(new DoubleClickMethodChainNode());
-
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick =>
 			MethodChainContext.Enqueue(new RightClickMethodChainNode());
 
-		public IHoverMethodChainNode Hover => throw new NotImplementedException();
+		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover =>
+			MethodChainContext.Enqueue(new HoverMethodChainNode());
+
 		public IDragMethodChainNode Drag => throw new NotImplementedException();
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();

@@ -1,11 +1,12 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Root;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace FluffySpoon.Automation.Web.Fluent.Click
+namespace FluffySpoon.Automation.Web.Fluent.Hover
 {
-	class ClickOnTargetsMethodChainNode : MethodChainRoot<ClickMethodChainNode>, IClickOnTargetsMethodChainNode
+	class HoverOnTargetMethodChainNode : MethodChainRoot<HoverMethodChainNode>, IHoverOnTargetMethodChainNode
 	{
 		public override IReadOnlyList<IDomElement> Elements { 
 			get => Parent.Elements; 
@@ -13,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			await framework.ClickAsync(Elements, Parent.OffsetX, Parent.OffsetY);
+			await framework.HoverAsync(Elements.Single(), Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
 	}

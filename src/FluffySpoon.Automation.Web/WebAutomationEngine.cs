@@ -10,9 +10,7 @@ using FluffySpoon.Automation.Web.Fluent.Context;
 using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
-using FluffySpoon.Automation.Web.Fluent.Expect;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
-using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
 using FluffySpoon.Automation.Web.Fluent.Hover;
 using FluffySpoon.Automation.Web.Fluent.Open;
@@ -24,7 +22,6 @@ using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Upload;
-using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web
 {
@@ -72,7 +69,7 @@ namespace FluffySpoon.Automation.Web
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick => StartNewSession().DoubleClick;
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick => StartNewSession().RightClick;
 
-		public IHoverMethodChainNode Hover => StartNewSession().Hover;
+		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover => StartNewSession().Hover;
 		public IDragMethodChainNode Drag => StartNewSession().Drag;
 		public IFocusMethodChainNode Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;

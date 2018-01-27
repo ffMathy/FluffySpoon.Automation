@@ -1,15 +1,12 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Exceptions;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
-using FluffySpoon.Automation.Web.Fluent.Root;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
-    class ExpectCountOfTargetsMethodChainNode : ExpectMethodChainRoot<ExpectCountMethodChainNode>, IExpectCountOfTargetsMethodChainNode
+	class ExpectCountOfTargetsMethodChainNode : ExpectMethodChainRoot<ExpectCountMethodChainNode>, IExpectCountOfTargetsMethodChainNode
 	{
 		public override IReadOnlyList<IDomElement> Elements
 		{

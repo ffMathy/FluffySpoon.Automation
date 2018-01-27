@@ -6,7 +6,6 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {

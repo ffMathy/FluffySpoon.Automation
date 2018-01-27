@@ -1,12 +1,9 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Targets;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 {
-    class ExpectCountMethodChainNode : BaseDomElementTargetsMethodChainNode<ExpectCountMethodChainNode, ExpectCountOfTargetsMethodChainNode>
+	class ExpectCountMethodChainNode : BaseDomElementTargetsMethodChainNode<ExpectCountMethodChainNode, ExpectCountOfTargetsMethodChainNode>
 	{
 		internal int Count { get; }
 
