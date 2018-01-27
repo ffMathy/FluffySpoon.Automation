@@ -41,23 +41,27 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => 
 			MethodChainContext.Enqueue(new ClickMethodChainNode());
 
-		public IDoubleClickMethodChainNode DoubleClick => throw new NotImplementedException();
-		public IRightClickMethodChainNode RightClick => throw new NotImplementedException();
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick =>
+			MethodChainContext.Enqueue(new DoubleClickMethodChainNode());
+
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick =>
+			MethodChainContext.Enqueue(new RightClickMethodChainNode());
+
 		public IHoverMethodChainNode Hover => throw new NotImplementedException();
 		public IDragMethodChainNode Drag => throw new NotImplementedException();
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
-		
+
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
 			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
-		public IMethodChainRoot Find(string selector)
-		{
-			return MethodChainContext.Enqueue(new FindMethodChainNode(selector));
-		}
+		public IMethodChainRoot Find(string selector) =>
+			MethodChainContext.Enqueue(new FindMethodChainNode(selector));
 
-		public IOpenMethodChainNode Open(string uri) => MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
-		public IOpenMethodChainNode Open(Uri uri) => Open(uri.ToString());
+		public IOpenMethodChainNode Open(string uri) => 
+			MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
+		public IOpenMethodChainNode Open(Uri uri) => 
+			Open(uri.ToString());
 
 		public IUploadMethodChainNode Upload(string filePath)
 		{

@@ -24,8 +24,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 	{
 		IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot { get; }
 		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click { get; }
-		IDoubleClickMethodChainNode DoubleClick { get; }
-		IRightClickMethodChainNode RightClick { get; }
+		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick { get; }
+		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick { get; }
 		IHoverMethodChainNode Hover { get; }
 		IDragMethodChainNode Drag { get; }
 		IFocusMethodChainNode Focus { get; }
