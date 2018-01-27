@@ -6,7 +6,7 @@ namespace FluffySpoon.Automation.Web.Dom
 	{
 		Task InitializeAsync();
 
-		string InitialJavaScriptForEachPage { get; }
+		string DomSelectorLibraryJavaScript { get; }
 		
 		string GetJavaScriptForRetrievingDomElements(string selector);
 	}

@@ -11,7 +11,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 			RegistrationExtensions.AddWebAutomationFrameworkInstance(provider => 
 				new SeleniumWebAutomationFrameworkInstance(
 					provider.GetRequiredService<IDomSelectorStrategy>(), 
-					provider.GetRequiredService<IDomElementFactory>(),
 					driver));
 		}
 	}

@@ -8,10 +8,10 @@ using FluffySpoon.Automation.Web.Selenium;
 
 namespace FluffySpoon.Automation.Web.Sample
 {
-    class Program
-    {
-        static async Task Main(string[] args)
-        {
+	class Program
+	{
+		static async Task Main(string[] args)
+		{
 			try
 			{
 				var serviceCollection = new ServiceCollection();
@@ -34,15 +34,19 @@ namespace FluffySpoon.Automation.Web.Sample
 					.Click.On("#sbtc .lsb:first")
 					.Wait(TimeSpan.FromSeconds(1))
 					.Expect
-					.Count(10).Of(".g");
+					.Count(10).Of(".srg .g");
+
+				await automationEngine
+					.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
 
 				Console.WriteLine("Test done!");
 			}
-			catch (Exception ex) {
+			catch (Exception ex)
+			{
 				await Console.Error.WriteLineAsync(ex.ToString());
 				Console.ReadLine();
 			}
-        }
+		}
 
 		private static ChromeDriver GetChromeDriver()
 		{
@@ -51,13 +55,17 @@ namespace FluffySpoon.Automation.Web.Sample
 			service.HideCommandPromptWindow = true;
 			service.SuppressInitialDiagnosticInformation = true;
 
-			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions()
+			var options = new ChromeOptions()
 			{
 				Proxy = null,
 				PageLoadStrategy = PageLoadStrategy.Normal,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept				
-			});
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+			};
+			options.AddArgument("--headless");
+
+			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+
 			return chromeDriver;
 		}
 	}

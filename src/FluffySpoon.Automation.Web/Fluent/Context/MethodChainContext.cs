@@ -11,6 +11,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 	{
 		private static volatile int MethodChainOffset;
 
+		private Exception _lastEncounteredException;
+
 		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
 
 		private readonly LinkedList<IBaseMethodChainNode> _allNodes;
@@ -44,13 +46,29 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			{
 				await _semaphore.WaitAsync();
 
-				if (_pendingNodesToRun.Count > 0)
+				try
 				{
-					var next = _pendingNodesToRun.Dequeue();
-					Log("Executing: " + next.GetType().Name);
 
-					await Task.WhenAll(_frameworks.Select(next.ExecuteAsync));
+					if (_pendingNodesToRun.Count > 0)
+					{
+						var next = _pendingNodesToRun.Dequeue();
+						Log("Executing: " + next.GetType().Name);
+
+						await Task.WhenAll(_frameworks.Select(next.ExecuteAsync));
+					}
+
 				}
+				catch (AggregateException ex)
+				{
+					_lastEncounteredException =
+						ex.InnerExceptions.Count == 1 ? ex.InnerExceptions.Single() : ex;
+				}
+				catch (Exception ex)
+				{
+					_lastEncounteredException = ex;
+				}
+
+				ThrowExceptionIfPresent();
 			}
 			finally
 			{
@@ -63,6 +81,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			try
 			{
 				_semaphore.Wait();
+				ThrowExceptionIfPresent();
+
+				var isQueueEmpty = _pendingNodesToRun.Count == 0;
 
 				if (node == _allNodes.Last?.Value)
 					return node;
@@ -73,24 +94,36 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 				var parentNode = linkedListNode?.Previous?.Value;
 				if (parentNode != null)
 					node.SetParent(parentNode);
-					
+
 				_pendingNodesToRun.Enqueue(node);
 
 				Log("Queued: " + node.GetType().Name);
+
+				if (isQueueEmpty)
+					Task.Factory
+						.StartNew(RunAllAsync)
+						;
 			}
 			finally
 			{
 				_semaphore.Release(1);
 			}
 
-			Task.Factory.StartNew(RunAllAsync);
-
 			return node;
 		}
 
 		public TaskAwaiter GetAwaiter()
 		{
+			ThrowExceptionIfPresent();
 			return RunAllAsync().GetAwaiter();
+		}
+
+		private void ThrowExceptionIfPresent()
+		{
+			if (_lastEncounteredException != null)
+				throw new ApplicationException(
+					"An error occured while performing one of the automation operations.", 
+					_lastEncounteredException);
 		}
 
 		private void Log(string message)

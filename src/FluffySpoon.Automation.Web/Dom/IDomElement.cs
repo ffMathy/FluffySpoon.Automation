@@ -1,7 +1,11 @@
-﻿namespace FluffySpoon.Automation.Web.Dom
+﻿using System.Collections.Generic;
+
+namespace FluffySpoon.Automation.Web.Dom
 {
 	public interface IDomElement
-    {
-        string CssSelector { get; }
-    }
+	{
+		string CssSelector { get; }
+		IDomAttributes Attributes { get; }
+		IDomRectangle BoundingClientRectangle { get; }
+	}
 }

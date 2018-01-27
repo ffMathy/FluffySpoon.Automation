@@ -7,7 +7,7 @@ using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
-    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode, IAwaitable
+    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode
 		where TParentMethodChainNode : IBaseMethodChainNode
     {
 		private Task _currentExecutionTask;

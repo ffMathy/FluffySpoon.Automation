@@ -1,9 +1,13 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Events;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +19,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 		private readonly EventFiringWebDriver _driver;
 		private readonly SemaphoreSlim _semaphore;
 
-		private readonly IDomElementFactory _domElementFactory;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
 
 		private readonly string _uniqueSelectorAttribute;
@@ -24,13 +27,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public SeleniumWebAutomationFrameworkInstance(
 			IDomSelectorStrategy domSelectorStrategy,
-			IDomElementFactory domElementFactory,
 			IWebDriver driver)
 		{
 			_driver = new EventFiringWebDriver(driver);
 			_semaphore = new SemaphoreSlim(1);
 
-			_domElementFactory = domElementFactory;
 			_domSelectorStrategy = domSelectorStrategy;
 
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
@@ -45,7 +46,10 @@ namespace FluffySpoon.Automation.Web.Selenium
 				if (!nativeElement.Displayed)
 					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
 
-				scriptExecutor.ExecuteScript("arguments[0].click()", nativeElement);
+				Actions.MoveToElement(nativeElement)
+					.Click()
+					.Build()
+					.Perform();
 			}
 		}
 
@@ -54,7 +58,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_driver.Quit();
 			_driver.Dispose();
 		}
-		
+
 		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
@@ -68,21 +72,55 @@ namespace FluffySpoon.Automation.Web.Selenium
 		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code)
 		{
 			var scriptExecutor = GetScriptExecutor();
-			
-			var prefix = Guid.NewGuid().ToString();
-			var tags = (IReadOnlyList<object>)scriptExecutor.ExecuteScript(@"
-				return (function() { 
-					var elements=(function() {" + code + @"})(); 
-					var tags=[];
-					for(var i=0;i<elements.length;i++) {
-						tags.push(elements[i].getAttribute('" + _uniqueSelectorAttribute + @"')||'" + prefix + @"-'+i);
-						elements[i].setAttribute('" + _uniqueSelectorAttribute + @"',tags[tags.length-1]);
-					}
-					return tags;
-	 			})()");
 
-			return tags
-				.Select(x => _domElementFactory.Create("[" + _uniqueSelectorAttribute + "='" + x.ToString() + "']"))
+			var prefix = Guid.NewGuid().ToString();
+			var elementFetchJavaScript = WrapJavaScriptInIsolatedFunction(
+				_domSelectorStrategy.DomSelectorLibraryJavaScript + "; " + code);
+
+			var resultJsonBlobs = (IReadOnlyList<object>)scriptExecutor.ExecuteScript(@"
+				return " + WrapJavaScriptInIsolatedFunction(@"
+					var elements = " + elementFetchJavaScript + @";
+					var returnValues = [];
+
+					for(var i = 0; i < elements.length; i++) {
+						var element = elements[i];
+						var attributes = [];
+						
+						var tag = element.getAttribute('" + _uniqueSelectorAttribute + @"') || '" + prefix + @"-'+i;
+						element.setAttribute('" + _uniqueSelectorAttribute + @"', tag);
+						
+						for(var o = 0; o < element.attributes.length; o++) {
+							var attribute = element.attributes[o];
+							attributes.push({
+								name: attribute.name,
+								value: attribute.value
+							});
+						}
+
+						returnValues.push(JSON.stringify({
+							tag: tag,
+							attributes: attributes,
+							boundingClientRectangle: element.getBoundingClientRect()
+						}));
+					}
+
+					return returnValues;
+				"));
+
+			return resultJsonBlobs
+				.Cast<string>()
+				.Select(JsonConvert.DeserializeObject<ElementWrapper>)
+				.Select(x =>
+				{
+					var attributes = new DomAttributes();
+					foreach (var attribute in x.Attributes)
+						attributes.Add(attribute.Name, attribute.Value);
+
+					return new DomElement(
+						"[" + _uniqueSelectorAttribute + "='" + x.Tag + "']",
+						x.BoundingClientRectangle,
+						attributes);
+				})
 				.ToArray();
 		}
 
@@ -96,8 +134,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsAsync(string selector)
 		{
-			return await EvaluateJavaScriptAsDomElementsAsync(
-				_domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector));
+			var scriptToExecute = _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
+			return await EvaluateJavaScriptAsDomElementsAsync(scriptToExecute);
 		}
 
 		public async Task OpenAsync(string uri)
@@ -109,10 +147,9 @@ namespace FluffySpoon.Automation.Web.Selenium
 			void DriverNavigated(object sender, WebDriverNavigationEventArgs e)
 			{
 				if (e.Url != uri) return;
-				
+
 				_driver.Navigated -= DriverNavigated;
-				EvaluateJavaScriptAsync(_domSelectorStrategy.InitialJavaScriptForEachPage)
-					.ContinueWith(_ => navigatedWaitHandle.Release(1));
+				navigatedWaitHandle.Release(1);
 			}
 
 			_driver.Navigated += DriverNavigated;
@@ -120,6 +157,14 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 			await navigatedWaitHandle.WaitAsync();
 			_semaphore.Release();
+		}
+
+		private ITakesScreenshot GetScreenshotDriver()
+		{
+			if (!(_driver is ITakesScreenshot screenshotDriver))
+				throw new InvalidOperationException("The given Selenium web driver does not support taking screenshots.");
+
+			return screenshotDriver;
 		}
 
 		private IJavaScriptExecutor GetScriptExecutor()
@@ -130,6 +175,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return scriptExecutor;
 		}
 
+		private string WrapJavaScriptInIsolatedFunction(string code)
+		{
+			return $"(function() {{{code}}})();";
+		}
+
 		private IWebElement[] GetWebDriverElementsFromDomElements(IReadOnlyList<IDomElement> domElements)
 		{
 			var selector = domElements
@@ -138,6 +188,69 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return _driver
 				.FindElements(By.CssSelector(selector))
 				.ToArray();
+		}
+
+		public async Task<SKBitmap> TakeScreenshotAsync()
+		{
+			var currentDriverDimensions = _driver.Manage().Window.Size;
+
+			try
+			{
+				var bodyDimensionsBlob = await EvaluateJavaScriptAsync(@"
+				return JSON.stringify({
+					document: {
+						width: Math.max(
+							document.body.scrollWidth, 
+							document.body.offsetWidth, 
+							document.documentElement.clientWidth, 
+							document.documentElement.scrollWidth, 
+							document.documentElement.offsetWidth),
+						height: Math.max(
+							document.body.scrollHeight, 
+							document.body.offsetHeight, 
+							document.documentElement.clientHeight, 
+							document.documentElement.scrollHeight, 
+							document.documentElement.offsetHeight)
+					},
+					window: {
+						width: window.outerWidth,
+						height: window.outerHeight
+					}
+				});");
+				var bodyDimensions = JsonConvert.DeserializeObject<GlobalDimensionsWrapper>(bodyDimensionsBlob);
+				
+				var newDriverDimensions = new Size()
+				{
+					Width = bodyDimensions.Document.Width + (currentDriverDimensions.Width - bodyDimensions.Window.Width),
+					Height = bodyDimensions.Document.Height + (currentDriverDimensions.Height - bodyDimensions.Window.Height)
+				};
+
+				_driver.Manage().Window.Size = newDriverDimensions;
+
+				var screenshot = GetScreenshotDriver().GetScreenshot();
+				return SKBitmap.Decode(screenshot.AsByteArray);
+			} finally {
+				_driver.Manage().Window.Size = currentDriverDimensions;
+			}
+		}
+
+		private class DimensionsWrapper {
+			public int Width { get; set; }
+			public int Height { get; set; }
+		}
+
+		private class GlobalDimensionsWrapper
+		{
+			public DimensionsWrapper Window { get; set; }
+			public DimensionsWrapper Document { get; set; }
+		}
+
+		private class ElementWrapper
+		{
+			public string Tag { get; set; }
+
+			public DomRectangle BoundingClientRectangle { get; set; }
+			public DomAttribute[] Attributes { get; set; }
 		}
 	}
 }

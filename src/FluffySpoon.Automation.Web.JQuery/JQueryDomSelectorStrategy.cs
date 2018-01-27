@@ -11,7 +11,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 
 		private string _uniqueJQueryInstanceReference;
 
-		public string InitialJavaScriptForEachPage { get; private set; }
+		public string DomSelectorLibraryJavaScript { get; private set; }
 
 		public JQueryDomSelectorStrategy()
 		{
@@ -29,7 +29,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 		public async Task InitializeAsync()
 		{
 			var jQueryScriptContents = await _webClient.GetAsync(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
-			InitialJavaScriptForEachPage = _uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()";
+			DomSelectorLibraryJavaScript = _uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()";
 		}
 
 		private static string PrepareSelectorForInlining(string selector)

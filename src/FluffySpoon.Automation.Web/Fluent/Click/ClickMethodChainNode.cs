@@ -12,5 +12,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 		{
 
 		}
+
+		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		{
+			return base.OnExecuteAsync(framework);
+		}
 	}
 }

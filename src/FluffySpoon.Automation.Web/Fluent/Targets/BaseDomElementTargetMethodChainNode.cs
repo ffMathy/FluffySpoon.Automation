@@ -40,8 +40,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		private TNextMethodChainNode Delegate()
 		{
-			MethodChainContext.Enqueue(this);
-			return MethodChainContext.Enqueue(new TNextMethodChainNode());
+			lock (MethodChainContext)
+			{
+				MethodChainContext.Enqueue(this);
+				return MethodChainContext.Enqueue(new TNextMethodChainNode());
+			}
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
@@ -52,8 +55,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 				var findNode = new FindMethodChainNode(_selector);
 				await findNode.ExecuteAsync(framework);
-
-				Elements = findNode.Elements;
+				
+				Elements = findNode.Elements ?? 
+					throw new InvalidOperationException("The web driver returned null when trying to get elements by selector \"" + _selector + "\".");
 			}
 
 			await base.OnExecuteAsync(framework);

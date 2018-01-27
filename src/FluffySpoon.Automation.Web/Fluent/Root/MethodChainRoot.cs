@@ -32,9 +32,15 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IAwaitable
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
-		public IExpectMethodChainRoot Expect => MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
-		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => throw new NotImplementedException();
-		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => MethodChainContext.Enqueue(new ClickMethodChainNode());
+		public IExpectMethodChainRoot Expect => 
+			MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
+
+		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot =>
+			MethodChainContext.Enqueue(new TakeScreenshotChainNode());
+
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => 
+			MethodChainContext.Enqueue(new ClickMethodChainNode());
+
 		public IDoubleClickMethodChainNode DoubleClick => throw new NotImplementedException();
 		public IRightClickMethodChainNode RightClick => throw new NotImplementedException();
 		public IHoverMethodChainNode Hover => throw new NotImplementedException();
@@ -42,7 +48,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
 		
-		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => MethodChainContext.Enqueue(new EnterMethodChainNode(text));
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
+			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
 		public IMethodChainRoot Find(string selector)
 		{

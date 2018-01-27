@@ -20,7 +20,7 @@ using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web.Fluent.Root
 {
-	public interface IMethodChainRoot
+	public interface IMethodChainRoot: IAwaitable
 	{
 		IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot { get; }
 		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click { get; }
@@ -34,6 +34,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		IMethodChainRoot Wait(TimeSpan time);
 		IMethodChainRoot Wait(int milliseconds);
+
+		//TODO: should be called WaitUntil, and should share an Expect chain so that it can wait until specific expects are done
 		IMethodChainRoot Wait(Func<bool> predicate);
 
 		IOpenMethodChainNode Open(string uri);
