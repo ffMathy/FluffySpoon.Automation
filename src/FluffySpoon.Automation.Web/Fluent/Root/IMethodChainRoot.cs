@@ -10,6 +10,7 @@ using FluffySpoon.Automation.Web.Fluent.Open;
 using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
@@ -26,7 +27,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick { get; }
 
 		IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover { get; }
-		IDragMethodChainNode Drag { get; }
+		IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetMethodChainNode> Drag { get; }
 		IFocusMethodChainNode Focus { get; }
 		ISelectMethodChainNode Select { get; }
 		IExpectMethodChainRoot Expect { get; }
@@ -36,11 +37,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		//TODO: should be called WaitUntil, and should share an Expect chain so that it can wait until specific expects are done
 		IMethodChainRoot Wait(Func<bool> predicate);
+		IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate);
 
 		IOpenMethodChainNode Open(string uri);
         IOpenMethodChainNode Open(Uri uri);
-		
-		IMethodChainRoot Find(string selector);
 
 		IUploadMethodChainNode Upload(string filePath);
 

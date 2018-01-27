@@ -256,6 +256,11 @@ namespace FluffySpoon.Automation.Web.Selenium
 			}
 		}
 
+		public Task DragDropAsync(IDomElement from, IDomElement to)
+		{
+			throw new NotImplementedException();
+		}
+
 		private class DimensionsWrapper {
 			public int Width { get; set; }
 			public int Height { get; set; }

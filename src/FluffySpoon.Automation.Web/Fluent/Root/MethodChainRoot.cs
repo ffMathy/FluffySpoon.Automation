@@ -11,6 +11,7 @@ using FluffySpoon.Automation.Web.Fluent.Open;
 using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
@@ -47,15 +48,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover =>
 			MethodChainContext.Enqueue(new HoverMethodChainNode());
 
-		public IDragMethodChainNode Drag => throw new NotImplementedException();
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetMethodChainNode> Drag =>
+			MethodChainContext.Enqueue(new DragMethodChainNode());
+
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
 			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
-
-		public IMethodChainRoot Find(string selector) =>
-			MethodChainContext.Enqueue(new FindMethodChainNode(selector));
 
 		public IOpenMethodChainNode Open(string uri) => 
 			MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
@@ -70,6 +70,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMethodChainRoot Wait(TimeSpan timespan) => MethodChainContext.Enqueue(new WaitMethodChainNode(timespan));
 		public IMethodChainRoot Wait(int milliseconds) => Wait(TimeSpan.FromMilliseconds(milliseconds));
 		public IMethodChainRoot Wait(Func<bool> predicate)
+		{
+			throw new NotImplementedException();
+		}
+		public IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate)
 		{
 			throw new NotImplementedException();
 		}

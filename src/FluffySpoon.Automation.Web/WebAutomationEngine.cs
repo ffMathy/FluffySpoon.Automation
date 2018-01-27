@@ -18,6 +18,7 @@ using FluffySpoon.Automation.Web.Fluent.RightClick;
 using FluffySpoon.Automation.Web.Fluent.Root;
 using FluffySpoon.Automation.Web.Fluent.Select;
 using FluffySpoon.Automation.Web.Fluent.TakeScreenshot;
+using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
@@ -70,18 +71,17 @@ namespace FluffySpoon.Automation.Web
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick => StartNewSession().RightClick;
 
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover => StartNewSession().Hover;
-		public IDragMethodChainNode Drag => StartNewSession().Drag;
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetMethodChainNode> Drag => StartNewSession().Drag;
 		public IFocusMethodChainNode Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;
 
 		public IMethodChainRoot Wait(TimeSpan time) => StartNewSession().Wait(time);
 		public IMethodChainRoot Wait(int milliseconds) => StartNewSession().Wait(milliseconds);
 		public IMethodChainRoot Wait(Func<bool> predicate) => StartNewSession().Wait(predicate);
+		public IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate) => StartNewSession().Wait(predicate);
 
 		public IOpenMethodChainNode Open(string uri) => StartNewSession().Open(uri);
 		public IOpenMethodChainNode Open(Uri uri) => StartNewSession().Open(uri);
-
-		public IMethodChainRoot Find(string selector) => StartNewSession().Find(selector);
 
 		public IUploadMethodChainNode Upload(string filePath) => StartNewSession().Upload(filePath);
 

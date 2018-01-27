@@ -39,6 +39,9 @@ namespace FluffySpoon.Automation.Web.Sample
 				await automationEngine
 					.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
 
+				await automationEngine
+					.Drag.From("body").To
+
 				Console.WriteLine("Test done!");
 			}
 			catch (Exception ex)

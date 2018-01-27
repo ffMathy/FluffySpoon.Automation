@@ -13,8 +13,8 @@ namespace FluffySpoon.Automation.Web
 		Task<string> EvaluateJavaScriptAsync(string code);
 
         Task OpenAsync(string uri);
-
-        Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
+		Task DragDropAsync(IDomElement from, IDomElement to);
+		Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
 		Task HoverAsync(IDomElement domElement, int offsetX, int offsetY);
 		Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
 		Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
