@@ -14,6 +14,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
+using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 
 namespace FluffySpoon.Automation.Web.Fluent.Root
@@ -27,8 +28,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick { get; }
 
 		IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover { get; }
-		IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetOnTargetMethodChainNode>> Drag { get; }
-		IFocusMethodChainNode Focus { get; }
+		IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag { get; }
+		IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus { get; }
 		ISelectMethodChainNode Select { get; }
 		IExpectMethodChainRoot Expect { get; }
 

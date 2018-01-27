@@ -36,6 +36,14 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
 		}
 
+		public Task FocusAsync(IDomElement domElement, int offsetX, int offsetY)
+		{
+			var nativeElement = GetWebDriverElementsFromDomElements(new[] { domElement }).Single();
+			GetScriptExecutor().ExecuteScript("arguments[0].focus();", nativeElement);
+
+			return Task.CompletedTask;
+		}
+
 		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
 		{
 			var scriptExecutor = GetScriptExecutor();

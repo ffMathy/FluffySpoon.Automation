@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Root;
@@ -18,6 +19,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Find
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
+			if (Parent is FindMethodChainNode)
+				throw new InvalidOperationException("It is not possible to have two Find operations after each other.");
+
 			Elements = await framework.FindDomElementsAsync(_selector);
 			await base.OnExecuteAsync(framework);
 		}

@@ -3,12 +3,14 @@ using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
+using FluffySpoon.Automation.Web.Fluent.Targets.To;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
 	interface IBaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
 		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
-		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
+		IDomElementInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IDomElementToTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IDomElementOfTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IDomElementFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IDomElementOnTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 

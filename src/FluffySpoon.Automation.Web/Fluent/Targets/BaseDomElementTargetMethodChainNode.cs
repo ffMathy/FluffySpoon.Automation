@@ -71,5 +71,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		public TNextMethodChainNode At(string selector) => Delegate(selector);
 		public TNextMethodChainNode At(IDomElement element) => Delegate(element);
+
+		public TNextMethodChainNode To(string selector) => Delegate(selector);
+		public TNextMethodChainNode To(IDomElement element) => Delegate(element);
 	}
 }

@@ -27,9 +27,6 @@ namespace FluffySpoon.Automation.Web.Sample
 					.Open("https://google.com");
 
 				await automationEngine
-					.Drag.From("div:first").On("div:last");
-
-				await automationEngine
 					.Enter("foobar").In("input[type=text]")
 					.Wait(TimeSpan.FromSeconds(1))
 					.Expect

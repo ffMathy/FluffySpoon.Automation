@@ -15,6 +15,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
+using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 using FluffySpoon.Automation.Web.Fluent.Wait;
 
@@ -48,10 +49,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover =>
 			MethodChainContext.Enqueue(new HoverMethodChainNode());
 
-		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetOnTargetMethodChainNode>> Drag =>
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag =>
 			MethodChainContext.Enqueue(new DragMethodChainNode());
 
-		public IFocusMethodChainNode Focus => throw new NotImplementedException();
+		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus =>
+			MethodChainContext.Enqueue(new FocusMethodChainNode());
+
 		public ISelectMethodChainNode Select => throw new NotImplementedException();
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>

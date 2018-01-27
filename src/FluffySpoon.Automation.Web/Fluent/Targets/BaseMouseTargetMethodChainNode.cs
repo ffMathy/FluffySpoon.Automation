@@ -4,6 +4,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
+using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using System;
 using System.Collections.Generic;
 
@@ -13,6 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+		IMouseToTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
@@ -54,5 +56,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		public TNextMethodChainNode At(int x, int y) => Delegate(x, y);
 		public TNextMethodChainNode At(IDomElement element, int relativeX, int relativeY) => Delegate(element, relativeX, relativeY);
+
+		public TNextMethodChainNode To(int x, int y) => Delegate(x, y);
+		public TNextMethodChainNode To(IDomElement element, int relativeX, int relativeY) => Delegate(element, relativeX, relativeY);
 	}
 }

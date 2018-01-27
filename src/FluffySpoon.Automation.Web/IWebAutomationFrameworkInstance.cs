@@ -14,6 +14,7 @@ namespace FluffySpoon.Automation.Web
 
         Task OpenAsync(string uri);
 		Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY);
+		Task FocusAsync(IDomElement domElement, int offsetX, int offsetY);
 		Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
 		Task HoverAsync(IDomElement domElement, int offsetX, int offsetY);
 		Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);

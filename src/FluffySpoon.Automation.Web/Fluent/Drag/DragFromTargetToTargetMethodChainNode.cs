@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
-	internal class DragFromTargetOnTargetMethodChainNode : MethodChainRoot<DragFromTargetMethodChainNode>, IDragFromTargetOnTargetMethodChainNode
+	internal class DragFromTargetToTargetMethodChainNode : MethodChainRoot<DragFromTargetMethodChainNode>, IDragFromTargetToTargetMethodChainNode
 	{
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{

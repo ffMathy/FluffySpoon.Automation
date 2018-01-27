@@ -22,6 +22,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
+using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using FluffySpoon.Automation.Web.Fluent.Upload;
 
 namespace FluffySpoon.Automation.Web
@@ -71,8 +72,8 @@ namespace FluffySpoon.Automation.Web
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick => StartNewSession().RightClick;
 
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover => StartNewSession().Hover;
-		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetOnTargetMethodChainNode>> Drag => StartNewSession().Drag;
-		public IFocusMethodChainNode Focus => StartNewSession().Focus;
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag => StartNewSession().Drag;
+		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;
 
 		public IMethodChainRoot Wait(TimeSpan time) => StartNewSession().Wait(time);

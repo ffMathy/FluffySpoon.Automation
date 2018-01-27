@@ -15,5 +15,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		public TNextMethodChainNode From(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 		public TNextMethodChainNode On(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 		public TNextMethodChainNode At(IReadOnlyList<IDomElement> elements) => Delegate(elements);
+		public TNextMethodChainNode To(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 	}
 }
