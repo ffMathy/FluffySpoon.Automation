@@ -39,18 +39,17 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			var scriptExecutor = GetScriptExecutor();
-			var nativeElements = GetWebDriverElementsFromDomElements(elements);
-			foreach (var nativeElement in nativeElements)
-			{
-				if (!nativeElement.Displayed)
-					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
+			await PerformOnElementCoordinatesAsync(x => x.Click(), elements, relativeX, relativeY);
+		}
 
-				Actions.MoveToElement(nativeElement)
-					.Click()
-					.Build()
-					.Perform();
-			}
+		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
+		{
+			await PerformOnElementCoordinatesAsync(x => x.DoubleClick(), elements, relativeX, relativeY);
+		}
+
+		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
+		{
+			await PerformOnElementCoordinatesAsync(x => x.ContextClick(), elements, relativeX, relativeY);
 		}
 
 		public void Dispose()
@@ -231,6 +230,25 @@ namespace FluffySpoon.Automation.Web.Selenium
 				return SKBitmap.Decode(screenshot.AsByteArray);
 			} finally {
 				_driver.Manage().Window.Size = currentDriverDimensions;
+			}
+		}
+
+		private async Task PerformOnElementCoordinatesAsync(
+			Func<Actions, Actions> operation,
+			IReadOnlyList<IDomElement> elements,
+			int relativeX,
+			int relativeY)
+		{
+			var scriptExecutor = GetScriptExecutor();
+			var nativeElements = GetWebDriverElementsFromDomElements(elements);
+			foreach (var nativeElement in nativeElements)
+			{
+				if (!nativeElement.Displayed)
+					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
+
+				operation(Actions.MoveToElement(nativeElement, relativeX, relativeY))
+					.Build()
+					.Perform();
 			}
 		}
 

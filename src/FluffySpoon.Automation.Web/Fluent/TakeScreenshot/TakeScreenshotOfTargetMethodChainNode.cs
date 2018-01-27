@@ -1,4 +1,5 @@
-﻿using FluffySpoon.Automation.Web.Fluent.Root;
+﻿using FluffySpoon.Automation.Web.Dom;
+using FluffySpoon.Automation.Web.Fluent.Root;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 	{
 		internal IReadOnlyList<SKBitmap> Screenshots { get; private set; }
 
+		public override IReadOnlyList<IDomElement> Elements
+		{
+			get => Parent.Elements;
+		}
+
 		public IMethodChainRoot SaveAs(string jpegFileName)
 		{
 			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
@@ -20,7 +26,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			var screenshots = new List<SKBitmap>();
 			using (var bodyScreenshot = await framework.TakeScreenshotAsync())
 			{
-				foreach (var element in Parent.Elements)
+				foreach (var element in Elements)
 				{
 					var elementBounds = element.BoundingClientRectangle;
 

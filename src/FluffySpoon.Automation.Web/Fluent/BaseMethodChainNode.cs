@@ -15,7 +15,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 		private readonly SemaphoreSlim _executeSemaphore;
 		
         public IMethodChainContext MethodChainContext { protected get; set; }
-		public IReadOnlyList<IDomElement> Elements { get; protected set; }
+		public virtual IReadOnlyList<IDomElement> Elements { get; protected set; }
 
 		protected TParentMethodChainNode Parent { get; private set; }
 

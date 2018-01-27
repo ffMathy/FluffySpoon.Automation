@@ -7,6 +7,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
     class EnterInTargetMethodChainNode: MethodChainRoot<EnterMethodChainNode>, IEnterInTargetMethodChainNode
 	{
+		public override IReadOnlyList<IDomElement> Elements
+		{
+			get => Parent.Elements;
+		}
+
 		public EnterInTargetMethodChainNode()
 		{
 			
@@ -14,7 +19,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 
         protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
-            await framework.EnterTextInAsync(Parent.Elements, Parent.TextToEnter);
+            await framework.EnterTextInAsync(Elements, Parent.TextToEnter);
             await base.OnExecuteAsync(framework);
         }
 	}

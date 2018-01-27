@@ -65,10 +65,13 @@ namespace FluffySpoon.Automation.Web
 		}
 
 		public IExpectMethodChainRoot Expect => StartNewSession().Expect;
+
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot => StartNewSession().TakeScreenshot;
+
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => StartNewSession().Click;
-		public IDoubleClickMethodChainNode DoubleClick => StartNewSession().DoubleClick;
-		public IRightClickMethodChainNode RightClick => StartNewSession().RightClick;
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick => StartNewSession().DoubleClick;
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick => StartNewSession().RightClick;
+
 		public IHoverMethodChainNode Hover => StartNewSession().Hover;
 		public IDragMethodChainNode Drag => StartNewSession().Drag;
 		public IFocusMethodChainNode Focus => StartNewSession().Focus;
