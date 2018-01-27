@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseMouseTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseMouseTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+	abstract class BaseMouseTargetsMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseMouseTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseInTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOfTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseFromTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
@@ -17,6 +17,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		IMouseAtTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
 		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY) => Delegate(elements, relativeX, relativeY);
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);

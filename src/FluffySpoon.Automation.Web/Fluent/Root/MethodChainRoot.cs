@@ -48,7 +48,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover =>
 			MethodChainContext.Enqueue(new HoverMethodChainNode());
 
-		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetMethodChainNode> Drag =>
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetOnTargetMethodChainNode>> Drag =>
 			MethodChainContext.Enqueue(new DragMethodChainNode());
 
 		public IFocusMethodChainNode Focus => throw new NotImplementedException();

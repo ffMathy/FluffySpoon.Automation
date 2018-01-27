@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-	class TakeScreenshotChainNode : BaseDomElementTargetsMethodChainNode<TakeScreenshotChainNode, TakeScreenshotOfTargetMethodChainNode>
+	class TakeScreenshotChainNode : BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, TakeScreenshotChainNode, TakeScreenshotOfTargetMethodChainNode>
 	{
 	}
 }

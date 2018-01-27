@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
+	abstract class BaseDomElementTargetsMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IBaseDomElementTargetsMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
 		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public TNextMethodChainNode In(IReadOnlyList<IDomElement> elements) => Delegate(elements);
 		public TNextMethodChainNode Of(IReadOnlyList<IDomElement> elements) => Delegate(elements);

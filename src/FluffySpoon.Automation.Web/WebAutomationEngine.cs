@@ -71,7 +71,7 @@ namespace FluffySpoon.Automation.Web
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick => StartNewSession().RightClick;
 
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover => StartNewSession().Hover;
-		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetMethodChainNode> Drag => StartNewSession().Drag;
+		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetOnTargetMethodChainNode>> Drag => StartNewSession().Drag;
 		public IFocusMethodChainNode Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;
 

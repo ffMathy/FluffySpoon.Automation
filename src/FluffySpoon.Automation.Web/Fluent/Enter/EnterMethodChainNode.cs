@@ -3,7 +3,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
-	class EnterMethodChainNode: BaseDomElementTargetsMethodChainNode<EnterMethodChainNode, EnterInTargetMethodChainNode>
+	class EnterMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, EnterMethodChainNode, EnterInTargetMethodChainNode>
     {
         internal string TextToEnter { get; }
 

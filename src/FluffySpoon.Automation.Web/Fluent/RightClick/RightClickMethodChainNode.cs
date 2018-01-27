@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
-	class RightClickMethodChainNode : BaseMouseTargetsMethodChainNode<RightClickMethodChainNode, RightClickOnTargetsMethodChainNode>
+	class RightClickMethodChainNode : BaseMouseTargetsMethodChainNode<IBaseMethodChainNode, RightClickMethodChainNode, RightClickOnTargetsMethodChainNode>
 	{
 		public RightClickMethodChainNode()
 		{

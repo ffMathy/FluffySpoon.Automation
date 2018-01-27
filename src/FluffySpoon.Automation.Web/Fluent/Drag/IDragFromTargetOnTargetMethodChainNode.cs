@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
-	public interface IDragFromTargetToTargetMethodChainNode : IBaseMethodChainNode, IMethodChainRoot
+	public interface IDragFromTargetOnTargetMethodChainNode : IBaseMethodChainNode, IMethodChainRoot
 	{
 	}
 }

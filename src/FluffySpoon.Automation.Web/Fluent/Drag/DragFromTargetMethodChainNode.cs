@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
-	class DragFromTargetMethodChainNode : BaseMouseTargetMethodChainNode<DragFromTargetMethodChainNode, DragFromTargetToTargetMethodChainNode>
+	class DragFromTargetMethodChainNode : BaseMouseTargetMethodChainNode<DragMethodChainNode, DragFromTargetMethodChainNode, DragFromTargetOnTargetMethodChainNode>
 	{
 	}
 }

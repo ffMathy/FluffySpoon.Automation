@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseMouseTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
+	abstract class BaseMouseTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
@@ -18,6 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		IMouseAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
 		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public int OffsetX { get; private set; }
 		public int OffsetY { get; private set; }

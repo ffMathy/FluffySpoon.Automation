@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	abstract class BaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
-		BaseMethodChainNode<IBaseMethodChainNode>,
+	abstract class BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
+		BaseMethodChainNode<TParentMethodChainNode>,
 		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
 		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
+		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		private string _selector;
 

@@ -14,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Hover
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			await framework.HoverAsync(Elements.Single(), Parent.OffsetX, Parent.OffsetY);
+			await framework.HoverAsync(Elements.First(), Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
 	}

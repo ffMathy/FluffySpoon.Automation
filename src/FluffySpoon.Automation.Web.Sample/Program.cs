@@ -24,7 +24,12 @@ namespace FluffySpoon.Automation.Web.Sample
 				await automationEngine.InitializeAsync();
 
 				await automationEngine
-					.Open("https://google.com")
+					.Open("https://google.com");
+
+				await automationEngine
+					.Drag.From("div:first").On("div:last");
+
+				await automationEngine
 					.Enter("foobar").In("input[type=text]")
 					.Wait(TimeSpan.FromSeconds(1))
 					.Expect
@@ -38,9 +43,6 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				await automationEngine
 					.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
-
-				await automationEngine
-					.Drag.From("body").To
 
 				Console.WriteLine("Test done!");
 			}

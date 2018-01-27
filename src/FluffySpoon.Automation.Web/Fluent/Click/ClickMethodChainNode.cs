@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Click
 {
-	class ClickMethodChainNode : BaseMouseTargetsMethodChainNode<ClickMethodChainNode, ClickOnTargetsMethodChainNode>
+	class ClickMethodChainNode : BaseMouseTargetsMethodChainNode<IBaseMethodChainNode, ClickMethodChainNode, ClickOnTargetsMethodChainNode>
 	{
 		public ClickMethodChainNode()
 		{

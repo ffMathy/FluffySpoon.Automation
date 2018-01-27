@@ -36,24 +36,46 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
 		}
 
+		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
+		{
+			var scriptExecutor = GetScriptExecutor();
+			var nativeElements = GetWebDriverElementsFromDomElements(new[] { from, to });
+			var nativeFromElement = nativeElements[0];
+			var nativeToElement = nativeElements[1];
+
+			Actions
+				.MoveToElement(
+					nativeFromElement,
+					fromOffsetX,
+					fromOffsetY)
+				.ClickAndHold()
+				.MoveToElement(
+					nativeToElement,
+					toOffsetX,
+					toOffsetY)
+				.Release()
+				.Build()
+				.Perform();
+		}
+
 		public async Task HoverAsync(IDomElement element, int relativeX, int relativeY)
 		{
-			await PerformOnElementCoordinatesAsync(x => x, new[] { element }, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync(x => x, new[] { element }, relativeX, relativeY);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformOnElementCoordinatesAsync(x => x.Click(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync(x => x.Click(), elements, relativeX, relativeY);
 		}
 
 		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformOnElementCoordinatesAsync(x => x.DoubleClick(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync(x => x.DoubleClick(), elements, relativeX, relativeY);
 		}
 
 		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformOnElementCoordinatesAsync(x => x.ContextClick(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync(x => x.ContextClick(), elements, relativeX, relativeY);
 		}
 
 		public void Dispose()
@@ -237,7 +259,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			}
 		}
 
-		private async Task PerformOnElementCoordinatesAsync(
+		private async Task PerformMouseOperationOnElementCoordinatesAsync(
 			Func<Actions, Actions> operation,
 			IReadOnlyList<IDomElement> elements,
 			int relativeX,
@@ -247,18 +269,10 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
 			{
-				if (!nativeElement.Displayed)
-					throw new InvalidOperationException("One of the " + elements.Count + " elements to click was not visible or unclickable.");
-
 				operation(Actions.MoveToElement(nativeElement, relativeX, relativeY))
 					.Build()
 					.Perform();
 			}
-		}
-
-		public Task DragDropAsync(IDomElement from, IDomElement to)
-		{
-			throw new NotImplementedException();
 		}
 
 		private class DimensionsWrapper {

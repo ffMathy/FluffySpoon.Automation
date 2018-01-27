@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Hover
 {
-	class HoverMethodChainNode : BaseMouseTargetMethodChainNode<HoverMethodChainNode, HoverOnTargetMethodChainNode>
+	class HoverMethodChainNode : BaseMouseTargetMethodChainNode<IBaseMethodChainNode, HoverMethodChainNode, HoverOnTargetMethodChainNode>
 	{
 		public HoverMethodChainNode()
 		{

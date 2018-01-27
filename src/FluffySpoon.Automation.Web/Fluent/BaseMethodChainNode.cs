@@ -17,7 +17,7 @@ namespace FluffySpoon.Automation.Web.Fluent
         public IMethodChainContext MethodChainContext { protected get; set; }
 		public virtual IReadOnlyList<IDomElement> Elements { get; protected set; }
 
-		protected TParentMethodChainNode Parent { get; private set; }
+		protected internal TParentMethodChainNode Parent { get; private set; }
 
         public BaseMethodChainNode()
         {
