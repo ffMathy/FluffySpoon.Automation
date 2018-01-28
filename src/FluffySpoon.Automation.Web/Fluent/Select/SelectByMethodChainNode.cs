@@ -1,11 +1,13 @@
-﻿using System;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {
-    class SelectByMethodChainNode: BaseMethodChainNode<SelectMethodChainNode>, ISelectByMethodChainNode
+    class SelectByMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectByMethodChainNode, SelectByFromTargetMethodChainNode>, 
+		ISelectByMethodChainNode
     {
 		internal string[] Values { get; private set; }
 		internal int[] Indices { get; private set; }
