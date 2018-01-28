@@ -55,7 +55,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus =>
 			MethodChainContext.Enqueue(new FocusMethodChainNode());
 
-		public ISelectMethodChainNode Select => throw new NotImplementedException();
+		public ISelectMethodChainNode Select =>
+			MethodChainContext.Enqueue(new SelectMethodChainNode());
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
 			MethodChainContext.Enqueue(new EnterMethodChainNode(text));

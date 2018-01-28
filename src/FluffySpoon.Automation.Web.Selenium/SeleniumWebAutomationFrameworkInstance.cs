@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Events;
+using OpenQA.Selenium.Support.UI;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -281,6 +282,55 @@ namespace FluffySpoon.Automation.Web.Selenium
 					.Build()
 					.Perform();
 			}
+		}
+
+		private void SelectAsync(IReadOnlyList<IDomElement> elements, Action<SelectElement> action)
+		{
+			var nativeElements = GetWebDriverElementsFromDomElements(elements);
+			foreach (var nativeElement in nativeElements)
+			{
+				var selectElement = new SelectElement(nativeElement);
+				if (selectElement.IsMultiple)
+					selectElement.DeselectAll();
+
+				action(selectElement);
+			}
+		}
+
+		public Task SelectByIndicesAsync(IReadOnlyList<IDomElement> elements, int[] indices)
+		{
+			SelectAsync(elements, selectElement =>
+			{
+				foreach (var index in indices)
+				{
+					selectElement.SelectByIndex(index);
+				}
+			});
+			return Task.CompletedTask;
+		}
+
+		public Task SelectByTextsAsync(IReadOnlyList<IDomElement> elements, string[] texts)
+		{
+			SelectAsync(elements, selectElement =>
+			{
+				foreach (var text in texts)
+				{
+					selectElement.SelectByText(text);
+				}
+			});
+			return Task.CompletedTask;
+		}
+
+		public Task SelectByValuesAsync(IReadOnlyList<IDomElement> elements, string[] values)
+		{
+			SelectAsync(elements, selectElement =>
+			{
+				foreach (var value in values)
+				{
+					selectElement.SelectByValue(value);
+				}
+			});
+			return Task.CompletedTask;
 		}
 
 		private class DimensionsWrapper {

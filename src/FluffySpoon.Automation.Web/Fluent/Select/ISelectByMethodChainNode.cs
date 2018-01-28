@@ -1,13 +1,9 @@
-﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent.Root;
-using System.Collections.Generic;
+﻿using FluffySpoon.Automation.Web.Fluent.Root;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {
-	public interface ISelectByMethodChainNode: IBaseMethodChainNode
+	public interface ISelectByMethodChainNode :
+		IBaseMethodChainNode
 	{
-		IMethodChainRoot From(string selector);
-		IMethodChainRoot From(IDomElement element);
-		IMethodChainRoot From(IReadOnlyList<IDomElement> elements);
 	}
 }
