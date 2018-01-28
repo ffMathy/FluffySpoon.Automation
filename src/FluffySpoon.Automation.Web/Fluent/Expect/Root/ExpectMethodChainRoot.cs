@@ -7,6 +7,7 @@ using FluffySpoon.Automation.Web.Fluent.Expect.Exists;
 using FluffySpoon.Automation.Web.Fluent.Expect.Text;
 using FluffySpoon.Automation.Web.Fluent.Expect.Uri;
 using FluffySpoon.Automation.Web.Fluent.Expect.Value;
+using FluffySpoon.Automation.Web.Fluent.Targets.In;
 using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
@@ -14,14 +15,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 	class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, IExpectMethodChainRoot
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
-		public IExpectClassMethodChainNode Class(string className)
+		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectClassesOfTargetsMethodChainNode> Classes(params string[] classNames)
 		{
-			throw new NotImplementedException();
-		}
-
-		public IExpectClassMethodChainNode Class(Func<string> classNamePredicate)
-		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new ExpectClassesMethodChainNode(classNames));
 		}
 
 		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainNode> Count(int count)
@@ -44,9 +40,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			return MethodChainContext.Enqueue(new ExpectExistsMethodChainNode(elements));
 		}
 
-		public IExpectTextMethodChainNode Text(string text)
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectTextInTargetsMethodChainNode> Text(string text)
 		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new ExpectTextMethodChainNode(text));
 		}
 
 		public IExpectUriMethodChainNode Uri(string uri)
@@ -59,19 +55,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			throw new NotImplementedException();
 		}
 
-		public IExpectUriMethodChainNode Uri(Func<System.Uri, bool> predicate)
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueInTargetsMethodChainNode> Value(string value)
 		{
-			throw new NotImplementedException();
-		}
-
-		public IExpectValueMethodChainNode Value(int value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IExpectValueMethodChainNode Value(string value)
-		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new ExpectValueMethodChainNode(value));
 		}
 	}
 }

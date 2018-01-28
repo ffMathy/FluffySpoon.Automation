@@ -134,6 +134,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 						returnValues.push(JSON.stringify({
 							tag: tag,
 							attributes: attributes,
+							textContent: element.textContent,
+							value: element.value,
 							boundingClientRectangle: element.getBoundingClientRect()
 						}));
 					}
@@ -152,6 +154,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 					return new DomElement(
 						"[" + _uniqueSelectorAttribute + "='" + x.Tag + "']",
+						x.TextContent,
+						x.Value,
 						x.BoundingClientRectangle,
 						attributes);
 				})
@@ -355,6 +359,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 		private class ElementWrapper
 		{
 			public string Tag { get; set; }
+			public string TextContent { get; set; }
+			public string Value { get; set; }
 
 			public DomRectangle BoundingClientRectangle { get; set; }
 			public DomAttribute[] Attributes { get; set; }
