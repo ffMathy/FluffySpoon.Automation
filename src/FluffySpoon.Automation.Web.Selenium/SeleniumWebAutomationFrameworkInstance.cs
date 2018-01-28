@@ -166,7 +166,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return Task.FromResult(result?.ToString());
 		}
 
-		public async Task<IReadOnlyList<IDomElement>> FindDomElementsAsync(string selector)
+		public async Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(string selector)
 		{
 			var scriptToExecute = _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
 			return await EvaluateJavaScriptAsDomElementsAsync(scriptToExecute);
@@ -231,26 +231,27 @@ namespace FluffySpoon.Automation.Web.Selenium
 			try
 			{
 				var bodyDimensionsBlob = await EvaluateJavaScriptAsync(@"
-				return JSON.stringify({
-					document: {
-						width: Math.max(
-							document.body.scrollWidth, 
-							document.body.offsetWidth, 
-							document.documentElement.clientWidth, 
-							document.documentElement.scrollWidth, 
-							document.documentElement.offsetWidth),
-						height: Math.max(
-							document.body.scrollHeight, 
-							document.body.offsetHeight, 
-							document.documentElement.clientHeight, 
-							document.documentElement.scrollHeight, 
-							document.documentElement.offsetHeight)
-					},
-					window: {
-						width: window.outerWidth,
-						height: window.outerHeight
-					}
-				});");
+					return JSON.stringify({
+						document: {
+							width: Math.max(
+								document.body.scrollWidth, 
+								document.body.offsetWidth, 
+								document.documentElement.clientWidth, 
+								document.documentElement.scrollWidth, 
+								document.documentElement.offsetWidth),
+							height: Math.max(
+								document.body.scrollHeight, 
+								document.body.offsetHeight, 
+								document.documentElement.clientHeight, 
+								document.documentElement.scrollHeight, 
+								document.documentElement.offsetHeight)
+						},
+						window: {
+							width: window.outerWidth,
+							height: window.outerHeight
+						}
+					});
+				");
 				var bodyDimensions = JsonConvert.DeserializeObject<GlobalDimensionsWrapper>(bodyDimensionsBlob);
 				
 				var newDriverDimensions = new Size()
@@ -331,6 +332,13 @@ namespace FluffySpoon.Automation.Web.Selenium
 				}
 			});
 			return Task.CompletedTask;
+		}
+
+		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(params string[] selectors)
+		{
+			var combinedSelector = selectors.Aggregate((a, b) => a + ", " + b);
+			var sanitizedSelector = combinedSelector.Replace("'", "\\'");
+			return await EvaluateJavaScriptAsDomElementsAsync(@"return document.querySelectorAll('" + sanitizedSelector + "');");
 		}
 
 		private class DimensionsWrapper {

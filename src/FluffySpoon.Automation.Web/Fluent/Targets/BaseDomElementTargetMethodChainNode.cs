@@ -47,11 +47,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 				if (_selector == null)
 					throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");
 
-				var findNode = new FindMethodChainNode(_selector);
-				await findNode.ExecuteAsync(framework);
-				
-				Elements = findNode.Elements ?? 
-					throw new InvalidOperationException("The web driver returned null when trying to get elements by selector \"" + _selector + "\".");
+				Elements = await framework.FindDomElementsBySelectorAsync(_selector);
 			}
 
 			await base.OnExecuteAsync(framework);

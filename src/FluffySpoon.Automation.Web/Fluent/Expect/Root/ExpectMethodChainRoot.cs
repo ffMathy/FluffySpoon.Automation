@@ -36,12 +36,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 
 		public IExpectExistsMethodChainNode Exists(IDomElement element)
 		{
-			throw new NotImplementedException();
+			return Exists(new[] { element });
 		}
 
 		public IExpectExistsMethodChainNode Exists(IReadOnlyList<IDomElement> elements)
 		{
-			throw new NotImplementedException();
+			return MethodChainContext.Enqueue(new ExpectExistsMethodChainNode(elements));
 		}
 
 		public IExpectTextMethodChainNode Text(string text)

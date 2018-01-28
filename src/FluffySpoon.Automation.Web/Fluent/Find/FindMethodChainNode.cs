@@ -22,7 +22,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Find
 			if (Parent is FindMethodChainNode)
 				throw new InvalidOperationException("It is not possible to have two Find operations after each other.");
 
-			Elements = await framework.FindDomElementsAsync(_selector);
+			Elements = await framework.FindDomElementsBySelectorAsync(_selector);
 			await base.OnExecuteAsync(framework);
 		}
 	}
