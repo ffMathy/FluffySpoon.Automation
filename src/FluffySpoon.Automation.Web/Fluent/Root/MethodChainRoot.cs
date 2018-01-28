@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Exceptions;
 using FluffySpoon.Automation.Web.Fluent.Click;
+using FluffySpoon.Automation.Web.Fluent.Context;
 using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
@@ -71,15 +74,56 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			throw new NotImplementedException();
 		}
 
-		public IMethodChainRoot Wait(TimeSpan timespan) => MethodChainContext.Enqueue(new WaitMethodChainNode(timespan));
+		public IMethodChainRoot Wait(TimeSpan timespan)
+		{
+			DateTime? startTime = null;
+			return Wait(() =>
+			{
+				if (startTime == null)
+					startTime = DateTime.UtcNow;
+
+				return DateTime.UtcNow - startTime > timespan;
+			});
+		}
 		public IMethodChainRoot Wait(int milliseconds) => Wait(TimeSpan.FromMilliseconds(milliseconds));
+		public IMethodChainRoot Wait(Func<Task<bool>> predicate) => MethodChainContext.Enqueue(new WaitMethodChainNode(predicate));
 		public IMethodChainRoot Wait(Func<bool> predicate)
 		{
-			throw new NotImplementedException();
+			return Wait(() =>
+			{
+				return Task.FromResult(predicate());
+			});
 		}
 		public IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate)
 		{
-			throw new NotImplementedException();
+			var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
+
+			var methodChainRoot = new MethodChainRoot();
+			methodChainRoot.MethodChainContext = methodChainContext;
+
+			return Wait(async () =>
+			{
+				predicate(methodChainRoot.Expect);
+
+				var expectationFailed = true;
+				while (expectationFailed)
+				{
+					try
+					{
+						await methodChainRoot;
+						expectationFailed = false;
+					}
+					catch (ExpectationNotMetException)
+					{
+						methodChainContext.ResetLastError();
+						expectationFailed = true;
+
+						await Task.Delay(100);
+					}
+				}
+
+				return true;
+			});
 		}
 	}
 }

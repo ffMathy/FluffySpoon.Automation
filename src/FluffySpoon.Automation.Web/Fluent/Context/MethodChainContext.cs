@@ -13,14 +13,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 		private Exception _lastEncounteredException;
 
-		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
-
 		private readonly LinkedList<IBaseMethodChainNode> _allNodes;
 		private readonly Queue<IBaseMethodChainNode> _pendingNodesToRun;
 
 		private readonly SemaphoreSlim _semaphore;
 
 		private readonly int _methodChainOffset;
+
+		public IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; private set; }
 
 		public MethodChainContext(
 			IEnumerable<IWebAutomationFrameworkInstance> frameworks)
@@ -29,7 +29,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			_pendingNodesToRun = new Queue<IBaseMethodChainNode>();
 			_semaphore = new SemaphoreSlim(1);
 
-			_frameworks = frameworks;
+			Frameworks = frameworks;
 
 			_methodChainOffset = Interlocked.Increment(ref MethodChainOffset);
 		}
@@ -54,7 +54,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 						var next = _pendingNodesToRun.Dequeue();
 						Log("Executing: " + next.GetType().Name);
 
-						await Task.WhenAll(_frameworks.Select(next.ExecuteAsync));
+						await Task.WhenAll(Frameworks.Select(next.ExecuteAsync));
 					}
 
 				}
@@ -129,6 +129,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private void Log(string message)
 		{
 			Console.WriteLine("[#" + _methodChainOffset + "] " + message);
+		}
+
+		public void ResetLastError()
+		{
+			_lastEncounteredException = null;
 		}
 	}
 }

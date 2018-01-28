@@ -6,16 +6,18 @@ namespace FluffySpoon.Automation.Web.Fluent.Wait
 {
 	class WaitMethodChainNode : MethodChainRoot
     {
-		private readonly TimeSpan _timespan;
+		private readonly Func<Task<bool>> _predicate;
 
-		public WaitMethodChainNode(TimeSpan timespan)
+		public WaitMethodChainNode(Func<Task<bool>> predicate)
 		{
-			_timespan = timespan;
+			_predicate = predicate;
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			await Task.Delay(_timespan);
+			while (!await _predicate())
+				await Task.Delay(1);
+
 			await base.OnExecuteAsync(framework);
 		}
 	}

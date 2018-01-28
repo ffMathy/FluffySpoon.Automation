@@ -1,4 +1,6 @@
-﻿using FluffySpoon.Automation.Web.Fluent.Targets;
+﻿using FluffySpoon.Automation.Web.Dom;
+using FluffySpoon.Automation.Web.Fluent.Targets;
+using FluffySpoon.Automation.Web.Fluent.Targets.From;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {
-    class SelectByMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectByMethodChainNode, SelectByFromTargetMethodChainNode>, 
-		ISelectByMethodChainNode
-    {
+    class SelectByMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectByMethodChainNode, SelectByFromTargetMethodChainNode>
+	{
 		internal string[] Values { get; private set; }
 		internal int[] Indices { get; private set; }
 		internal string[] Texts { get; private set; }

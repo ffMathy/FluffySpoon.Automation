@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Context
 {
@@ -7,6 +8,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
         Task RunAllAsync();
         Task RunNextAsync();
 
-        TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : class, IBaseMethodChainNode;
+		IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; }
+		TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : class, IBaseMethodChainNode;
     }
 }

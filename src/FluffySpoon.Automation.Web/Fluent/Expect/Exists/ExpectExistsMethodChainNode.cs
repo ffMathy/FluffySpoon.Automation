@@ -1,9 +1,10 @@
 ﻿using FluffySpoon.Automation.Web.Exceptions;
+using FluffySpoon.Automation.Web.Fluent.Expect.Root;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 {
-	class ExpectExistsMethodChainNode : BaseMethodChainNode<IBaseMethodChainNode>, IExpectExistsMethodChainNode
+	class ExpectExistsMethodChainNode : ExpectMethodChainRoot<IBaseMethodChainNode>, IExpectExistsMethodChainNode
 	{
 		private readonly string _selector;
 

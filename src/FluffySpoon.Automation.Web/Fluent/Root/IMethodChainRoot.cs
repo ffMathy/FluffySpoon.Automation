@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Fluent.Click;
 using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
@@ -35,9 +36,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		IMethodChainRoot Wait(TimeSpan time);
 		IMethodChainRoot Wait(int milliseconds);
-
-		//TODO: should be called WaitUntil, and should share an Expect chain so that it can wait until specific expects are done
 		IMethodChainRoot Wait(Func<bool> predicate);
+		IMethodChainRoot Wait(Func<Task<bool>> predicate);
 		IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate);
 
 		IOpenMethodChainNode Open(string uri);
