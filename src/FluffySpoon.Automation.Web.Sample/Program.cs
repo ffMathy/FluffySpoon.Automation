@@ -28,11 +28,11 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				await automationEngine
 					.Enter("foobar").In("input[type=text]")
-					.Wait(until => until.Count(2).Of("#sbtc .lsb"));
+					.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
 
 				await automationEngine
 					.Click.On("#sbtc .lsb:first")
-					.Wait(until => until.Exists(".srg .g"))
+					.Wait(until => until.Exists(".srg .g:visible"))
 					.Expect
 					.Count(10).Of(".srg .g");
 

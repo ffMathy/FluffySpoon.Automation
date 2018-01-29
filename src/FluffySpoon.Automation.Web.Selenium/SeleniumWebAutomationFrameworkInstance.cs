@@ -69,22 +69,22 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task HoverAsync(IDomElement element, int relativeX, int relativeY)
 		{
-			await PerformMouseOperationOnElementCoordinatesAsync(x => x, new[] { element }, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a, new[] { element }, relativeX, relativeY);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformMouseOperationOnElementCoordinatesAsync(x => x.Click(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a.Click(b), elements, relativeX, relativeY);
 		}
 
 		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformMouseOperationOnElementCoordinatesAsync(x => x.DoubleClick(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a.DoubleClick(b), elements, relativeX, relativeY);
 		}
 
 		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)
 		{
-			await PerformMouseOperationOnElementCoordinatesAsync(x => x.ContextClick(), elements, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a.ContextClick(b), elements, relativeX, relativeY);
 		}
 
 		public void Dispose()
@@ -274,16 +274,15 @@ namespace FluffySpoon.Automation.Web.Selenium
 		}
 
 		private async Task PerformMouseOperationOnElementCoordinatesAsync(
-			Func<Actions, Actions> operation,
+			Func<Actions, IWebElement, Actions> operation,
 			IReadOnlyList<IDomElement> elements,
 			int relativeX,
 			int relativeY)
 		{
-			var scriptExecutor = GetScriptExecutor();
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
 			{
-				operation(Actions.MoveToElement(nativeElement, relativeX, relativeY))
+				operation(Actions.MoveToElement(nativeElement, relativeX, relativeY), nativeElement)
 					.Build()
 					.Perform();
 			}
