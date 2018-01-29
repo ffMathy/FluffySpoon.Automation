@@ -20,24 +20,26 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
-				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
-				await automationEngine.InitializeAsync();
+				using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>())
+				{
+					await automationEngine.InitializeAsync();
 
-				await automationEngine
-					.Open("https://google.com");
+					await automationEngine
+						.Open("https://google.com");
 
-				await automationEngine
-					.Enter("foobar").In("input[type=text]")
-					.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
+					await automationEngine
+						.Enter("foobar").In("input[type=text]")
+						.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
 
-				await automationEngine
-					.Click.On("#sbtc .lsb:first")
-					.Wait(until => until.Exists(".srg .g:visible"))
-					.Expect
-					.Count(10).Of(".srg .g");
+					await automationEngine
+						.Click.On("#sbtc .lsb:first")
+						.Wait(until => until.Exists(".srg .g:visible"))
+						.Expect
+						.Count(10).Of(".srg .g");
 
-				await automationEngine
-					.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
+					await automationEngine
+						.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
+				}
 
 				Console.WriteLine("Test done!");
 			}
@@ -55,8 +57,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			service.HideCommandPromptWindow = true;
 			service.SuppressInitialDiagnosticInformation = true;
 
-			var options = new ChromeOptions()
-			{
+			var options = new ChromeOptions() {
 				Proxy = null,
 				PageLoadStrategy = PageLoadStrategy.Normal,
 				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept

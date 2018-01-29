@@ -29,21 +29,20 @@ namespace FluffySpoon.Automation.Web
 {
 	class WebAutomationEngine : IWebAutomationEngine
     {
-        private readonly IMethodChainContextFactory _methodChainContextFactory;
+		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
-
 		private readonly ICollection<IMethodChainContext> _pendingQueues;
 
 		private bool _isInitialized;
 		private bool _isInitializing;
 
 		public WebAutomationEngine(
-			IMethodChainContextFactory methodChainContextFactory,
+			IEnumerable<IWebAutomationFrameworkInstance> frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
         {
             _pendingQueues = new HashSet<IMethodChainContext>();
-
-            _methodChainContextFactory = methodChainContextFactory;
+			
+			_frameworks = frameworks;
 			_domSelectorStrategy = domSelectorStrategy;
         }
 
@@ -105,10 +104,18 @@ namespace FluffySpoon.Automation.Web
 
 		private IMethodChainContext CreateNewQueue()
 		{
-			var methodChainQueue = _methodChainContextFactory.Create();
+			var methodChainQueue = new MethodChainContext(_frameworks);
 			_pendingQueues.Add(methodChainQueue);
 
 			return methodChainQueue;
+		}
+
+		public void Dispose()
+		{
+			foreach(var framework in _frameworks)
+			{
+				framework.Dispose();
+			}
 		}
 	}
 }
