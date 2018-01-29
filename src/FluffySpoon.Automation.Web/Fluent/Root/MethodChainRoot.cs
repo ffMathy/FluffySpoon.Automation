@@ -29,20 +29,20 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 	}
 
-	class MethodChainRoot<TParentMethodChainNode>: 
-		BaseMethodChainNode<TParentMethodChainNode>, 
-		IMethodChainRoot, 
-		IBaseMethodChainNode, 
+	class MethodChainRoot<TParentMethodChainNode> :
+		BaseMethodChainNode<TParentMethodChainNode>,
+		IMethodChainRoot,
+		IBaseMethodChainNode,
 		IAwaitable
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
-		public IExpectMethodChainRoot Expect => 
+		public IExpectMethodChainRoot Expect =>
 			MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
 
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot =>
 			MethodChainContext.Enqueue(new TakeScreenshotChainNode());
 
-		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click => 
+		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click =>
 			MethodChainContext.Enqueue(new ClickMethodChainNode());
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick =>
 			MethodChainContext.Enqueue(new DoubleClickMethodChainNode());
@@ -64,9 +64,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
 			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
-		public IOpenMethodChainNode Open(string uri) => 
+		public IOpenMethodChainNode Open(string uri) =>
 			MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
-		public IOpenMethodChainNode Open(Uri uri) => 
+		public IOpenMethodChainNode Open(Uri uri) =>
 			Open(uri.ToString());
 
 		public IUploadMethodChainNode Upload(string filePath)
@@ -77,8 +77,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMethodChainRoot Wait(TimeSpan timespan)
 		{
 			DateTime? startTime = null;
-			return Wait(() =>
-			{
+			return Wait(() => {
 				if (startTime == null)
 					startTime = DateTime.UtcNow;
 
@@ -89,40 +88,37 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMethodChainRoot Wait(Func<Task<bool>> predicate) => MethodChainContext.Enqueue(new WaitMethodChainNode(predicate));
 		public IMethodChainRoot Wait(Func<bool> predicate)
 		{
-			return Wait(() =>
-			{
+			return Wait(() => {
 				return Task.FromResult(predicate());
 			});
 		}
 		public IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate)
 		{
-			var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
-
-			var methodChainRoot = new MethodChainRoot();
-			methodChainRoot.MethodChainContext = methodChainContext;
-
-			return Wait(async () =>
-			{
-				predicate(methodChainRoot.Expect);
-
-				var expectationFailed = true;
-				while (expectationFailed)
+			return Wait(async () => {
+				while (true)
 				{
+					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
+
+					var methodChainRoot = new MethodChainRoot();
+					methodChainRoot.MethodChainContext = methodChainContext;
+
+					predicate(methodChainRoot.Expect);
+
 					try
 					{
 						await methodChainRoot;
-						expectationFailed = false;
+						return true;
+					}
+					catch (Exception ex) when (ex.InnerException is ExpectationNotMetException)
+					{
 					}
 					catch (ExpectationNotMetException)
 					{
-						methodChainContext.ResetLastError();
-						expectationFailed = true;
-
-						await Task.Delay(100);
 					}
-				}
 
-				return true;
+					methodChainContext.ResetLastError();
+					await Task.Delay(100);
+				}
 			});
 		}
 	}
