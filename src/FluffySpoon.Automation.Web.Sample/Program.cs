@@ -28,7 +28,7 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				await automationEngine
 					.Enter("foobar").In("input[type=text]")
-					.Wait(until => until.Count(2).Of(".lsb"));
+					.Wait(until => until.Count(2).Of("#sbtc .lsb"));
 
 				await automationEngine
 					.Click.On("#sbtc .lsb:first")
