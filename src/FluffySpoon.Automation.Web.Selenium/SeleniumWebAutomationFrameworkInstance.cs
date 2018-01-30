@@ -25,10 +25,14 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private Actions Actions => new Actions(_driver);
 
+		public string Technology { get; }
+
 		public SeleniumWebAutomationFrameworkInstance(
 			IDomSelectorStrategy domSelectorStrategy,
 			IWebDriver driver)
 		{
+			Technology = driver.GetType().Name;
+
 			_driver = new EventFiringWebDriver(driver);
 			_semaphore = new SemaphoreSlim(1);
 

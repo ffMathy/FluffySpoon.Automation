@@ -17,18 +17,21 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			var fileOffset = -1;
-			var fileNameWithoutExtension = 
-				Path.GetDirectoryName(_jpegFileName) + 
-				Path.DirectorySeparatorChar + 
-				Path.GetFileNameWithoutExtension(_jpegFileName);
 
+			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_jpegFileName);
+			var jpegFileName = framework.Technology + "_" + fileNameWithoutExtension;
+
+			var filePathWithoutExtension =
+				Path.GetDirectoryName(jpegFileName) +
+				Path.DirectorySeparatorChar +
+				jpegFileName;
 			foreach (var screenshotBitmap in Parent.Screenshots)
 			{
 				++fileOffset;
 
 				var fileName = Parent.Screenshots.Count > 1 ?
-					$"{fileNameWithoutExtension}-{fileOffset}.jpg" :
-					_jpegFileName;
+					$"{filePathWithoutExtension}-{fileOffset}.jpg" :
+					jpegFileName;
 
 				using (screenshotBitmap)
 				using (var screenshotImage = SKImage.FromBitmap(screenshotBitmap)) 

@@ -30,10 +30,11 @@ namespace FluffySpoon.Automation.Web.Sample
 					await automationEngine
 						.Enter("foobar").In("input[type=text]")
 						.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
-					
+
 					await automationEngine
 						.Click.On("#sbtc .lsb:first")
 						.Wait(until => until.Exists("#rso .g:visible"))
+						.Wait(TimeSpan.FromSeconds(1))
 						.Expect
 						.Count(8).Of("#rso .g");
 					
@@ -62,7 +63,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				PageLoadStrategy = PageLoadStrategy.Normal,
 				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
 			};
-			//options.AddArgument("--headless");
+			options.AddArgument("--headless");
 
 			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
