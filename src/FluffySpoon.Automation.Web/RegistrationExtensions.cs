@@ -25,9 +25,9 @@ namespace FluffySpoon.Automation.Web
 			this ServiceCollection services)
 		{
 			services.AddTransient<IWebAutomationEngine, WebAutomationEngine>();
-			services.AddTransient<IMethodChainContextFactory, MethodChainContextFactory>();
-
-			services.AddTransient(provider => webAutomationFrameworkInstanceConstructors.Select(constructor => constructor(provider)));
+			services.AddTransient(provider => webAutomationFrameworkInstanceConstructors
+				.Select(constructor => constructor(provider))
+				.ToArray());
 		}
 	}
 }

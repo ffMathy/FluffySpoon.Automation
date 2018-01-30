@@ -29,7 +29,7 @@ namespace FluffySpoon.Automation.Web
 {
 	class WebAutomationEngine : IWebAutomationEngine
     {
-		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
+		private readonly IWebAutomationFrameworkInstance[] _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
 		private readonly ICollection<IMethodChainContext> _pendingQueues;
 
@@ -37,7 +37,7 @@ namespace FluffySpoon.Automation.Web
 		private bool _isInitializing;
 
 		public WebAutomationEngine(
-			IEnumerable<IWebAutomationFrameworkInstance> frameworks,
+			IWebAutomationFrameworkInstance[] frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
         {
             _pendingQueues = new HashSet<IMethodChainContext>();

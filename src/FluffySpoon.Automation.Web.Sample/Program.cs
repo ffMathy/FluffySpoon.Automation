@@ -16,7 +16,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver());
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(() => GetChromeDriver());
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -26,17 +26,17 @@ namespace FluffySpoon.Automation.Web.Sample
 
 					await automationEngine
 						.Open("https://google.com");
-
+					
 					await automationEngine
 						.Enter("foobar").In("input[type=text]")
 						.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
-
+					
 					await automationEngine
 						.Click.On("#sbtc .lsb:first")
-						.Wait(until => until.Exists(".srg .g:visible"))
+						.Wait(until => until.Exists("#rso .g:visible"))
 						.Expect
-						.Count(10).Of(".srg .g");
-
+						.Count(8).Of("#rso .g");
+					
 					await automationEngine
 						.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
 				}
@@ -62,7 +62,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				PageLoadStrategy = PageLoadStrategy.Normal,
 				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
 			};
-			options.AddArgument("--headless");
+			//options.AddArgument("--headless");
 
 			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
