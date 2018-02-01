@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Fluent.Targets;
 using FluffySpoon.Automation.Web.Fluent.Targets.From;
-using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {
@@ -16,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByIndices(params int[] indices)
 		{
-			return MethodChainContext.Enqueue(SelectByMethodChainNode.ByIndices(indices));
+			return MethodChainContext.Enqueue(() => SelectByMethodChainNode.ByIndices(indices));
 		}
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByText(string text)
@@ -26,7 +24,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByTexts(params string[] texts)
 		{
-			return MethodChainContext.Enqueue(SelectByMethodChainNode.ByTexts(texts));
+			return MethodChainContext.Enqueue(() => SelectByMethodChainNode.ByTexts(texts));
 		}
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByValue(object value)
@@ -53,7 +51,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByValues(params string[] values)
 		{
-			return MethodChainContext.Enqueue(SelectByMethodChainNode.ByValues(values));
+			return MethodChainContext.Enqueue(() => SelectByMethodChainNode.ByValues(values));
 		}
 
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByValues(params int[] values)

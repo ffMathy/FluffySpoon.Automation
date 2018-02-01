@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 {
-	public interface IExpectClassesOfTargetsMethodChainNode: IExpectMethodChainRoot, IAwaitable, IBaseExpectMethodChainNode
+	public interface IExpectClassesOfTargetsMethodChainNode: IExpectMethodChainRoot, IBaseExpectMethodChainNode
 	{
 	}
 }

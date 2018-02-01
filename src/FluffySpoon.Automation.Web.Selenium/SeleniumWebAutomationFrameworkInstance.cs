@@ -25,13 +25,13 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private Actions Actions => new Actions(_driver);
 
-		public string Technology { get; }
+		public string UserAgentName { get; }
 
 		public SeleniumWebAutomationFrameworkInstance(
 			IDomSelectorStrategy domSelectorStrategy,
 			IWebDriver driver)
 		{
-			Technology = driver.GetType().Name;
+			UserAgentName = driver.GetType().Name;
 
 			_driver = new EventFiringWebDriver(driver);
 			_semaphore = new SemaphoreSlim(1);
@@ -51,7 +51,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
 		{
-			var scriptExecutor = GetScriptExecutor();
 			var nativeElements = GetWebDriverElementsFromDomElements(new[] { from, to });
 			var nativeFromElement = nativeElements[0];
 			var nativeToElement = nativeElements[1];

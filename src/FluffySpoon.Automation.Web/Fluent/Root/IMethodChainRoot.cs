@@ -17,10 +17,11 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using FluffySpoon.Automation.Web.Fluent.Upload;
+using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web.Fluent.Root
 {
-	public interface IMethodChainRoot: IAwaitable
+	public interface IMethodChainRoot
 	{
 		IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot { get; }
 
@@ -34,11 +35,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		ISelectMethodChainNode Select { get; }
 		IExpectMethodChainRoot Expect { get; }
 
-		IMethodChainRoot Wait(TimeSpan time);
-		IMethodChainRoot Wait(int milliseconds);
-		IMethodChainRoot Wait(Func<bool> predicate);
-		IMethodChainRoot Wait(Func<Task<bool>> predicate);
-		IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate);
+		IWaitMethodChainNode Wait(TimeSpan time);
+		IWaitMethodChainNode Wait(int milliseconds);
+		IWaitMethodChainNode Wait(Func<bool> predicate);
+		IWaitMethodChainNode Wait(Func<Task<bool>> predicate);
+		IWaitMethodChainNode Wait(Action<IExpectMethodChainRoot> predicate);
 
 		IOpenMethodChainNode Open(string uri);
         IOpenMethodChainNode Open(Uri uri);

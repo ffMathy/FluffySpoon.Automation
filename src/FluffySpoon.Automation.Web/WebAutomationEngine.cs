@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent;
@@ -24,6 +22,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 using FluffySpoon.Automation.Web.Fluent.Targets.On;
 using FluffySpoon.Automation.Web.Fluent.Targets.To;
 using FluffySpoon.Automation.Web.Fluent.Upload;
+using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web
 {
@@ -44,11 +43,6 @@ namespace FluffySpoon.Automation.Web
 			
 			_frameworks = frameworks;
 			_domSelectorStrategy = domSelectorStrategy;
-        }
-
-        public TaskAwaiter GetAwaiter()
-        {
-            return Task.WhenAll(_pendingQueues.Select(x => x.RunAllAsync())).GetAwaiter();
         }
 		
 		public async Task InitializeAsync()
@@ -75,11 +69,11 @@ namespace FluffySpoon.Automation.Web
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus => StartNewSession().Focus;
 		public ISelectMethodChainNode Select => StartNewSession().Select;
 
-		public IMethodChainRoot Wait(TimeSpan time) => StartNewSession().Wait(time);
-		public IMethodChainRoot Wait(int milliseconds) => StartNewSession().Wait(milliseconds);
-		public IMethodChainRoot Wait(Func<bool> predicate) => StartNewSession().Wait(predicate);
-		public IMethodChainRoot Wait(Func<Task<bool>> predicate) => StartNewSession().Wait(predicate);
-		public IMethodChainRoot Wait(Action<IExpectMethodChainRoot> predicate) => StartNewSession().Wait(predicate);
+		public IWaitMethodChainNode Wait(TimeSpan time) => StartNewSession().Wait(time);
+		public IWaitMethodChainNode Wait(int milliseconds) => StartNewSession().Wait(milliseconds);
+		public IWaitMethodChainNode Wait(Func<bool> predicate) => StartNewSession().Wait(predicate);
+		public IWaitMethodChainNode Wait(Func<Task<bool>> predicate) => StartNewSession().Wait(predicate);
+		public IWaitMethodChainNode Wait(Action<IExpectMethodChainRoot> predicate) => StartNewSession().Wait(predicate);
 
 		public IOpenMethodChainNode Open(string uri) => StartNewSession().Open(uri);
 		public IOpenMethodChainNode Open(Uri uri) => StartNewSession().Open(uri);

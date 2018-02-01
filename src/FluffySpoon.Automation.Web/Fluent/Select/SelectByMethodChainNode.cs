@@ -1,10 +1,4 @@
-﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent.Targets;
-using FluffySpoon.Automation.Web.Fluent.Targets.From;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {

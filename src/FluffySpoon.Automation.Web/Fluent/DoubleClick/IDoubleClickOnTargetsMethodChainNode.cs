@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 {
-	public interface IDoubleClickOnTargetsMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	public interface IDoubleClickOnTargetsMethodChainNode : IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }

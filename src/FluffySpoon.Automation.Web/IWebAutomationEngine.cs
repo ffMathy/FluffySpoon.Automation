@@ -4,7 +4,7 @@ using FluffySpoon.Automation.Web.Fluent.Root;
 
 namespace FluffySpoon.Automation.Web
 {
-	public interface IWebAutomationEngine: IMethodChainRoot, IAwaitable, IDisposable
+	public interface IWebAutomationEngine: IMethodChainRoot, IDisposable
     {
 		Task InitializeAsync();
     }

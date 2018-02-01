@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Focus
 {
-	public interface IFocusOnTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	public interface IFocusOnTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }

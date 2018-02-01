@@ -5,7 +5,7 @@ namespace FluffySpoon.Automation.Web.Exceptions
 {
 	public class ExpectationNotMetException : ApplicationException
 	{
-		public string ExpectationName { get; private set; }
+		public string ExpectationName { get; }
 
 		public static ExpectationNotMetException FromMethodChainNode(
 			IBaseExpectMethodChainNode node,
@@ -26,7 +26,7 @@ namespace FluffySpoon.Automation.Web.Exceptions
 
 			var name = type.Name;
 			name = name.Substring("Expect".Length);
-			name = name.Substring(0, name.IndexOf("MethodChainNode"));
+			name = name.Substring(0, name.IndexOf("MethodChainNode", StringComparison.Ordinal));
 
 			return name;
 		}

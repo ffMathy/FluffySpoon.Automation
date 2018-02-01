@@ -1,6 +1,4 @@
-﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent.Root;
-using System.Collections.Generic;
+﻿using FluffySpoon.Automation.Web.Fluent.Root;
 using System.Linq;
 using System.Threading.Tasks;
 

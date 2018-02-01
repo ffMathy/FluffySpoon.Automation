@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Expect.Class;
 using FluffySpoon.Automation.Web.Fluent.Expect.Count;

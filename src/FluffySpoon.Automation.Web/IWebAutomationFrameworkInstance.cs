@@ -8,7 +8,7 @@ namespace FluffySpoon.Automation.Web
 {
 	public interface IWebAutomationFrameworkInstance: IDisposable
 	{
-		string Technology { get; }
+		string UserAgentName { get; }
 
 		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(string selector);
 		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(params string[] selectors);

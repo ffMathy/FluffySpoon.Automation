@@ -7,7 +7,9 @@ using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
-    abstract class BaseMethodChainNode<TParentMethodChainNode> : IBaseMethodChainNode
+    abstract class BaseMethodChainNode<TParentMethodChainNode> : 
+		IBaseMethodChainNode,
+		IAwaitable<IReadOnlyList<IDomElement>>
 		where TParentMethodChainNode : IBaseMethodChainNode
     {
 		private Task _currentExecutionTask;
@@ -24,24 +26,11 @@ namespace FluffySpoon.Automation.Web.Fluent
 			_executeSemaphore = new SemaphoreSlim(1);
         }
 
-        public TaskAwaiter GetAwaiter()
-        {
-            return MethodChainContext.GetAwaiter();
-        }
-
         public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			await _executeSemaphore.WaitAsync();
-			await ExecuteCachedAsync(framework);
+			await OnExecuteAsync(framework);
 			_executeSemaphore.Release(1);
-		}
-
-		private Task ExecuteCachedAsync(IWebAutomationFrameworkInstance framework)
-		{
-			if (_currentExecutionTask != null)
-				return _currentExecutionTask;
-
-			return _currentExecutionTask = OnExecuteAsync(framework);
 		}
 
 		protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
@@ -52,6 +41,14 @@ namespace FluffySpoon.Automation.Web.Fluent
 		public void SetParent(IBaseMethodChainNode parent)
 		{
 			Parent = (TParentMethodChainNode)parent;
+		}
+
+		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
+		{
+			return MethodChainContext
+				.RunAllAsync()
+				.ContinueWith(t => Elements)
+				.GetAwaiter();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
-	public interface IRightClickOnTargetsMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	public interface IRightClickOnTargetsMethodChainNode : IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }

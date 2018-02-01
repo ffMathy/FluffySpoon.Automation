@@ -1,8 +1,4 @@
-﻿using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Fluent.Targets;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Drag
 {

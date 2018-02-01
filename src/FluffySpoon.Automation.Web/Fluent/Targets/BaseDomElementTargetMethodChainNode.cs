@@ -1,7 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using System;
 using System.Collections.Generic;
-using FluffySpoon.Automation.Web.Fluent.Find;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
@@ -36,8 +35,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		{
 			lock (MethodChainContext)
 			{
-				MethodChainContext.Enqueue(this);
-				return MethodChainContext.Enqueue(new TNextMethodChainNode());
+				return MethodChainContext.Enqueue(() => new TNextMethodChainNode());
 			}
 		}
 

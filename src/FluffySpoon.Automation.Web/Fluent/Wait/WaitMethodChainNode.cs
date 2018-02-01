@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Wait
 {
-	class WaitMethodChainNode : MethodChainRoot
+	class WaitMethodChainNode : MethodChainRoot, IWaitMethodChainNode
     {
 		private readonly Func<Task<bool>> _predicate;
 

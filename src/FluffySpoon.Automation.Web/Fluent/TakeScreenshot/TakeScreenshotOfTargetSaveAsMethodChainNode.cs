@@ -19,7 +19,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			var fileOffset = -1;
 
 			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_jpegFileName);
-			var jpegFileName = framework.Technology + "_" + fileNameWithoutExtension;
+			var jpegFileName = framework.UserAgentName + "_" + fileNameWithoutExtension;
 
 			var filePathWithoutExtension =
 				Path.GetDirectoryName(jpegFileName) +

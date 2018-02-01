@@ -5,6 +5,8 @@ using System;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.JQuery;
 using FluffySpoon.Automation.Web.Selenium;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 
 namespace FluffySpoon.Automation.Web.Sample
 {
@@ -16,7 +18,9 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(() => GetChromeDriver());
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -51,6 +55,30 @@ namespace FluffySpoon.Automation.Web.Sample
 			}
 		}
 
+		private static EdgeDriver GetEdgeDriver()
+		{
+			var options = new EdgeOptions() {
+				AcceptInsecureCertificates = true,
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+				PageLoadStrategy = PageLoadStrategy.Eager
+			};
+
+			var driver = new EdgeDriver(Environment.CurrentDirectory, options);
+			return driver;
+		}
+
+		private static FirefoxDriver GetFirefoxDriver()
+		{
+			var options = new FirefoxOptions() {
+				PageLoadStrategy = PageLoadStrategy.Eager,
+				AcceptInsecureCertificates = true,
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+			};
+
+			var driver = new FirefoxDriver(Environment.CurrentDirectory, options);
+			return driver;
+		}
+
 		private static ChromeDriver GetChromeDriver()
 		{
 			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
@@ -60,10 +88,9 @@ namespace FluffySpoon.Automation.Web.Sample
 
 			var options = new ChromeOptions() {
 				Proxy = null,
-				PageLoadStrategy = PageLoadStrategy.Normal,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+				AcceptInsecureCertificates = true
 			};
-			options.AddArgument("--headless");
 
 			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;

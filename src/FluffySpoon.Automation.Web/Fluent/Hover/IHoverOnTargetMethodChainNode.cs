@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Hover
 {
-	public interface IHoverOnTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode, IAwaitable
+	public interface IHoverOnTargetMethodChainNode : IMethodChainRoot, IBaseMethodChainNode
 	{
 	}
 }
