@@ -12,15 +12,15 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 			get => Parent.Elements;
 		}
 
-		public EnterInTargetMethodChainNode()
-		{
-			
-		}
-
         protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
             await framework.EnterTextInAsync(Elements, Parent.TextToEnter);
             await base.OnExecuteAsync(framework);
         }
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new EnterInTargetMethodChainNode();
+		}
 	}
 }

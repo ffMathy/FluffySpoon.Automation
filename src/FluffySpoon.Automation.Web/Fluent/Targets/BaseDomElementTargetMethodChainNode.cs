@@ -8,7 +8,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 	abstract class BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
 		BaseMethodChainNode<TParentMethodChainNode>,
 		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
-		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
+		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
@@ -35,8 +35,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		{
 			lock (MethodChainContext)
 			{
-				MethodChainContext.Enqueue(() => this);
-				return MethodChainContext.Enqueue(() => new TNextMethodChainNode());
+				MethodChainContext.Enqueue(Clone());
+				return MethodChainContext.Enqueue(new TNextMethodChainNode());
 			}
 		}
 

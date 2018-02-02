@@ -18,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 
 		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(string jpegFileName)
 		{
-			return MethodChainContext.Enqueue(() => new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
+			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
@@ -53,6 +53,11 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			Screenshots = screenshots;
 
 			await base.OnExecuteAsync(framework);
+		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new TakeScreenshotOfTargetMethodChainNode();
 		}
 	}
 }

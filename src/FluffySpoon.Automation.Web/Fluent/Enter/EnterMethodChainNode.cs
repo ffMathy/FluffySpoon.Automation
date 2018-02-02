@@ -12,9 +12,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
             TextToEnter = text;
         }
 
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		public override IBaseMethodChainNode Clone()
 		{
-			return base.OnExecuteAsync(framework);
+			return new EnterMethodChainNode(TextToEnter);
 		}
 	}
 }

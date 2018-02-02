@@ -5,14 +5,9 @@ namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 {
 	class DoubleClickMethodChainNode : BaseMouseTargetsMethodChainNode<IBaseMethodChainNode, DoubleClickMethodChainNode, DoubleClickOnTargetsMethodChainNode>
 	{
-		public DoubleClickMethodChainNode()
+		public override IBaseMethodChainNode Clone()
 		{
-
-		}
-
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-		{
-			return base.OnExecuteAsync(framework);
+			return new DoubleClickMethodChainNode();
 		}
 	}
 }

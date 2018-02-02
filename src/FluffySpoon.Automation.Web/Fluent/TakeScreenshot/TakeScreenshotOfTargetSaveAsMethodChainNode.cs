@@ -44,5 +44,10 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new TakeScreenshotOfTargetSaveAsMethodChainNode(_jpegFileName);
+		}
 	}
 }

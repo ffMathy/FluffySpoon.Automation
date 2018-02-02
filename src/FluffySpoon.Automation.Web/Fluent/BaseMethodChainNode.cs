@@ -12,8 +12,6 @@ namespace FluffySpoon.Automation.Web.Fluent
 		IAwaitable<IReadOnlyList<IDomElement>>
 		where TParentMethodChainNode : IBaseMethodChainNode
     {
-		private Task _currentExecutionTask;
-
 		private readonly SemaphoreSlim _executeSemaphore;
 		
         public IMethodChainContext MethodChainContext { protected get; set; }
@@ -42,6 +40,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 		{
 			Parent = (TParentMethodChainNode)parent;
 		}
+
+		public abstract IBaseMethodChainNode Clone();
 
 		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{

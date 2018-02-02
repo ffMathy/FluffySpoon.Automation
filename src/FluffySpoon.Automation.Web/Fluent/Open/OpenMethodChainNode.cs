@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Open
 {
-	class OpenMethodChainNode: MethodChainRoot, IOpenMethodChainNode
+	class OpenMethodChainNode: MethodChainRoot<IBaseMethodChainNode>, IOpenMethodChainNode
 	{
         private readonly string _uri;
 
@@ -17,5 +17,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Open
             await framework.OpenAsync(_uri);
             await base.OnExecuteAsync(framework);
         }
-    }
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new OpenMethodChainNode(_uri);
+		}
+	}
 }

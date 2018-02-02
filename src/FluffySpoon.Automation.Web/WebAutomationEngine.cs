@@ -90,7 +90,7 @@ namespace FluffySpoon.Automation.Web
 			if (!_isInitialized)
 				throw new InvalidOperationException("Can't automate anything when the web engine is not initialized yet. Call " + nameof(InitializeAsync) + " first.");
 
-			return new MethodChainRoot()
+			return new MethodChainEntryPoint()
 			{
 				MethodChainContext = CreateNewQueue()
 			};

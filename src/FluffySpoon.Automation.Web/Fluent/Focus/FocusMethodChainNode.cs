@@ -5,14 +5,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Focus
 {
 	class FocusMethodChainNode : BaseMouseTargetMethodChainNode<IBaseMethodChainNode, FocusMethodChainNode, FocusOnTargetMethodChainNode>
 	{
-		public FocusMethodChainNode()
+		public override IBaseMethodChainNode Clone()
 		{
-
-		}
-
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-		{
-			return base.OnExecuteAsync(framework);
+			return new FocusMethodChainNode();
 		}
 	}
 }

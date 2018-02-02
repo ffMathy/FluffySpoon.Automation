@@ -5,14 +5,9 @@ namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
 	class RightClickMethodChainNode : BaseMouseTargetsMethodChainNode<IBaseMethodChainNode, RightClickMethodChainNode, RightClickOnTargetsMethodChainNode>
 	{
-		public RightClickMethodChainNode()
+		public override IBaseMethodChainNode Clone()
 		{
-
-		}
-
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-		{
-			return base.OnExecuteAsync(framework);
+			return new RightClickMethodChainNode();
 		}
 	}
 }

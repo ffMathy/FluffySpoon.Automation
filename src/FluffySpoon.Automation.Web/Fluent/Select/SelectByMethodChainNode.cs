@@ -33,5 +33,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 				Indices = indices
 			};
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new SelectByMethodChainNode() {
+				Indices = Indices,
+				Texts = Texts,
+				Values = Values
+			};
+		}
 	}
 }

@@ -16,5 +16,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 			await framework.ClickAsync(Elements, Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ClickOnTargetsMethodChainNode();
+		}
 	}
 }

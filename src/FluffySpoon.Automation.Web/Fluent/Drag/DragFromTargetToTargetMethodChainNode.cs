@@ -20,5 +20,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 				toNode.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new DragFromTargetToTargetMethodChainNode();
+		}
 	}
 }

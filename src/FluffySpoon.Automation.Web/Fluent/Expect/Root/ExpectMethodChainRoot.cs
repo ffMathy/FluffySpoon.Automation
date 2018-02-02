@@ -20,17 +20,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 	{
 		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectClassesOfTargetsMethodChainNode> Classes(params string[] classNames)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectClassesMethodChainNode(classNames));
+			return MethodChainContext.Enqueue(new ExpectClassesMethodChainNode(classNames));
 		}
 
 		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectCountOfTargetsMethodChainNode> Count(int count)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectCountMethodChainNode(count));
+			return MethodChainContext.Enqueue(new ExpectCountMethodChainNode(count));
 		}
 
 		public IExpectExistsMethodChainNode Exists(string selector)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectExistsMethodChainNode(selector));
+			return MethodChainContext.Enqueue(new ExpectExistsMethodChainNode(selector));
 		}
 
 		public IExpectExistsMethodChainNode Exists(IDomElement element)
@@ -40,12 +40,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 
 		public IExpectExistsMethodChainNode Exists(IReadOnlyList<IDomElement> elements)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectExistsMethodChainNode(elements));
+			return MethodChainContext.Enqueue(new ExpectExistsMethodChainNode(elements));
 		}
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectTextInTargetsMethodChainNode> Text(string text)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectTextMethodChainNode(text));
+			return MethodChainContext.Enqueue(new ExpectTextMethodChainNode(text));
 		}
 
 		public IExpectUriMethodChainNode Uri(string uri)
@@ -60,7 +60,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueInTargetsMethodChainNode> Value(string value)
 		{
-			return MethodChainContext.Enqueue(() => new ExpectValueMethodChainNode(value));
+			return MethodChainContext.Enqueue(new ExpectValueMethodChainNode(value));
+		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ExpectMethodChainRoot<TParentMethodChainNode>();
 		}
 
 		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()

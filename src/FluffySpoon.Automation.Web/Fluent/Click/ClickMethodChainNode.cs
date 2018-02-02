@@ -5,14 +5,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 {
 	class ClickMethodChainNode : BaseMouseTargetsMethodChainNode<IBaseMethodChainNode, ClickMethodChainNode, ClickOnTargetsMethodChainNode>
 	{
-		public ClickMethodChainNode()
+		public override IBaseMethodChainNode Clone()
 		{
-
-		}
-
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-		{
-			return base.OnExecuteAsync(framework);
+			return new ClickMethodChainNode();
 		}
 	}
 }

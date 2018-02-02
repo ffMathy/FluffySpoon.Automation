@@ -13,11 +13,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 			get => Parent.Elements;
 		}
 
-		public SelectByFromTargetMethodChainNode()
-		{
-			
-		}
-
         protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
         {
 			if (Parent.Indices == null && Parent.Texts == null && Parent.Values == null)
@@ -34,5 +29,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 			await base.OnExecuteAsync(framework);
         }
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new SelectByFromTargetMethodChainNode();
+		}
 	}
 }

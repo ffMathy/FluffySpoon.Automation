@@ -24,12 +24,7 @@ using FluffySpoon.Automation.Web.Fluent.Wait;
 
 namespace FluffySpoon.Automation.Web.Fluent.Root
 {
-	class MethodChainRoot : MethodChainRoot<IBaseMethodChainNode>
-	{
-
-	}
-
-	class MethodChainRoot<TParentMethodChainNode> :
+	abstract class MethodChainRoot<TParentMethodChainNode> :
 		BaseMethodChainNode<TParentMethodChainNode>,
 		IMethodChainRoot,
 		IBaseMethodChainNode,
@@ -37,35 +32,35 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public IExpectMethodChainRoot Expect =>
-			MethodChainContext.Enqueue(() => new ExpectMethodChainRoot<IBaseMethodChainNode>());
+			MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
 
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot =>
-			MethodChainContext.Enqueue(() => new TakeScreenshotChainNode());
+			MethodChainContext.Enqueue(new TakeScreenshotChainNode());
 
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click =>
-			MethodChainContext.Enqueue(() => new ClickMethodChainNode());
+			MethodChainContext.Enqueue(new ClickMethodChainNode());
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IDoubleClickOnTargetsMethodChainNode> DoubleClick =>
-			MethodChainContext.Enqueue(() => new DoubleClickMethodChainNode());
+			MethodChainContext.Enqueue(new DoubleClickMethodChainNode());
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IRightClickOnTargetsMethodChainNode> RightClick =>
-			MethodChainContext.Enqueue(() => new RightClickMethodChainNode());
+			MethodChainContext.Enqueue(new RightClickMethodChainNode());
 
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover =>
-			MethodChainContext.Enqueue(() => new HoverMethodChainNode());
+			MethodChainContext.Enqueue(new HoverMethodChainNode());
 
 		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag =>
-			MethodChainContext.Enqueue(() => new DragMethodChainNode());
+			MethodChainContext.Enqueue(new DragMethodChainNode());
 
 		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus =>
-			MethodChainContext.Enqueue(() => new FocusMethodChainNode());
+			MethodChainContext.Enqueue(new FocusMethodChainNode());
 
 		public ISelectMethodChainNode Select =>
-			MethodChainContext.Enqueue(() => new SelectMethodChainNode());
+			MethodChainContext.Enqueue(new SelectMethodChainNode());
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
-			MethodChainContext.Enqueue(() => new EnterMethodChainNode(text));
+			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
 
 		public IOpenMethodChainNode Open(string uri) =>
-			MethodChainContext.Enqueue(() => new OpenMethodChainNode(uri));
+			MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
 		public IOpenMethodChainNode Open(Uri uri) =>
 			Open(uri.ToString());
 
@@ -85,7 +80,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			});
 		}
 		public IWaitMethodChainNode Wait(int milliseconds) => Wait(TimeSpan.FromMilliseconds(milliseconds));
-		public IWaitMethodChainNode Wait(Func<Task<bool>> predicate) => MethodChainContext.Enqueue(() => new WaitMethodChainNode(predicate));
+		public IWaitMethodChainNode Wait(Func<Task<bool>> predicate) => MethodChainContext.Enqueue(new WaitMethodChainNode(predicate));
 		public IWaitMethodChainNode Wait(Func<bool> predicate)
 		{
 			return Wait(() => Task.FromResult(predicate()));
@@ -97,7 +92,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 				{
 					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
 
-					var methodChainRoot = new MethodChainRoot();
+					var methodChainRoot = (MethodChainRoot<IBaseMethodChainNode>)Clone();
 					methodChainRoot.MethodChainContext = methodChainContext;
 
 					predicate(methodChainRoot.Expect);

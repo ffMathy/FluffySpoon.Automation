@@ -102,14 +102,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		public TMethodChainNode Enqueue<TMethodChainNode>(Func<TMethodChainNode> nodeConstructor) where TMethodChainNode : class, IBaseMethodChainNode
+		public TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : IBaseMethodChainNode
 		{
 			try
 			{
 				_semaphore.Wait();
 				ThrowExceptionIfPresent();
 
-				TMethodChainNode result = null;
+				node.MethodChainContext = this;
 
 				var isQueueEmpty = _nodeCount == 0;
 				foreach (var framework in Frameworks)
@@ -117,22 +117,19 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 					var methodChainQueue = _userAgentMethodChainQueue[framework];
 					var allNodes = methodChainQueue.AllNodes;
 
-					var node = nodeConstructor();
-					node.MethodChainContext = this;
+					var newNode = node.Clone();
+					newNode.MethodChainContext = this;
 
-					var linkedListNode = allNodes.AddLast(node);
+					var linkedListNode = allNodes.AddLast(newNode);
 					var parentNode = linkedListNode?.Previous?.Value;
 					if (parentNode != null)
-						node.SetParent(parentNode);
+						newNode.SetParent(parentNode);
 
 					methodChainQueue
 						.PendingNodesToRun
-						.Enqueue(node);
-
-					if(result == null)
-						result = node;
-
-					Log("[" + framework.UserAgentName + "] Queued: " + node.GetType().Name);
+						.Enqueue(newNode);
+						
+					Log("[" + framework.UserAgentName + "] Queued: " + newNode.GetType().Name);
 				}
 
 				_nodeCount++;
@@ -141,7 +138,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 					Task.Factory
 						.StartNew(RunAllAsync);
 
-				return result;
+				return node;
 			}
 			finally
 			{
