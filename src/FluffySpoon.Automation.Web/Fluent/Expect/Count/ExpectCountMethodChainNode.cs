@@ -14,7 +14,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return new ExpectCountMethodChainNode(Count);
+			var clone = new ExpectCountMethodChainNode(Count);
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

@@ -14,7 +14,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return new ExpectClassesMethodChainNode(Classes);
+			var clone = new ExpectClassesMethodChainNode(Classes);
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

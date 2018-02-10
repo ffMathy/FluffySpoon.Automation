@@ -13,6 +13,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 			get => Parent?.Elements;
 		}
 
+		public ExpectCountOfTargetsMethodChainNode()
+		{
+
+		}
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			if(Elements?.Count != Parent.Count)

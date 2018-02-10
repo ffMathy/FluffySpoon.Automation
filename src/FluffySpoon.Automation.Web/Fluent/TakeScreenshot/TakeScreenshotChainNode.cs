@@ -6,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new TakeScreenshotChainNode();
+			var clone = new TakeScreenshotChainNode();
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

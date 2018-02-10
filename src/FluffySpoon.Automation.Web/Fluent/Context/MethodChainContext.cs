@@ -55,12 +55,15 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 		public Task RunAllAsync()
 		{
-			if (_cachedRunAllTask != null)
-				return _cachedRunAllTask;
+			lock (this)
+			{
+				if (_cachedRunAllTask != null)
+					return _cachedRunAllTask;
 
-			_cachedRunAllTask = ExecuteRunAllAsync()
-				.ContinueWith(t => _cachedRunAllTask = null);
-			return _cachedRunAllTask;
+				_cachedRunAllTask = ExecuteRunAllAsync()
+					.ContinueWith(t => _cachedRunAllTask = null);
+				return _cachedRunAllTask;
+			}
 		}
 
 		private async Task ExecuteRunAllAsync()
@@ -144,10 +147,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 				}
 
 				_nodeCount++;
-
-				if (isQueueEmpty)
-					Task.Factory
-						.StartNew(RunAllAsync);
 
 				return node;
 			}

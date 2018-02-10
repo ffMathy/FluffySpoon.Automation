@@ -7,7 +7,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
 	abstract class BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> :
 		BaseMethodChainNode<TParentMethodChainNode>,
-		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> 
+		IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
 		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 		where TParentMethodChainNode : IBaseMethodChainNode
@@ -37,28 +37,29 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		{
 			lock (MethodChainContext)
 			{
-				//MethodChainContext.Enqueue(Clone());
 				return MethodChainContext.Enqueue(new TNextMethodChainNode());
 			}
 		}
 
-		protected void TransferDelegation(BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> target) {
+		protected void TransferDelegation(BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> target)
+		{
 			target._delegatedFrom = this;
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			if(_delegatedFrom != null) {
+			if (_delegatedFrom != null)
+			{
 				Elements = _delegatedFrom.Elements;
 				_selector = _delegatedFrom._selector;
 			}
 
-			if(Elements == null) {
-				if (_selector == null)
-					throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");
+			var hasNoElements = Elements == null;
+			if (hasNoElements && _selector == null)
+				throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");
 
+			if (hasNoElements)
 				Elements = await framework.FindDomElementsBySelectorAsync(_selector);
-			}
 
 			await base.OnExecuteAsync(framework);
 		}

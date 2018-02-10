@@ -72,7 +72,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IWaitMethodChainNode Wait(TimeSpan timespan)
 		{
 			DateTime? startTime = null;
-			return Wait(() => {
+			return Wait(() =>
+			{
 				if (startTime == null)
 					startTime = DateTime.UtcNow;
 
@@ -87,19 +88,18 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		}
 		public IWaitMethodChainNode Wait(Action<IExpectMethodChainRoot> predicate)
 		{
-			return Wait(async () => {
+			return Wait(async () =>
+			{
 				while (true)
 				{
 					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
+					var expectNode = methodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
 
-					var methodChainRoot = (MethodChainRoot<IBaseMethodChainNode>)Clone();
-					methodChainRoot.MethodChainContext = methodChainContext;
-
-					predicate(methodChainRoot.Expect);
+					predicate(expectNode);
 
 					try
 					{
-						await methodChainRoot;
+						await methodChainContext.RunAllAsync();
 						return true;
 					}
 					catch (Exception ex) when (ex.InnerException is ExpectationNotMetException)
@@ -110,7 +110,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 					}
 
 					methodChainContext.ResetLastError();
-					await Task.Delay(100);
+					await Task.Delay(10);
 				}
 			});
 		}
