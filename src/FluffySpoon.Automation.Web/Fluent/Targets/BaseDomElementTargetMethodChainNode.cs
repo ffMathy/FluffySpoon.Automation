@@ -14,6 +14,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 	{
 		private string _selector;
 
+		private BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> _delegatedFrom;
+
 		protected TNextMethodChainNode Delegate(string selector)
 		{
 			_selector = selector;
@@ -40,8 +42,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 			}
 		}
 
+		protected void TransferDelegation(BaseDomElementTargetMethodChainNode<TParentMethodChainNode, TCurrentMethodChainNode, TNextMethodChainNode> target) {
+			target._delegatedFrom = this;
+		}
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
+			if(_delegatedFrom != null) {
+				Elements = _delegatedFrom.Elements;
+				_selector = _delegatedFrom._selector;
+			}
+
 			if(Elements == null) {
 				if (_selector == null)
 					throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");

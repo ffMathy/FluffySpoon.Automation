@@ -7,7 +7,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new ClickMethodChainNode();
+			var clone = new ClickMethodChainNode();
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

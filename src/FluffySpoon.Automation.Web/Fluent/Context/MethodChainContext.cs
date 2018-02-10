@@ -26,6 +26,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private readonly int _methodChainOffset;
 
 		private int _nodeCount;
+		private Task _cachedRunAllTask;
 
 		private Exception _lastEncounteredException;
 
@@ -52,7 +53,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		public async Task RunAllAsync()
+		public Task RunAllAsync()
+		{
+			if (_cachedRunAllTask != null)
+				return _cachedRunAllTask;
+
+			_cachedRunAllTask = ExecuteRunAllAsync()
+				.ContinueWith(t => _cachedRunAllTask = null);
+			return _cachedRunAllTask;
+		}
+
+		private async Task ExecuteRunAllAsync()
 		{
 			while (_nodeCount > 0)
 				await RunNextAsync();
