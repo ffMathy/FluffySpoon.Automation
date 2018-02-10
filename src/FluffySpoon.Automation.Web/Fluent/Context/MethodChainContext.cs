@@ -25,7 +25,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private static volatile int _globalMethodChainOffset;
 		private readonly int _methodChainOffset;
 
-		private int _nodeCount;
 		private Task _cachedRunAllTask;
 
 		private Exception _lastEncounteredException;
@@ -35,6 +34,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private readonly IDictionary<IWebAutomationFrameworkInstance, MethodChain> _userAgentMethodChainQueue;
 
 		public IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; private set; }
+
+		public int NodeCount { get; private set; }
 
 		public MethodChainContext(
 			IEnumerable<IWebAutomationFrameworkInstance> frameworks)
@@ -57,18 +58,24 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		{
 			lock (this)
 			{
+				ThrowExceptionIfPresent();
+
 				if (_cachedRunAllTask != null)
 					return _cachedRunAllTask;
 
 				_cachedRunAllTask = ExecuteRunAllAsync()
-					.ContinueWith(t => _cachedRunAllTask = null);
+					.ContinueWith(t =>
+					{
+						_cachedRunAllTask = null;
+						ThrowExceptionIfPresent();
+					});
 				return _cachedRunAllTask;
 			}
 		}
 
 		private async Task ExecuteRunAllAsync()
 		{
-			while (_nodeCount > 0)
+			while (NodeCount > 0)
 				await RunNextAsync();
 		}
 
@@ -80,16 +87,16 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 				try
 				{
-					if (_nodeCount > 0)
+					if (NodeCount > 0)
 					{
-						_nodeCount--;
+						NodeCount--;
 
 						var tasks = new List<Task>();
 						foreach (var framework in Frameworks)
 						{
 							var methodChainQueue = _userAgentMethodChainQueue[framework];
 							var next = methodChainQueue.PendingNodesToRun.Dequeue();
-							Log("[" + framework.UserAgentName + "] Executing: " + next.GetType().Name);
+							Log("[" + framework.UserAgentName + "] Executing: " + next);
 
 							tasks.Add(next.ExecuteAsync(framework));
 						}
@@ -125,7 +132,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 				node.MethodChainContext = this;
 
-				var isQueueEmpty = _nodeCount == 0;
+				var isQueueEmpty = NodeCount == 0;
 				foreach (var framework in Frameworks)
 				{
 					var methodChainQueue = _userAgentMethodChainQueue[framework];
@@ -143,10 +150,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 						.PendingNodesToRun
 						.Enqueue(newNode);
 						
-					Log("[" + framework.UserAgentName + "] Queued: " + newNode.GetType().Name);
+					Log("[" + framework.UserAgentName + "] Queued: " + newNode);
 				}
 
-				_nodeCount++;
+				NodeCount++;
 
 				return node;
 			}

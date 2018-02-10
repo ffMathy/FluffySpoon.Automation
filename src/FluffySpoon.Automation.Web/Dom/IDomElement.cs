@@ -6,7 +6,13 @@
 		string TextContent { get; }
 		string Value { get; }
 
-		IDomAttributes Attributes { get; }
+		int ClientLeft { get; }
+		int ClientTop { get; }
+		int ClientWidth { get; }
+		int ClientHeight { get; }
+
 		IDomRectangle BoundingClientRectangle { get; }
+		IDomAttributes Attributes { get; }
+		IDomStyle ComputedStyle { get; }
 	}
 }

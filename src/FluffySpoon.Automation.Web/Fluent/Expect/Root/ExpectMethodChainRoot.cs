@@ -13,7 +13,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
-	class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, 
+	abstract class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, 
 		IExpectMethodChainRoot,
 		IAwaitable<IReadOnlyList<IDomElement>>
 		where TParentMethodChainNode : IBaseMethodChainNode
@@ -63,16 +63,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			return MethodChainContext.Enqueue(new ExpectValueMethodChainNode(value));
 		}
 
-		public override IBaseMethodChainNode Clone()
-		{
-			return new ExpectMethodChainRoot<TParentMethodChainNode>();
-		}
-
-		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
+		public new TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{
 			return MethodChainContext
 				.RunAllAsync()
-				.ContinueWith(t => Elements)
+				.ContinueWith(t => Elements ?? Array.Empty<IDomElement>())
 				.GetAwaiter();
 		}
 	}

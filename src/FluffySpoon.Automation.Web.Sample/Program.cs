@@ -29,24 +29,24 @@ namespace FluffySpoon.Automation.Web.Sample
 					await automationEngine.InitializeAsync();
 
 					await automationEngine
-						.Open("https://google.com")
-						.Wait(until => until.Exists("input[type=text]:visible"));
+						.Open("https://google.com");
 					
 					await automationEngine
 						.Enter("foobar").In("input[type=text]:visible")
-						.Wait(until => until.Exists("input[type=submit]:visible"));
+						.Wait(until => 
+							until.Exists("input[type=submit]:visible"));
 
-					await automationEngine
+					var elements = await automationEngine
 						.Click.On("input[type=submit]:visible:first")
-						.Wait(until => until.Exists("#rso .g:visible"))
+						.Wait(until => 
+							until.Exists("#rso .g:visible"))
 						.Expect
-						.Count(8).Of("#rso .g");
+						.Count(10).Of("#rso .g:visible");
 					
 					await automationEngine
-						.TakeScreenshot.Of("#rso .g").SaveAs(@"bin\result-picture.jpg");
+						.TakeScreenshot.Of("#rso .g:visible").SaveAs(@"bin\result-picture.jpg");
 
 					Console.WriteLine("Test done!");
-					Console.ReadLine();
 				}
 			}
 			catch (Exception ex)

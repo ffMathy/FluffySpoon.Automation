@@ -59,7 +59,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 				throw new InvalidOperationException("Elements to target must be found either via a selector or a list of elements.");
 
 			if (hasNoElements)
-				Elements = await framework.FindDomElementsBySelectorAsync(_selector);
+				Elements = await framework.FindDomElementsBySelectorAsync(
+					MethodChainOffset,
+					_selector);
+
+			if (_delegatedFrom != null)
+				_delegatedFrom.Elements = Elements;
 
 			await base.OnExecuteAsync(framework);
 		}

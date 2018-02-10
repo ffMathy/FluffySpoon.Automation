@@ -32,7 +32,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public IExpectMethodChainRoot Expect =>
-			MethodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
+			MethodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
 
 		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot =>
 			MethodChainContext.Enqueue(new TakeScreenshotChainNode());
@@ -84,7 +84,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IWaitMethodChainNode Wait(Func<Task<bool>> predicate) => MethodChainContext.Enqueue(new WaitMethodChainNode(predicate));
 		public IWaitMethodChainNode Wait(Func<bool> predicate)
 		{
-			return Wait(() => Task.FromResult(predicate()));
+			return Wait(() => Task.Factory.StartNew(predicate));
 		}
 		public IWaitMethodChainNode Wait(Action<IExpectMethodChainRoot> predicate)
 		{
@@ -93,7 +93,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 				while (true)
 				{
 					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
-					var expectNode = methodChainContext.Enqueue(new ExpectMethodChainRoot<IBaseMethodChainNode>());
+					var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
 
 					predicate(expectNode);
 

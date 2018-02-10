@@ -3,21 +3,27 @@
 	public class DomRectangle : IDomRectangle
 	{
 		public DomRectangle(
-			double x,
-			double y,
-			double width,
-			double height)
+			double left,
+			double top,
+			double right,
+			double bottom)
 		{
-			X = x;
-			Y = y;
-			Width = width;
-			Height = height;
+			Left = left;
+			Top = top;
+			Right = right;
+			Bottom = bottom;
 		}
 
-		public double X { get; }
-		public double Y { get; }
+		public double Left { get; }
+		public double Top { get; }
 
-		public double Width { get; }
-		public double Height { get; }
+		public double Right { get; }
+		public double Bottom { get; }
+
+		public double X => Left;
+		public double Y => Top;
+
+		public double Width => Right - Left;
+		public double Height => Bottom - Top;
 	}
 }

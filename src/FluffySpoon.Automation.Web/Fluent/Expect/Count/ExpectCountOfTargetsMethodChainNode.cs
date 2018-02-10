@@ -25,5 +25,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ExpectCountOfTargetsMethodChainNode();
+		}
 	}
 }
