@@ -25,7 +25,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private static volatile int _globalMethodChainOffset;
 		private readonly int _methodChainOffset;
 
-		private int _nodeCount;
+		private Task _cachedRunAllTask;
 
 		private Exception _lastEncounteredException;
 
@@ -34,6 +34,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		private readonly IDictionary<IWebAutomationFrameworkInstance, MethodChain> _userAgentMethodChainQueue;
 
 		public IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; private set; }
+
+		public int NodeCount { get; private set; }
 
 		public MethodChainContext(
 			IEnumerable<IWebAutomationFrameworkInstance> frameworks)
@@ -52,9 +54,28 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		public async Task RunAllAsync()
+		public Task RunAllAsync()
 		{
-			while (_nodeCount > 0)
+			lock (this)
+			{
+				ThrowExceptionIfPresent();
+
+				if (_cachedRunAllTask != null)
+					return _cachedRunAllTask;
+
+				_cachedRunAllTask = ExecuteRunAllAsync()
+					.ContinueWith(t =>
+					{
+						_cachedRunAllTask = null;
+						ThrowExceptionIfPresent();
+					});
+				return _cachedRunAllTask;
+			}
+		}
+
+		private async Task ExecuteRunAllAsync()
+		{
+			while (NodeCount > 0)
 				await RunNextAsync();
 		}
 
@@ -66,16 +87,16 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 				try
 				{
-					if (_nodeCount > 0)
+					if (NodeCount > 0)
 					{
-						_nodeCount--;
+						NodeCount--;
 
 						var tasks = new List<Task>();
 						foreach (var framework in Frameworks)
 						{
 							var methodChainQueue = _userAgentMethodChainQueue[framework];
 							var next = methodChainQueue.PendingNodesToRun.Dequeue();
-							Log("[" + framework.UserAgentName + "] Executing: " + next.GetType().Name);
+							Log("[" + framework.UserAgentName + "] Executing: " + next);
 
 							tasks.Add(next.ExecuteAsync(framework));
 						}
@@ -102,46 +123,39 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		public TMethodChainNode Enqueue<TMethodChainNode>(Func<TMethodChainNode> nodeConstructor) where TMethodChainNode : class, IBaseMethodChainNode
+		public TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : IBaseMethodChainNode
 		{
 			try
 			{
 				_semaphore.Wait();
 				ThrowExceptionIfPresent();
 
-				TMethodChainNode result = null;
+				node.MethodChainContext = this;
 
-				var isQueueEmpty = _nodeCount == 0;
+				var isQueueEmpty = NodeCount == 0;
 				foreach (var framework in Frameworks)
 				{
 					var methodChainQueue = _userAgentMethodChainQueue[framework];
 					var allNodes = methodChainQueue.AllNodes;
 
-					var node = nodeConstructor();
-					node.MethodChainContext = this;
+					var newNode = node.Clone();
+					newNode.MethodChainContext = this;
 
-					var linkedListNode = allNodes.AddLast(node);
+					var linkedListNode = allNodes.AddLast(newNode);
 					var parentNode = linkedListNode?.Previous?.Value;
 					if (parentNode != null)
-						node.SetParent(parentNode);
+						newNode.SetParent(parentNode);
 
 					methodChainQueue
 						.PendingNodesToRun
-						.Enqueue(node);
-
-					if(result == null)
-						result = node;
-
-					Log("[" + framework.UserAgentName + "] Queued: " + node.GetType().Name);
+						.Enqueue(newNode);
+						
+					Log("[" + framework.UserAgentName + "] Queued: " + newNode);
 				}
 
-				_nodeCount++;
+				NodeCount++;
 
-				if (isQueueEmpty)
-					Task.Factory
-						.StartNew(RunAllAsync);
-
-				return result;
+				return node;
 			}
 			finally
 			{

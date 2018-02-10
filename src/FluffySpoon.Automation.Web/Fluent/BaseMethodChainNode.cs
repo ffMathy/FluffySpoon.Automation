@@ -7,26 +7,38 @@ using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
-    abstract class BaseMethodChainNode<TParentMethodChainNode> : 
+	abstract class BaseMethodChainNode<TParentMethodChainNode> :
 		IBaseMethodChainNode,
 		IAwaitable<IReadOnlyList<IDomElement>>
 		where TParentMethodChainNode : IBaseMethodChainNode
-    {
-		private Task _currentExecutionTask;
-
+	{
 		private readonly SemaphoreSlim _executeSemaphore;
-		
-        public IMethodChainContext MethodChainContext { protected get; set; }
+		private IMethodChainContext _methodChainContext;
+
+		public IMethodChainContext MethodChainContext { 
+			protected get
+			{
+				return _methodChainContext;
+			} 
+			set
+			{
+				_methodChainContext = value;
+				if(value != null)
+					MethodChainOffset = value.NodeCount;
+			}
+		}
 		public virtual IReadOnlyList<IDomElement> Elements { get; protected set; }
+
+		public int MethodChainOffset { get; set; }
 
 		protected internal TParentMethodChainNode Parent { get; private set; }
 
-        public BaseMethodChainNode()
-        {
+		public BaseMethodChainNode()
+		{
 			_executeSemaphore = new SemaphoreSlim(1);
-        }
+		}
 
-        public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
+		public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			await _executeSemaphore.WaitAsync();
 			await OnExecuteAsync(framework);
@@ -34,14 +46,16 @@ namespace FluffySpoon.Automation.Web.Fluent
 		}
 
 		protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-        {
-            return Task.CompletedTask;
-        }
+		{
+			return Task.CompletedTask;
+		}
 
 		public void SetParent(IBaseMethodChainNode parent)
 		{
 			Parent = (TParentMethodChainNode)parent;
 		}
+
+		public abstract IBaseMethodChainNode Clone();
 
 		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{
@@ -49,6 +63,16 @@ namespace FluffySpoon.Automation.Web.Fluent
 				.RunAllAsync()
 				.ContinueWith(t => Elements)
 				.GetAwaiter();
+		}
+
+		public override string ToString()
+		{
+			var result = string.Empty;
+			if (Parent != null)
+				result += Parent.ToString() + " -> ";
+
+			result += GetType().Name.Replace("MethodChainNode", "");
+			return result;
 		}
 	}
 }

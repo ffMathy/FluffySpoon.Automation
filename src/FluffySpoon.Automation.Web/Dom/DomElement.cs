@@ -6,22 +6,39 @@
 		public string TextContent { get; }
 		public string Value { get; }
 
-		public IDomAttributes Attributes { get; }
+		public int ClientLeft { get; }
+		public int ClientTop { get; }
+		public int ClientWidth { get; }
+		public int ClientHeight { get; }
+
 		public IDomRectangle BoundingClientRectangle { get; }
+		public IDomAttributes Attributes { get; }
+		public IDomStyle ComputedStyle { get; }
 
 		public DomElement(
 			string cssSelector,
 			string textContent,
 			string value,
+			int clientLeft,
+			int clientTop,
+			int clientWidth,
+			int clientHeight,
 			IDomRectangle boundingClientRectangle,
-			IDomAttributes attributes)
+			IDomAttributes attributes,
+			IDomStyle computedStyle)
 		{
 			CssSelector = cssSelector;
 			TextContent = textContent;
 			Value = value;
 
+			ClientLeft = clientLeft;
+			ClientTop = clientTop;
+			ClientWidth = clientWidth;
+			ClientHeight = clientHeight;
+
 			BoundingClientRectangle = boundingClientRectangle;
 			Attributes = attributes;
+			ComputedStyle = computedStyle;
 		}
 	}
 }

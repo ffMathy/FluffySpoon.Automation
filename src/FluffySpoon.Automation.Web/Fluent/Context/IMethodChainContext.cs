@@ -9,7 +9,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
         Task RunAllAsync();
         Task RunNextAsync();
 
+		int NodeCount { get; }
+
 		IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; }
-		TMethodChainNode Enqueue<TMethodChainNode>(Func<TMethodChainNode> node) where TMethodChainNode : class, IBaseMethodChainNode;
+		TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : IBaseMethodChainNode;
     }
 }

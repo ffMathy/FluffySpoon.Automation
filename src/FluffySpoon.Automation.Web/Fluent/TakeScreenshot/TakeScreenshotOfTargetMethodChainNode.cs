@@ -18,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 
 		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(string jpegFileName)
 		{
-			return MethodChainContext.Enqueue(() => new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
+			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
@@ -29,6 +29,8 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 				foreach (var element in Elements)
 				{
 					var elementBounds = element.BoundingClientRectangle;
+					if (elementBounds.Width == 0 || elementBounds.Height == 0)
+						throw new InvalidOperationException("Can't take a screenshot of a zero-pixel width or zero-pixel height element.");
 
 					var elementScreenshot = new SKBitmap(
 						(int)Math.Round(elementBounds.Width),
@@ -39,8 +41,8 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 						new SKRectI()
 						{
 							Location = new SKPointI(
-								(int)Math.Round(elementBounds.X),
-								(int)Math.Round(elementBounds.Y)),
+								(int)Math.Round(elementBounds.Left),
+								(int)Math.Round(elementBounds.Top)),
 							Size = new SKSizeI(
 								elementScreenshot.Width,
 								elementScreenshot.Height)
@@ -53,6 +55,11 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			Screenshots = screenshots;
 
 			await base.OnExecuteAsync(framework);
+		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new TakeScreenshotOfTargetMethodChainNode();
 		}
 	}
 }

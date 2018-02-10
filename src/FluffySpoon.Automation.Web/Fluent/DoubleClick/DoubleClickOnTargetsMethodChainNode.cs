@@ -2,6 +2,7 @@
 using FluffySpoon.Automation.Web.Fluent.Root;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Fluent.Click;
 
 namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 {
@@ -16,6 +17,11 @@ namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 		{
 			await framework.DoubleClickAsync(Elements, Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
+		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new DoubleClickOnTargetsMethodChainNode();
 		}
 	}
 }

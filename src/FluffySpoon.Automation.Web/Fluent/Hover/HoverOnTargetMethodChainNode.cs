@@ -17,5 +17,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Hover
 			await framework.HoverAsync(Elements.First(), Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new HoverOnTargetMethodChainNode();
+		}
 	}
 }

@@ -7,7 +7,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.To;
 
 namespace FluffySpoon.Automation.Web.Fluent.Targets
 {
-	interface IBaseDomElementTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode> :
+	interface IBaseDomElementTargetMethodChainNode<out TCurrentMethodChainNode, out TNextMethodChainNode> :
 		IDomElementInTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 
 		IDomElementToTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IDomElementOfTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>, 

@@ -5,14 +5,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
 	class DragMethodChainNode : BaseMouseTargetMethodChainNode<IBaseMethodChainNode, DragMethodChainNode, DragFromTargetMethodChainNode>
 	{
-		public DragMethodChainNode()
+		public override IBaseMethodChainNode Clone()
 		{
-
-		}
-
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
-		{
-			return base.OnExecuteAsync(framework);
+			return new DragMethodChainNode();
 		}
 	}
 }

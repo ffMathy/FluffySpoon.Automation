@@ -10,9 +10,9 @@ namespace FluffySpoon.Automation.Web
 	{
 		string UserAgentName { get; }
 
-		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(string selector);
-		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(params string[] selectors);
-		Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(string code);
+		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector);
+		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors);
+		Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(int methodChainOffset, string code);
 		Task<string> EvaluateJavaScriptAsync(string code);
 
         Task OpenAsync(string uri);

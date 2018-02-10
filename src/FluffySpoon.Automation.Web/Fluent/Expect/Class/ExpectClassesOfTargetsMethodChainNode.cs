@@ -34,5 +34,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 		{
 			return classAttribute.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ExpectClassesOfTargetsMethodChainNode();
+		}
 	}
 }

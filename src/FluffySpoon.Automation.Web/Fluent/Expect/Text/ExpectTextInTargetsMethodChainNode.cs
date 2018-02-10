@@ -14,9 +14,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Text
 			get => Parent?.Elements;
 		}
 
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ExpectTextInTargetsMethodChainNode();
+		}
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			if(!Elements.Any(x => x.TextContent == Parent.Text))
+			if (!Elements.Any(x => x.TextContent == Parent.Text))
 				throw ExpectationNotMetException.FromMethodChainNode(this, "Expected text \"" + Parent.Text + "\" to be found in all of the matched elements.");
 
 			await base.OnExecuteAsync(framework);

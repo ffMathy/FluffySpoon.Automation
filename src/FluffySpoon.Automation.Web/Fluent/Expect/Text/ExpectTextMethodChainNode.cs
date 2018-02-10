@@ -12,9 +12,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Text
 			Text = text;
 		}
 
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		public override IBaseMethodChainNode Clone()
 		{
-			return base.OnExecuteAsync(framework);
+			var clone = new ExpectTextMethodChainNode(Text);
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

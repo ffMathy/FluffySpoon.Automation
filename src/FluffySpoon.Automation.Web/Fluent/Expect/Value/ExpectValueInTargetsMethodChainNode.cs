@@ -14,6 +14,11 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 			get => Parent?.Elements;
 		}
 
+		public override IBaseMethodChainNode Clone()
+		{
+			return new ExpectValueInTargetsMethodChainNode();
+		}
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			if(!Elements.Any(x => x.Value == Parent.Value))

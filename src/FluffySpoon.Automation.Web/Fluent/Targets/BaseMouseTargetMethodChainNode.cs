@@ -18,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		IMouseFromTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseOnTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>,
 		IMouseAtTargetMethodChainNode<TCurrentMethodChainNode, TNextMethodChainNode>
-		where TNextMethodChainNode : class, IBaseMethodChainNode, new()
+		where TNextMethodChainNode : IBaseMethodChainNode, new()
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{

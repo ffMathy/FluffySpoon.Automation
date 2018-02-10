@@ -7,14 +7,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 	{
 		internal string Value { get; }
 
-		public ExpectValueMethodChainNode(string text)
+		public ExpectValueMethodChainNode(string value)
 		{
-			Value = text;
+			Value = value;
 		}
 
-		protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		public override IBaseMethodChainNode Clone()
 		{
-			return base.OnExecuteAsync(framework);
+			var clone = new ExpectValueMethodChainNode(Value);
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

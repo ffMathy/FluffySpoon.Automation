@@ -17,5 +17,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Focus
 			await framework.FocusAsync(Elements.First(), Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new FocusOnTargetMethodChainNode();
+		}
 	}
 }

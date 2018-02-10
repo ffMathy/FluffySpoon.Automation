@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Wait
 {
-	class WaitMethodChainNode : MethodChainRoot, IWaitMethodChainNode
-    {
+	class WaitMethodChainNode : MethodChainRoot<IBaseMethodChainNode>, IWaitMethodChainNode
+	{
 		private readonly Func<Task<bool>> _predicate;
 
 		public WaitMethodChainNode(Func<Task<bool>> predicate)
@@ -16,9 +16,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Wait
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			while (!await _predicate())
-				await Task.Delay(1);
+				await Task.Delay(10);
 
 			await base.OnExecuteAsync(framework);
+		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new WaitMethodChainNode(_predicate);
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
 				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 
@@ -32,21 +32,22 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Open("https://google.com");
 					
 					await automationEngine
-						.Enter("foobar").In("input[type=text]")
-						.Wait(until => until.Count(2).Of("#sbtc .lsb:visible"));
+						.Enter("foobar").In("input[type=text]:visible")
+						.Wait(until => 
+							until.Exists("input[type=submit]:visible"));
 
-					await automationEngine
-						.Click.On("#sbtc .lsb:first")
-						.Wait(until => until.Exists("#rso .g:visible"))
-						.Wait(TimeSpan.FromSeconds(1))
+					var elements = await automationEngine
+						.Click.On("input[type=submit]:visible:first")
+						.Wait(until => 
+							until.Exists("#rso .g:visible"))
 						.Expect
-						.Count(8).Of("#rso .g");
+						.Count(10).Of("#rso .g:visible");
 					
 					await automationEngine
-						.TakeScreenshot.Of(".srg .g").SaveAs(@"bin\result-picture.jpg");
-				}
+						.TakeScreenshot.Of("#rso .g:visible").SaveAs(@"bin\result-picture.jpg");
 
-				Console.WriteLine("Test done!");
+					Console.WriteLine("Test done!");
+				}
 			}
 			catch (Exception ex)
 			{

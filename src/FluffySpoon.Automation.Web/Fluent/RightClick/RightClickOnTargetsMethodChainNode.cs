@@ -17,5 +17,10 @@ namespace FluffySpoon.Automation.Web.Fluent.RightClick
 			await framework.RightClickAsync(Elements, Parent.OffsetX, Parent.OffsetY);
 			await base.OnExecuteAsync(framework);
 		}
+
+		public override IBaseMethodChainNode Clone()
+		{
+			return new RightClickOnTargetsMethodChainNode();
+		}
 	}
 }
