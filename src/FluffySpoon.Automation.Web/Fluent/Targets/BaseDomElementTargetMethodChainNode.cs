@@ -37,7 +37,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		{
 			lock (MethodChainContext)
 			{
-				MethodChainContext.Enqueue(Clone());
+				//MethodChainContext.Enqueue(Clone());
 				return MethodChainContext.Enqueue(new TNextMethodChainNode());
 			}
 		}
