@@ -51,7 +51,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 					.ToArray());
 					
 			if (elements == null || elements.Count == 0)
-				throw ExpectationNotMetException.FromMethodChainNode(this, "No matching elements were found.");
+				throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "No matching elements were found.");
 		}
 	}
 }

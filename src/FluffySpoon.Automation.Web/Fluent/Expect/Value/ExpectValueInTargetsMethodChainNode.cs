@@ -22,7 +22,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			if(!Elements.Any(x => x.Value == Parent.Value))
-				throw ExpectationNotMetException.FromMethodChainNode(this, "Expected value \"" + Parent.Value + "\" to be found in all of the matched elements.");
+				throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "Expected value \"" + Parent.Value + "\" to be found in all of the matched elements.");
 
 			await base.OnExecuteAsync(framework);
 		}
