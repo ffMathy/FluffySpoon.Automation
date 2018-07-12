@@ -18,9 +18,9 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
-				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -34,17 +34,14 @@ namespace FluffySpoon.Automation.Web.Sample
 					await automationEngine
 						.Enter("foobar").In("input[type=text]:visible")
 						.Wait(until => 
-							until.Exists("input[type=submit]:visible"));
+							until.Exists(".lsb:visible"));
 
 					var elements = await automationEngine
-						.Click.On("input[type=submit]:visible:first")
+						.Click.On(".lsb:visible:first")
 						.Wait(until => 
 							until.Exists("#rso .g:visible"))
 						.Expect
-						.Count(10).Of("#rso .g:visible");
-					
-					await automationEngine
-						.TakeScreenshot.Of("#rso .g:visible").SaveAs(@"bin\result-picture.jpg");
+						.Count(8).Of("#rso .g:visible");
 
 					Console.WriteLine("Test done!");
 				}

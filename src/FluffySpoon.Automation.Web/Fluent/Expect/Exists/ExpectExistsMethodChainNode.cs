@@ -49,7 +49,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 						_domElements
 					.Select(x => x.CssSelector)
 					.ToArray());
-
+					
 			if (elements == null || elements.Count == 0)
 				throw ExpectationNotMetException.FromMethodChainNode(this, "No matching elements were found.");
 		}
