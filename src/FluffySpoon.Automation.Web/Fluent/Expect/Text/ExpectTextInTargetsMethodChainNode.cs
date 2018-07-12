@@ -22,7 +22,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Text
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			if (!Elements.Any(x => x.TextContent == Parent.Text))
-				throw ExpectationNotMetException.FromMethodChainNode(this, "Expected text \"" + Parent.Text + "\" to be found in all of the matched elements.");
+				throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "Expected text \"" + Parent.Text + "\" to be found in all of the matched elements.");
 
 			await base.OnExecuteAsync(framework);
 		}

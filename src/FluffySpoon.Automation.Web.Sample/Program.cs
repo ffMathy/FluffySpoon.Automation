@@ -18,9 +18,9 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
-				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -32,7 +32,7 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Open("https://google.com");
 					
 					await automationEngine
-						.Enter("foobar").In("input[type=text]:visible")
+						.Enter("this is a very long test that works").In("input[type=text]:visible")
 						.Wait(until => 
 							until.Exists("input[type=submit]:visible"));
 
@@ -42,9 +42,6 @@ namespace FluffySpoon.Automation.Web.Sample
 							until.Exists("#rso .g:visible"))
 						.Expect
 						.Count(10).Of("#rso .g:visible");
-					
-					await automationEngine
-						.TakeScreenshot.Of("#rso .g:visible").SaveAs(@"bin\result-picture.jpg");
 
 					Console.WriteLine("Test done!");
 				}

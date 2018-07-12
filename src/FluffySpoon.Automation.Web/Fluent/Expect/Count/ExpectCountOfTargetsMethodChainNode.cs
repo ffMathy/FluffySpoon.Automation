@@ -21,7 +21,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			if(Elements?.Count != Parent.Count)
-				throw ExpectationNotMetException.FromMethodChainNode(this, "Expected " + Parent.Count + " elements but found " + (Parent.Elements?.Count ?? 0) + ".");
+				throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "Expected " + Parent.Count + " elements but found " + (Parent.Elements?.Count ?? 0) + ".");
 
 			await base.OnExecuteAsync(framework);
 		}

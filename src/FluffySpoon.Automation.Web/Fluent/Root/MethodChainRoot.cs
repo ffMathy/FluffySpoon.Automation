@@ -110,7 +110,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 					}
 
 					methodChainContext.ResetLastError();
-					await Task.Delay(10);
+					await Task.Delay(100);
 				}
 			});
 		}

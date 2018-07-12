@@ -96,7 +96,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 						{
 							var methodChainQueue = _userAgentMethodChainQueue[framework];
 							var next = methodChainQueue.PendingNodesToRun.Dequeue();
-							Log("[" + framework.UserAgentName + "] Executing: " + next);
+
+							var nextToString = next.ToString();
+							Log("[" + framework.UserAgentName + "] Executing: " + nextToString);
 
 							tasks.Add(next.ExecuteAsync(framework));
 						}

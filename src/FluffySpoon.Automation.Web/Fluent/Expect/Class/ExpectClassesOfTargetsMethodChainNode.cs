@@ -23,7 +23,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 				var elementClasses = GetClassesFromAttributeValue(classAttribute);
 				foreach(var classToFind in Parent.Classes) {
 					if (!elementClasses.Contains(classToFind))
-						throw ExpectationNotMetException.FromMethodChainNode(this, "The class \"" + classToFind + "\" was not found in the element.");
+						throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "The class \"" + classToFind + "\" was not found in the element.");
 				}
 			}
 

@@ -186,7 +186,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 					var computedStyle = new DomStyle(x.ComputedStyle);
 
-					return new DomElement(
+					var domElement = new DomElement(
 						cssSelector: "[" + _uniqueSelectorAttribute + "='" + x.Tag + "']",
 						textContent: x.TextContent,
 						value: x.Value,
@@ -197,6 +197,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 						boundingClientRectangle: x.BoundingClientRectangle,
 						attributes: attributes,
 						computedStyle: computedStyle);
+
+					return domElement;
 				})
 				.ToArray();
 		}
@@ -273,6 +275,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var selector = domElements
 				.Select(x => x.CssSelector)
 				.Aggregate((a, b) => $"{a}, {b}");
+			
 			return _driver
 				.FindElements(By.CssSelector(selector))
 				.ToArray();

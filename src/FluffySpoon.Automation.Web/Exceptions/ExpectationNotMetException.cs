@@ -9,11 +9,12 @@ namespace FluffySpoon.Automation.Web.Exceptions
 
 		public static ExpectationNotMetException FromMethodChainNode(
 			IBaseExpectMethodChainNode node,
+			string userAgent,
 			string message)
 		{
 			var expectationName = GetExpectationName(node);
 
-			var finalMessage = $@"The expectation ""{expectationName}"" failed.";
+			var finalMessage = $@"The expectation ""{expectationName}"" failed on {userAgent}.";
 			if (message != null)
 				finalMessage += $" {message}";
 
@@ -31,7 +32,9 @@ namespace FluffySpoon.Automation.Web.Exceptions
 			return name;
 		}
 
-		private ExpectationNotMetException(string expectationName, string message)
+		private ExpectationNotMetException(
+			string expectationName,
+			string message)
 			: base(message)
 		{
 			ExpectationName = expectationName;
