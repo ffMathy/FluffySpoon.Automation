@@ -197,7 +197,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 						boundingClientRectangle: x.BoundingClientRectangle,
 						attributes: attributes,
 						computedStyle: computedStyle);
-					Console.WriteLine(UserAgentName + " found DOM element " + domElement.CssSelector);
 
 					return domElement;
 				})
@@ -216,8 +215,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 			int methodChainOffset, 
 			string selector)
 		{
-			Console.WriteLine(UserAgentName + " finding DOM elements by selector " + selector);
-
 			var scriptToExecute = _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
 			return await EvaluateJavaScriptAsDomElementsAsync(methodChainOffset, scriptToExecute);
 		}
@@ -278,8 +275,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var selector = domElements
 				.Select(x => x.CssSelector)
 				.Aggregate((a, b) => $"{a}, {b}");
-		
-			Console.WriteLine(UserAgentName + " finding driver elements by selector " + selector);
 			
 			return _driver
 				.FindElements(By.CssSelector(selector))
