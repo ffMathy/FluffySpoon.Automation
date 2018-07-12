@@ -32,16 +32,16 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Open("https://google.com");
 					
 					await automationEngine
-						.Enter("foobar").In("input[type=text]:visible")
+						.Enter("this is a very long test that works").In("input[type=text]:visible")
 						.Wait(until => 
-							until.Exists(".lsb:visible"));
+							until.Exists("input[type=submit]:visible"));
 
 					var elements = await automationEngine
-						.Click.On(".lsb:visible:first")
+						.Click.On("input[type=submit]:visible:first")
 						.Wait(until => 
 							until.Exists("#rso .g:visible"))
 						.Expect
-						.Count(8).Of("#rso .g:visible");
+						.Count(10).Of("#rso .g:visible");
 
 					Console.WriteLine("Test done!");
 				}
