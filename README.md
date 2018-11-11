@@ -1,6 +1,11 @@
 # FluffySpoon.Automation
 A set of automation tools.
 
+```
+install-package FluffySpoon.Automation.JQuery
+install-package FluffySpoon.Automation.Selenium
+```
+
 ## Example
 The following test searches for something in Google and asserts that the results are present in both Chrome and Firefox.
 
