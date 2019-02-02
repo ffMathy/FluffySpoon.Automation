@@ -50,7 +50,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag =>
 			MethodChainContext.Enqueue(new DragMethodChainNode());
 
-		public IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus =>
+		public IDomElementOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus =>
 			MethodChainContext.Enqueue(new FocusMethodChainNode());
 
 		public ISelectMethodChainNode Select =>

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Focus
 {
-	class FocusMethodChainNode : BaseMouseTargetMethodChainNode<IBaseMethodChainNode, FocusMethodChainNode, FocusOnTargetMethodChainNode>
+	class FocusMethodChainNode : BaseDomElementTargetMethodChainNode<IBaseMethodChainNode, FocusMethodChainNode, FocusOnTargetMethodChainNode>
 	{
 		public override IBaseMethodChainNode Clone()
 		{

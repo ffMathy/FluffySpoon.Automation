@@ -31,7 +31,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IHoverOnTargetMethodChainNode> Hover { get; }
 		IMouseFromTargetMethodChainNode<IBaseMethodChainNode, IMouseToTargetMethodChainNode<IBaseMethodChainNode, IDragFromTargetToTargetMethodChainNode>> Drag { get; }
-		IMouseOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus { get; }
+		IDomElementOnTargetMethodChainNode<IBaseMethodChainNode, IFocusOnTargetMethodChainNode> Focus { get; }
 		ISelectMethodChainNode Select { get; }
 		IExpectMethodChainRoot Expect { get; }
 

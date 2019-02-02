@@ -16,35 +16,29 @@ namespace FluffySpoon.Automation.Web.Selenium
 {
 	class SeleniumWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
 	{
-		private readonly EventFiringWebDriver _driver;
+		private EventFiringWebDriver _driver;
+
 		private readonly SemaphoreSlim _semaphore;
 
-		private readonly IDomSelectorStrategy _domSelectorStrategy;
+		private readonly Func<Task<IWebDriver>> _driverConstructor;
 
-		private readonly static string _uniqueSelectorAttribute;
+		private readonly IDomTunnel _domTunnel;
 
 		private Actions Actions => new Actions(_driver);
 
-		public string UserAgentName { get; }
-
-		static SeleniumWebAutomationFrameworkInstance()
-		{
-			_uniqueSelectorAttribute = "fluffyspoon-tag-" + Guid.NewGuid();
-		}
+		public string UserAgentName { get; private set; }
 
 		public SeleniumWebAutomationFrameworkInstance(
-			IDomSelectorStrategy domSelectorStrategy,
-			IWebDriver driver)
+			Func<Task<IWebDriver>> driverConstructor,
+			IDomTunnel domTunnel)
 		{
-			UserAgentName = driver.GetType().Name;
+			_driverConstructor = driverConstructor;
+			_domTunnel = domTunnel;
 
-			_driver = new EventFiringWebDriver(driver);
 			_semaphore = new SemaphoreSlim(1);
-
-			_domSelectorStrategy = domSelectorStrategy;
 		}
 
-		public Task FocusAsync(IDomElement domElement, int offsetX, int offsetY)
+		public Task FocusAsync(IDomElement domElement)
 		{
 			var nativeElement = GetWebDriverElementsFromDomElements(new[] { domElement }).Single();
 			GetScriptExecutor().ExecuteScript("arguments[0].focus();", nativeElement);
@@ -109,100 +103,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 			}
 		}
 
-		public async Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(
-			int methodChainOffset,
-			string javascriptCode)
-		{
-			var scriptExecutor = GetScriptExecutor();
-			
-			var elementFetchJavaScript = WrapJavaScriptInIsolatedFunction(
-				_domSelectorStrategy.DomSelectorLibraryJavaScript + "; " + javascriptCode);
-
-			var resultJsonBlobs = (IReadOnlyList<object>)scriptExecutor.ExecuteScript(@"
-				return " + WrapJavaScriptInIsolatedFunction(@"
-					var elements = " + elementFetchJavaScript + @";
-					var returnValues = [];
-
-					for(var i = 0; i < elements.length; i++) {
-						var element = elements[i];
-
-						var attributes = [];
-						var computedStyleProperties = [];
-						
-						var tag = element.getAttribute('" + _uniqueSelectorAttribute + @"') || '" + methodChainOffset + @"-'+i;
-						element.setAttribute('" + _uniqueSelectorAttribute + @"', tag);
-						
-						var o;
-
-						for(o = 0; o < element.attributes.length; o++) {
-							var attribute = element.attributes[o];
-							attributes.push({
-								name: attribute.name,
-								value: attribute.value
-							});
-						}
-
-						var computedStyle = getComputedStyle(element);
-						for(o = 0; o < computedStyle.length; o++) {
-							var styleKey = computedStyle[o];
-							computedStyleProperties.push({
-								property: styleKey,
-								value: computedStyle.getPropertyValue(styleKey)
-							});
-						}
-
-						var boundingClientRectangle = element.getBoundingClientRect();
-
-						returnValues.push(JSON.stringify({
-							tag: tag,
-							attributes: attributes,
-							computedStyle: computedStyleProperties,
-							textContent: element.textContent,
-							value: element.value,
-							clientLeft: element.clientLeft,
-							clientTop: element.clientTop,
-							clientWidth: element.clientWidth,
-							clientHeight: element.clientHeight,
-							boundingClientRectangle: {
-								left: boundingClientRectangle.left,
-								right: boundingClientRectangle.right,
-								top: boundingClientRectangle.top,
-								bottom: boundingClientRectangle.bottom
-							}
-						}));
-					}
-
-					return returnValues;
-				"));
-
-			return resultJsonBlobs
-				.Cast<string>()
-				.Select(JsonConvert.DeserializeObject<ElementWrapper>)
-				.Select(x =>
-				{
-					var attributes = new DomAttributes();
-					foreach (var attribute in x.Attributes)
-						attributes.Add(attribute.Name, attribute.Value);
-
-					var computedStyle = new DomStyle(x.ComputedStyle);
-
-					var domElement = new DomElement(
-						cssSelector: "[" + _uniqueSelectorAttribute + "='" + x.Tag + "']",
-						textContent: x.TextContent,
-						value: x.Value,
-						clientLeft: x.ClientLeft,
-						clientTop: x.ClientTop,
-						clientWidth: x.ClientWidth,
-						clientHeight: x.ClientHeight,
-						boundingClientRectangle: x.BoundingClientRectangle,
-						attributes: attributes,
-						computedStyle: computedStyle);
-
-					return domElement;
-				})
-				.ToArray();
-		}
-
 		public Task<string> EvaluateJavaScriptAsync(string code)
 		{
 			var scriptExecutor = GetScriptExecutor();
@@ -212,11 +112,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 		}
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(
-			int methodChainOffset, 
+			int methodChainOffset,
 			string selector)
 		{
-			var scriptToExecute = _domSelectorStrategy.GetJavaScriptForRetrievingDomElements(selector);
-			return await EvaluateJavaScriptAsDomElementsAsync(methodChainOffset, scriptToExecute);
+			return await _domTunnel.GetDomElementsFromSelector(this,
+				methodChainOffset,
+				selector);
 		}
 
 		public async Task OpenAsync(string uri)
@@ -265,17 +166,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return scriptExecutor;
 		}
 
-		private string WrapJavaScriptInIsolatedFunction(string code)
-		{
-			return $"(function() {{{code}}})();";
-		}
-
 		private IWebElement[] GetWebDriverElementsFromDomElements(IReadOnlyList<IDomElement> domElements)
 		{
 			var selector = domElements
 				.Select(x => x.CssSelector)
 				.Aggregate((a, b) => $"{a}, {b}");
-			
+
 			return _driver
 				.FindElements(By.CssSelector(selector))
 				.ToArray();
@@ -398,9 +294,16 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			var combinedSelector = selectors.Aggregate((a, b) => a + ", " + b);
 			var sanitizedSelector = combinedSelector.Replace("'", "\\'");
-			return await EvaluateJavaScriptAsDomElementsAsync(
-				methodChainOffset, 
+			return await _domTunnel.GetDomElementsFromSelector(this,
+				methodChainOffset,
 				@"return document.querySelectorAll('" + sanitizedSelector + "')");
+		}
+
+		public async Task InitializeAsync()
+		{
+			var driver = await _driverConstructor();
+			UserAgentName = driver.GetType().Name;
+			_driver = new EventFiringWebDriver(driver);
 		}
 
 		private class DimensionsWrapper
@@ -413,23 +316,6 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			public DimensionsWrapper Window { get; set; }
 			public DimensionsWrapper Document { get; set; }
-		}
-
-		private class ElementWrapper
-		{
-			public string Tag { get; set; }
-			public string TextContent { get; set; }
-			public string Value { get; set; }
-
-			public int ClientLeft { get; set; }
-			public int ClientTop { get; set; }
-			public int ClientWidth { get; set; }
-			public int ClientHeight { get; set; }
-
-			public DomRectangle BoundingClientRectangle { get; set; }
-
-			public DomAttribute[] Attributes { get; set; }
-			public DomStyleProperty[] ComputedStyle { get; set; }
 		}
 	}
 }

@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using PuppeteerSharp;
 
 namespace FluffySpoon.Automation.Web.Selenium
 {
 	public static class PuppeteerRegistrationExtensions
 	{
-		public static void AddSeleniumWebAutomationFrameworkInstance(this ServiceCollection services, Func<IWebDriver> driverConstructor)
+		public static void AddPuppeteerWebAutomationFrameworkInstance(this ServiceCollection services, Func<Task<Browser>> driverConstructor)
 		{
 			RegistrationExtensions.AddWebAutomationFrameworkInstance(provider => 
-				new SeleniumWebAutomationFrameworkInstance(
-					provider.GetRequiredService<IDomSelectorStrategy>(), 
-					driverConstructor()));
+				new PuppeteerWebAutomationFrameworkInstance(
+					driverConstructor));
 		}
 	}
 }

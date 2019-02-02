@@ -12,12 +12,11 @@ namespace FluffySpoon.Automation.Web
 
 		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector);
 		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors);
-		Task<IReadOnlyList<IDomElement>> EvaluateJavaScriptAsDomElementsAsync(int methodChainOffset, string code);
 		Task<string> EvaluateJavaScriptAsync(string code);
 
         Task OpenAsync(string uri);
 		Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY);
-		Task FocusAsync(IDomElement domElement, int offsetX, int offsetY);
+		Task FocusAsync(IDomElement domElement);
 		Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);
 		Task HoverAsync(IDomElement domElement, int offsetX, int offsetY);
 		Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);

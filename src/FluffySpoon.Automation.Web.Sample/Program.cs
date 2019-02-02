@@ -18,9 +18,9 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -53,7 +53,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			}
 		}
 
-		private static EdgeDriver GetEdgeDriver()
+		private static async Task<IWebDriver> GetEdgeDriverAsync()
 		{
 			var options = new EdgeOptions() {
 				AcceptInsecureCertificates = true,
@@ -65,7 +65,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			return driver;
 		}
 
-		private static FirefoxDriver GetFirefoxDriver()
+		private static async Task<IWebDriver> GetFirefoxDriverAsync()
 		{
 			var options = new FirefoxOptions() {
 				PageLoadStrategy = PageLoadStrategy.Eager,
@@ -77,7 +77,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			return driver;
 		}
 
-		private static ChromeDriver GetChromeDriver()
+		private static async Task<IWebDriver> GetChromeDriverAsync()
 		{
 			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
 			service.EnableVerboseLogging = false;

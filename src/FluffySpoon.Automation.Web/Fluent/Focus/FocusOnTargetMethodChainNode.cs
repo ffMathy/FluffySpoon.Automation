@@ -14,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Focus
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			await framework.FocusAsync(Elements.First(), Parent.OffsetX, Parent.OffsetY);
+			await framework.FocusAsync(Elements.First());
 			await base.OnExecuteAsync(framework);
 		}
 
