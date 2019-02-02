@@ -20,6 +20,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				serviceCollection.UseJQueryDomSelector();
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
