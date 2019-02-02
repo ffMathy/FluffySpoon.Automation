@@ -28,5 +28,6 @@ namespace FluffySpoon.Automation.Web
 		Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY);
 
 		Task<SKBitmap> TakeScreenshotAsync();
-    }
+		Task InitializeAsync();
+	}
 }

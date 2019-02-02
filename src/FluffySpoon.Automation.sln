@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28527.54
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web", "FluffySpoon.Automation.Web\FluffySpoon.Automation.Web.csproj", "{5DEA4C1A-3C5F-4C64-A133-EE327D5C5658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Selenium", "FluffySpoon.Automation.Web.Selenium\FluffySpoon.Automation.Web.Selenium.csproj", "{D043EDB5-68F5-4385-B1CE-7E9ED070D9F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.Selenium", "FluffySpoon.Automation.Web.Selenium\FluffySpoon.Automation.Web.Selenium.csproj", "{D043EDB5-68F5-4385-B1CE-7E9ED070D9F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Sample", "FluffySpoon.Automation.Web.Sample\FluffySpoon.Automation.Web.Sample.csproj", "{C6CF7AEC-7244-4602-8790-9EF60CE91E74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.Sample", "FluffySpoon.Automation.Web.Sample\FluffySpoon.Automation.Web.Sample.csproj", "{C6CF7AEC-7244-4602-8790-9EF60CE91E74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.JQuery", "FluffySpoon.Automation.Web.JQuery\FluffySpoon.Automation.Web.JQuery.csproj", "{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.JQuery", "FluffySpoon.Automation.Web.JQuery\FluffySpoon.Automation.Web.JQuery.csproj", "{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Puppeteer", "FluffySpoon.Automation.Web.Puppeteer\FluffySpoon.Automation.Web.Puppeteer.csproj", "{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

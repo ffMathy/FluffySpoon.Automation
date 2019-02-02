@@ -51,7 +51,13 @@ namespace FluffySpoon.Automation.Web
 				throw new InvalidOperationException("Can't call initialize twice.");
 				
 			_isInitializing = true;
+
 			await _domSelectorStrategy.InitializeAsync();
+
+			foreach(var framework in _frameworks) {
+				await framework.InitializeAsync();
+			}
+
 			_isInitialized = true;
 			_isInitializing = false;
 		}
