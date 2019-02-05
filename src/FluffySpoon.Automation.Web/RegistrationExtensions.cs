@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluffySpoon.Automation.Web.Dom;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace FluffySpoon.Automation.Web
 		public static void UseFluffySpoonAutomationWeb(
 			this ServiceCollection services)
 		{
+			services.AddTransient<IDomTunnel, DomTunnel>();
 			services.AddTransient<IWebAutomationEngine, WebAutomationEngine>();
 			services.AddTransient(provider => webAutomationFrameworkInstanceConstructors
 				.Select(constructor => constructor(provider))

@@ -1,19 +1,41 @@
 # FluffySpoon.Automation
-A set of automation tools.
+An abstraction that makes Selenium or Puppeteer testing fun, stable and fast.
 
+## Selectors
+A selector determines how to select elements. Right now, only jQuery selectors are supported.
+
+### jQuery
 ```
 install-package FluffySpoon.Automation.JQuery
+```
+
+## Automation frameworks
+An automation framework decides how the automation is done. Can use either Selenium or Puppeteer currently.
+
+### Selenium
+```
 install-package FluffySpoon.Automation.Selenium
 ```
 
+### Puppeteer
+```
+install-package FluffySpoon.Automation.Puppeteer
+```
+
 ## Example
-The following test searches for something in Google and asserts that the results are present in both Chrome and Firefox.
+The following test searches for something in Google and asserts that the results are present in both Chrome, Edge and Firefox on Selenium, and Chromium on Puppeteer.
 
 ```csharp
 var serviceCollection = new ServiceCollection();
 serviceCollection.UseJQueryDomSelector();
+
+//use 3 different browsers via Selenium
+serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriver);
 serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriver);
 serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriver);
+
+//also use Chromium via Puppeteer
+serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
 

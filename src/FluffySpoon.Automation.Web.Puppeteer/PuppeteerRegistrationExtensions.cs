@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Dom;
 using Microsoft.Extensions.DependencyInjection;
 using PuppeteerSharp;
 
@@ -11,7 +12,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			RegistrationExtensions.AddWebAutomationFrameworkInstance(provider => 
 				new PuppeteerWebAutomationFrameworkInstance(
-					driverConstructor));
+					driverConstructor,
+					provider.GetRequiredService<IDomTunnel>()));
 		}
 	}
 }

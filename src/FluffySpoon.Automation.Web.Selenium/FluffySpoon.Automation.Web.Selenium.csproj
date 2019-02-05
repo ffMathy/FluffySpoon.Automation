@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="selenium.support" Version="3.8.0" />
-    <PackageReference Include="selenium.webdriver" Version="3.8.0" />
+    <PackageReference Include="selenium.support" Version="3.141.0" />
+    <PackageReference Include="selenium.webdriver" Version="3.141.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -44,8 +44,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 			foreach (var element in elements)
 			{
 				await _page.Mouse.ClickAsync(
-					element.ClientLeft + offsetX,
-					element.ClientTop + offsetY);
+					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY);
 			}
 		}
 
@@ -60,8 +60,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 			foreach (var element in elements)
 			{
 				await _page.Mouse.ClickAsync(
-					element.ClientLeft + offsetX,
-					element.ClientTop + offsetY,
+					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
 					new ClickOptions() {
 						ClickCount = 2
 					});
@@ -71,21 +71,22 @@ namespace FluffySpoon.Automation.Web.Selenium
 		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
 		{
 			await _page.Mouse.MoveAsync(
-				from.ClientLeft + fromOffsetX,
-				from.ClientTop + fromOffsetY);
+				(int)Math.Ceiling(from.BoundingClientRectangle.Left) + fromOffsetX,
+				(int)Math.Ceiling(from.BoundingClientRectangle.Top) + fromOffsetY);
 			await _page.Mouse.DownAsync();
 
 			await _page.Mouse.MoveAsync(
-				to.ClientLeft + toOffsetX,
-				to.ClientTop + toOffsetY);
+				(int)Math.Ceiling(to.BoundingClientRectangle.Left) + toOffsetX,
+				(int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY);
 			await _page.Mouse.UpAsync();
 		}
 
 		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
 			var handles = await GetElementHandlesFromDomElementsAsync(elements);
-			foreach(var handle in handles)
+			foreach(var handle in handles) { 
 				await handle.TypeAsync(text);
+			}
 		}
 
 		public async Task<string> EvaluateJavaScriptAsync(string code)
@@ -116,19 +117,22 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			var handle = await GetElementHandleFromDomElementAsync(domElement);
 			await _page.Mouse.MoveAsync(
-				domElement.ClientLeft + offsetX,
-				domElement.ClientTop + offsetY);
+				(int)Math.Ceiling(domElement.BoundingClientRectangle.Left) + offsetX,
+				(int)Math.Ceiling(domElement.BoundingClientRectangle.Top) + offsetY);
 		}
 
 		public async Task InitializeAsync()
 		{
 			_browser = await _driverConstructor();
-			_page = await _browser.NewPageAsync();
+
+			var pages = await _browser.PagesAsync();
+			_page = pages.Single();
 		}
 
-		public Task OpenAsync(string uri)
+		public async Task OpenAsync(string uri)
 		{
-			return _page.GoToAsync(uri);
+			await _page.GoToAsync(uri);
+			await _page.WaitForExpressionAsync("document.readyState === 'complete'");
 		}
 
 		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
@@ -136,8 +140,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 			foreach (var element in elements)
 			{
 				await _page.Mouse.ClickAsync(
-					element.ClientLeft + offsetX,
-					element.ClientTop + offsetY,
+					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
 					new ClickOptions() {
 						Button = MouseButton.Right
 					});
@@ -152,29 +156,56 @@ namespace FluffySpoon.Automation.Web.Selenium
 					.Select(x => $"{element.CssSelector} > option:nth-child({x+1})")
 					.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
 				var handles = await _page.QuerySelectorAllAsync(selector);
-				//var values = handles.Select(x => x.)
-				//await _page.SelectAsync(handle)
+				var valueTasks = handles.Select(x => _page.EvaluateFunctionAsync("x => x.value", x));
+				var valueTokens = await Task.WhenAll(valueTasks);
+				var values = valueTokens.Cast<string>();
+				await _page.SelectAsync(element.CssSelector, values.ToArray());
 			}
 		}
 
-		public Task SelectByTextsAsync(IReadOnlyList<IDomElement> elements, string[] byTexts)
+		public async Task SelectByTextsAsync(IReadOnlyList<IDomElement> elements, string[] byTexts)
 		{
-			throw new NotImplementedException();
+			var trimmedByTexts = byTexts
+				.Select(x => x.Trim())
+				.ToArray();
+			foreach (var element in elements)
+			{
+				var selector = byTexts
+					.Select(x => $"{element.CssSelector} > option")
+					.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
+				var handles = await _page.QuerySelectorAllAsync(selector);
+				var tasks = handles.Select(x => _page.EvaluateFunctionAsync("x => { return { value: x.value, textContent: x.textContent } }", x));
+				var tokens = await Task.WhenAll(tasks);
+				var values = tokens
+					.Select(x => new {
+						Value = x.Value<string>("value"),
+						TextContent = x.Value<string>("textContent")
+					})
+					.Where(x => trimmedByTexts.Contains(x.TextContent?.Trim()))
+					.Select(x => x.Value);
+				await _page.SelectAsync(element.CssSelector, values.ToArray());
+			}
 		}
 
-		public Task SelectByValuesAsync(IReadOnlyList<IDomElement> elements, string[] byValues)
+		public async Task SelectByValuesAsync(IReadOnlyList<IDomElement> elements, string[] byValues)
 		{
-			throw new NotImplementedException();
+			var selector = elements
+				.Select(x => x.CssSelector)
+				.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
+			await _page.SelectAsync(selector, byValues);
 		}
 
-		public Task<SKBitmap> TakeScreenshotAsync()
+		public async Task<SKBitmap> TakeScreenshotAsync()
 		{
-			throw new NotImplementedException();
+			var bytes = await _page.ScreenshotDataAsync();
+			return SKBitmap.Decode(bytes);
 		}
 
-		public Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
+		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
 		{
-			throw new NotImplementedException();
+			return await FindDomElementsBySelectorAsync(
+				methodChainOffset,
+				selectors.Aggregate(string.Empty, (a, b) => $"{a}, {b}"));
 		}
 	}
 }

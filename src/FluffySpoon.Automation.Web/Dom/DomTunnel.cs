@@ -38,9 +38,9 @@ namespace FluffySpoon.Automation.Web.Dom
 		{
 			var elementFetchJavaScript = WrapJavaScriptInIsolatedFunction(
 				scriptToExecute);
-
-			var resultJsonBlobs = await automationFrameworkInstance.EvaluateJavaScriptAsync(@"
-				return " + WrapJavaScriptInIsolatedFunction(@"
+				
+			var resultJsonBlobs = await automationFrameworkInstance.EvaluateJavaScriptAsync(
+				WrapJavaScriptInIsolatedFunction(@"
 					var elements = " + elementFetchJavaScript + @";
 					var returnValues = [];
 
@@ -74,7 +74,7 @@ namespace FluffySpoon.Automation.Web.Dom
 
 						var boundingClientRectangle = element.getBoundingClientRect();
 
-						returnValues.push(JSON.stringify({
+						returnValues.push({
 							tag: tag,
 							attributes: attributes,
 							computedStyle: computedStyleProperties,
@@ -90,7 +90,7 @@ namespace FluffySpoon.Automation.Web.Dom
 								top: boundingClientRectangle.top,
 								bottom: boundingClientRectangle.bottom
 							}
-						}));
+						});
 					}
 
 					return JSON.stringify(returnValues);

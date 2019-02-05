@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluffySpoon.Http" Version="1.0.9" />
+    <PackageReference Include="FluffySpoon.Http" Version="1.0.21" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ using FluffySpoon.Automation.Web.JQuery;
 using FluffySpoon.Automation.Web.Selenium;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using PuppeteerSharp;
 
 namespace FluffySpoon.Automation.Web.Sample
 {
@@ -18,9 +19,12 @@ namespace FluffySpoon.Automation.Web.Sample
 			{
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
+
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
+
+				serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
 				var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -34,10 +38,10 @@ namespace FluffySpoon.Automation.Web.Sample
 					await automationEngine
 						.Enter("this is a very long test that works").In("input[type=text]:visible")
 						.Wait(until => 
-							until.Exists("input[type=submit]:visible"));
+							until.Exists("input[type=submit][name=btnK]:visible"));
 
 					var elements = await automationEngine
-						.Click.On("input[type=submit]:visible:first")
+						.Click.On("input[type=submit][name=btnK]:visible")
 						.Wait(until => 
 							until.Exists("#rso .g:visible"))
 						.Expect
@@ -51,6 +55,19 @@ namespace FluffySpoon.Automation.Web.Sample
 				await Console.Error.WriteLineAsync(ex.ToString());
 				Console.ReadLine();
 			}
+		}
+
+		private static async Task<Browser> GetPuppeteerDriverAsync()
+		{
+			await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+			return await Puppeteer.LaunchAsync(new LaunchOptions
+			{
+				Headless = false,
+				DefaultViewport = new ViewPortOptions() {
+					Width = 1100,
+					Height = 500
+				}
+			});
 		}
 
 		private static async Task<IWebDriver> GetEdgeDriverAsync()

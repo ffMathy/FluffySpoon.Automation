@@ -28,7 +28,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 
 		public async Task InitializeAsync()
 		{
-			var jQueryScriptContents = await _webClient.GetAsync(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
+			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
 			DomSelectorLibraryJavaScript = _uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()";
 		}
 
