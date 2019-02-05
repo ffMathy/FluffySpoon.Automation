@@ -148,8 +148,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			foreach (var element in elements)
 			{
-				var handle = await _page.QuerySelectorAsync(element.CssSelector);
-				await _page.SelectAsync(handle)
+				var selector = byIndices
+					.Select(x => $"{element.CssSelector} > option:nth-child({x+1})")
+					.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
+				var handles = await _page.QuerySelectorAllAsync(selector);
+				//var values = handles.Select(x => x.)
+				//await _page.SelectAsync(handle)
 			}
 		}
 
