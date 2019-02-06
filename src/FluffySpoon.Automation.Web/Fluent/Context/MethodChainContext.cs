@@ -48,7 +48,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 			_methodChainOffset = Interlocked.Increment(ref _globalMethodChainOffset);
 
-			foreach(var framework in Frameworks)
+			foreach (var framework in Frameworks)
 			{
 				_userAgentMethodChainQueue.Add(framework, new MethodChain());
 			}
@@ -95,10 +95,16 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 						foreach (var framework in Frameworks)
 						{
 							var methodChainQueue = _userAgentMethodChainQueue[framework];
-							var next = methodChainQueue.PendingNodesToRun.Dequeue();
 
-							var nextToString = next.ToString();
-							Log("[" + framework.UserAgentName + "] Executing: " + nextToString);
+							var next = methodChainQueue.PendingNodesToRun.Dequeue();
+							var nextNext = methodChainQueue.PendingNodesToRun.Count > 0 ?
+								methodChainQueue.PendingNodesToRun.Peek() :
+								null;
+
+							Log("[" + framework.UserAgentName + "] Executing: " + next);
+
+							if (nextNext != null)
+								Log("[" + framework.UserAgentName + "] Next is: " + nextNext);
 
 							tasks.Add(next.ExecuteAsync(framework));
 						}
@@ -146,12 +152,15 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 					var linkedListNode = allNodes.AddLast(newNode);
 					var parentNode = linkedListNode?.Previous?.Value;
 					if (parentNode != null)
+					{
 						newNode.SetParent(parentNode);
+						node.SetParent(parentNode);
+					}
 
 					methodChainQueue
 						.PendingNodesToRun
 						.Enqueue(newNode);
-						
+
 					Log("[" + framework.UserAgentName + "] Queued: " + newNode);
 				}
 

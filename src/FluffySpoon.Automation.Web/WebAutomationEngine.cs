@@ -54,9 +54,8 @@ namespace FluffySpoon.Automation.Web
 
 			await _domSelectorStrategy.InitializeAsync();
 
-			foreach(var framework in _frameworks) {
+			foreach(var framework in _frameworks)
 				await framework.InitializeAsync();
-			}
 
 			_isInitialized = true;
 			_isInitializing = false;

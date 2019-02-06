@@ -51,8 +51,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public void Dispose()
 		{
-			_page.Dispose();
-			_browser.Dispose();
+			_page?.Dispose();
+			_browser?.Dispose();
 		}
 
 		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)

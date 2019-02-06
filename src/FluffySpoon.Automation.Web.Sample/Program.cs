@@ -20,9 +20,9 @@ namespace FluffySpoon.Automation.Web.Sample
 				var serviceCollection = new ServiceCollection();
 				serviceCollection.UseJQueryDomSelector();
 
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
+				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
 
 				serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
@@ -40,12 +40,18 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Wait(until => 
 							until.Exists("input[type=submit][name=btnK]:visible"));
 
-					var elements = await automationEngine
+					await automationEngine
 						.Click.On("input[type=submit][name=btnK]:visible")
 						.Wait(until => 
-							until.Exists("#rso .g:visible"))
+							until.Exists("#rso .g:visible"));
+
+					var elements = await automationEngine
 						.Expect
 						.Count(10).Of("#rso .g:visible");
+
+					foreach (var element in elements) {
+						await automationEngine.TakeScreenshot.Of(element).SaveAs("screenshot.jpg");
+					}
 
 					Console.WriteLine("Test done!");
 				}

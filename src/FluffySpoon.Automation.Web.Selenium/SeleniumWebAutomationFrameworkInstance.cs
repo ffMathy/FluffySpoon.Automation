@@ -89,8 +89,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public void Dispose()
 		{
-			_driver.Quit();
-			_driver.Dispose();
+			_driver?.Quit();
+			_driver?.Dispose();
 		}
 
 		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
@@ -106,7 +106,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 		public Task<string> EvaluateJavaScriptAsync(string code)
 		{
 			var scriptExecutor = GetScriptExecutor();
-			var result = scriptExecutor.ExecuteScript(code);
+			var result = scriptExecutor.ExecuteScript("return " + code);
 
 			return Task.FromResult(result?.ToString());
 		}

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,6 +96,8 @@ namespace FluffySpoon.Automation.Web.Dom
 
 					return JSON.stringify(returnValues);
 				"));
+
+			Debug.Assert(resultJsonBlobs != null, "result json blobs not null");
 
 			var blobs = JsonConvert.DeserializeObject<ElementWrapper[]>(resultJsonBlobs);
 			return blobs

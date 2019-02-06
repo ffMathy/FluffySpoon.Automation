@@ -13,25 +13,35 @@ namespace FluffySpoon.Automation.Web.Fluent
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		private readonly SemaphoreSlim _executeSemaphore;
-		private IMethodChainContext _methodChainContext;
 
-		public IMethodChainContext MethodChainContext { 
+		private IMethodChainContext _methodChainContext;
+		private IReadOnlyList<IDomElement> _elements;
+
+		public IMethodChainContext MethodChainContext
+		{
 			protected get
 			{
 				return _methodChainContext;
-			} 
+			}
 			set
 			{
 				_methodChainContext = value;
-				if(value != null)
+				if (value != null)
 					MethodChainOffset = value.NodeCount;
 			}
 		}
-		public virtual IReadOnlyList<IDomElement> Elements { get; protected set; }
+
+		public virtual IReadOnlyList<IDomElement> Elements { 
+			get => _elements; 
+			protected set => _elements = value; 
+		}
 
 		public int MethodChainOffset { get; set; }
 
-		protected internal TParentMethodChainNode Parent { get; private set; }
+		protected internal TParentMethodChainNode Parent { 
+			get; 
+			private set; 
+		}
 
 		public BaseMethodChainNode()
 		{
