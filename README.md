@@ -1,6 +1,8 @@
 # FluffySpoon.Automation
 An abstraction that makes Selenium or Puppeteer testing fun, stable and fast.
 
+<b>This is still not ready for production-use and is experimental! There are still open issues on it, and it is not 100% bug-free.</b>
+
 ## Selectors
 A selector determines how to select elements. Right now, only jQuery selectors are supported.
 
