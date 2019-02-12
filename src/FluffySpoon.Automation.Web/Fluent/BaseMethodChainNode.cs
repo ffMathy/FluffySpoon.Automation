@@ -71,7 +71,12 @@ namespace FluffySpoon.Automation.Web.Fluent
 		{
 			return MethodChainContext
 				.RunAllAsync()
-				.ContinueWith(t => Elements)
+				.ContinueWith(t => {
+					if(MethodChainContext.LastEncounteredException != null)
+						throw MethodChainContext.LastEncounteredException;
+
+					return Elements;
+				}, TaskContinuationOptions.NotOnFaulted)
 				.GetAwaiter();
 		}
 

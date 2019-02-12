@@ -34,20 +34,12 @@ namespace FluffySpoon.Automation.Web.Sample
 
 					await automationEngine
 						.Open("https://google.com");
-					
-					await automationEngine
-						.Enter("this is a very long test that works").In("input[type=text]:visible")
-						.Wait(until => 
-							until.Exists("input[type=submit][name=btnK]:visible"));
-
-					await automationEngine
-						.Click.On("input[type=submit][name=btnK]:visible")
-						.Wait(until => 
-							until.Exists("#rso .g:visible"));
 
 					var elements = await automationEngine
+						.Wait(until =>
+							until.Exists("input[type=submit][name=btnK]:visible"))
 						.Expect
-						.Count(10).Of("#rso .g:visible");
+						.Count(1).Of("input[type=submit][name=btnK]:visible");
 
 					foreach (var element in elements) {
 						await automationEngine.TakeScreenshot.Of(element).SaveAs("screenshot.jpg");

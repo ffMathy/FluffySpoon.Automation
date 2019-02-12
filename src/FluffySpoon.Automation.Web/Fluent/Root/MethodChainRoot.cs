@@ -92,7 +92,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			{
 				while (true)
 				{
-					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks);
+					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks, MethodChainContext.AutomationEngine);
 					var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
 
 					predicate(expectNode);
