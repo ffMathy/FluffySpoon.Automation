@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
+using FluffySpoon.Automation.Web.Exceptions;
 using FluffySpoon.Automation.Web.Fluent;
 using FluffySpoon.Automation.Web.Fluent.Click;
 using FluffySpoon.Automation.Web.Fluent.Context;
@@ -31,18 +32,27 @@ namespace FluffySpoon.Automation.Web
 	{
 		private readonly IWebAutomationFrameworkInstance[] _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
-		private readonly ICollection<IMethodChainContext> _activeMethodChainContexts;
 
 		public SynchronizationContext SynchronizationContext { get; private set; }
 
+		public Exception LastEncounteredException
+		{
+			get => _lastEncounteredException;
+			set {
+				_lastEncounteredException = value;
+				Console.WriteLine("Exception set " + value?.GetType().Name);
+			}
+		}
+
 		private bool _isInitialized;
 		private bool _isInitializing;
+
+		private Exception _lastEncounteredException;
 
 		public WebAutomationEngine(
 			IWebAutomationFrameworkInstance[] frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
 		{
-			_activeMethodChainContexts = new HashSet<IMethodChainContext>();
 			SynchronizationContext = new SynchronizationContext();
 
 			_frameworks = frameworks;
@@ -108,21 +118,14 @@ namespace FluffySpoon.Automation.Web
 		private IMethodChainContext CreateNewQueue()
 		{
 			var methodChainQueue = new MethodChainContext(_frameworks, this);
-			_activeMethodChainContexts.Add(methodChainQueue);
-
 			return methodChainQueue;
 		}
 
 		public void Dispose()
 		{
-			foreach(var methodChain in _activeMethodChainContexts) {
-				if(methodChain.LastEncounteredException != null)
-					throw methodChain.LastEncounteredException;
-			}
-
 			foreach (var framework in _frameworks)
 			{
-				framework.Dispose();
+				framework?.Dispose();
 			}
 		}
 	}

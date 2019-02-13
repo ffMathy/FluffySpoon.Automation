@@ -9,5 +9,6 @@ namespace FluffySpoon.Automation.Web
 	{
 		Task InitializeAsync();
 		SynchronizationContext SynchronizationContext { get; }
+		Exception LastEncounteredException { get; set; }
 	}
 }

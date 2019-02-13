@@ -13,7 +13,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return this;
+			return new ExpectMethodChainEntryPoint();
 		}
 	}
 }
