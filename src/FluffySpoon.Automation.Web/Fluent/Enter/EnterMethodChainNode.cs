@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using FluffySpoon.Automation.Web.Fluent.Targets;
+﻿using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Enter
 {

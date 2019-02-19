@@ -3,7 +3,7 @@ using System;
 
 namespace FluffySpoon.Automation.Web.Exceptions
 {
-	public class ExpectationNotMetException : ApplicationException
+	public class ExpectationNotMetException : AutomationException
 	{
 		public string ExpectationName { get; }
 

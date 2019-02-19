@@ -1,5 +1,4 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Targets;
-using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
@@ -7,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new DragMethodChainNode();
+			var clone = new DragMethodChainNode();
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

@@ -5,6 +5,7 @@ using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
 using FluffySpoon.Automation.Web.Fluent.Hover;
 using FluffySpoon.Automation.Web.Fluent.Open;
@@ -40,6 +41,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		IWaitMethodChainNode Wait(Func<bool> predicate);
 		IWaitMethodChainNode Wait(Func<Task<bool>> predicate);
 		IWaitMethodChainNode Wait(Action<IExpectMethodChainRoot> predicate);
+
+		IFindMethodChainNode Find(string selector);
 
 		IOpenMethodChainNode Open(string uri);
         IOpenMethodChainNode Open(Uri uri);

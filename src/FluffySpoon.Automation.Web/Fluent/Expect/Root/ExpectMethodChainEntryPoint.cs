@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
+﻿namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
 	class ExpectMethodChainEntryPoint : ExpectMethodChainRoot<IBaseMethodChainNode>
 	{
@@ -13,7 +9,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return this;
+			return new ExpectMethodChainEntryPoint();
 		}
 	}
 }
