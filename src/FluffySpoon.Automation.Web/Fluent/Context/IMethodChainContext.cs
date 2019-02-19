@@ -10,8 +10,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 
 		int NodeCount { get; }
 
-		Exception LastEncounteredException { get; }
-
 		IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; }
 		IWebAutomationEngine AutomationEngine { get; }
 		TMethodChainNode Enqueue<TMethodChainNode>(TMethodChainNode node) where TMethodChainNode : IBaseMethodChainNode;
