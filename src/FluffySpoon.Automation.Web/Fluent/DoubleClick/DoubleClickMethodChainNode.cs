@@ -1,5 +1,4 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Targets;
-using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 {

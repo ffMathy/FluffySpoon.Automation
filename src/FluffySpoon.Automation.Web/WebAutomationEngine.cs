@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
-using FluffySpoon.Automation.Web.Exceptions;
 using FluffySpoon.Automation.Web.Fluent;
 using FluffySpoon.Automation.Web.Fluent.Click;
 using FluffySpoon.Automation.Web.Fluent.Context;
@@ -11,6 +8,7 @@ using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
 using FluffySpoon.Automation.Web.Fluent.Hover;
 using FluffySpoon.Automation.Web.Fluent.Open;
@@ -33,28 +31,13 @@ namespace FluffySpoon.Automation.Web
 		private readonly IWebAutomationFrameworkInstance[] _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
 
-		public SynchronizationContext SynchronizationContext { get; private set; }
-
-		public Exception LastEncounteredException
-		{
-			get => _lastEncounteredException;
-			set {
-				_lastEncounteredException = value;
-				Console.WriteLine("Exception set " + value?.GetType().Name);
-			}
-		}
-
 		private bool _isInitialized;
 		private bool _isInitializing;
-
-		private Exception _lastEncounteredException;
 
 		public WebAutomationEngine(
 			IWebAutomationFrameworkInstance[] frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
 		{
-			SynchronizationContext = new SynchronizationContext();
-
 			_frameworks = frameworks;
 			_domSelectorStrategy = domSelectorStrategy;
 		}
@@ -98,6 +81,8 @@ namespace FluffySpoon.Automation.Web
 		public IOpenMethodChainNode Open(Uri uri) => StartNewSession().Open(uri);
 
 		public IUploadMethodChainNode Upload(string filePath) => StartNewSession().Upload(filePath);
+
+		public IFindMethodChainNode Find(string selector) => StartNewSession().Find(selector);
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => StartNewSession().Enter(text);
 

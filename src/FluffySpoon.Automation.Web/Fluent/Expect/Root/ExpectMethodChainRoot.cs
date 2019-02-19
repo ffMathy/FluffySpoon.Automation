@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent.Expect.Class;
@@ -13,9 +14,7 @@ using FluffySpoon.Automation.Web.Fluent.Targets.Of;
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 {
-	abstract class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, 
-		IExpectMethodChainRoot,
-		IAwaitable<IReadOnlyList<IDomElement>>
+	abstract class ExpectMethodChainRoot<TParentMethodChainNode> : BaseMethodChainNode<TParentMethodChainNode>, IExpectMethodChainRoot
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
 		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, IExpectClassesOfTargetsMethodChainNode> Classes(params string[] classNames)
@@ -67,7 +66,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 		{
 			return MethodChainContext
 				.RunAllAsync()
-				.ContinueWith(t => Elements ?? Array.Empty<IDomElement>())
+				.ContinueWith(
+					t => {
+						if(t.Exception != null) { 
+							throw t.Exception.InnerExceptions.Count == 1 ? 
+								t.Exception.InnerExceptions.Single() :
+								t.Exception;
+						}
+
+						return Elements ?? Array.Empty<IDomElement>();
+					},
+					TaskUtilities.ContinuationOptions)
 				.GetAwaiter();
 		}
 	}

@@ -8,6 +8,7 @@ using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
 using FluffySpoon.Automation.Web.Fluent.Hover;
 using FluffySpoon.Automation.Web.Fluent.Open;
@@ -58,6 +59,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) =>
 			MethodChainContext.Enqueue(new EnterMethodChainNode(text));
+
+		public IFindMethodChainNode Find(string selector) => 
+			MethodChainContext.Enqueue(new FindMethodChainNode(selector));
 
 		public IOpenMethodChainNode Open(string uri) =>
 			MethodChainContext.Enqueue(new OpenMethodChainNode(uri));
@@ -115,7 +119,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			});
 		}
 
-		public TaskAwaiter GetAwaiter()
+		public new TaskAwaiter GetAwaiter()
 		{
 			return MethodChainContext.GetAwaiter();
 		}

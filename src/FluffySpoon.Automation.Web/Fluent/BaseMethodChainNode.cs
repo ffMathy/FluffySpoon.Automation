@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using System;
+using System.Linq;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
@@ -57,8 +58,6 @@ namespace FluffySpoon.Automation.Web.Fluent
 			try
 			{
 				await OnExecuteAsync(framework);
-
-				Console.WriteLine("Check" + GetType().Name);
 			}
 			finally
 			{
@@ -81,14 +80,21 @@ namespace FluffySpoon.Automation.Web.Fluent
 
 		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{
-			Console.WriteLine("GetAwaiter");
 			return MethodChainContext
 				.RunAllAsync()
-				.ContinueWith(t =>
-				{
-					Console.WriteLine("GetAwaiterContinueWith");
-					return Elements;
-				})
+				.ContinueWith(
+					t =>
+					{
+						if (t.Exception != null)
+						{
+							throw t.Exception.InnerExceptions.Count == 1 ?
+								t.Exception.InnerExceptions.Single() :
+								t.Exception;
+						}
+
+						return Elements;
+					},
+					TaskUtilities.ContinuationOptions)
 				.GetAwaiter();
 		}
 

@@ -1,6 +1,5 @@
 ﻿using FluffySpoon.Automation.Web.Exceptions;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -22,9 +21,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 				PendingNodesToRun = new Queue<IBaseMethodChainNode>();
 			}
 		}
-
-		private static volatile int _globalMethodChainOffset;
-		private readonly int _methodChainOffset;
 
 		private Task _cachedRunAllTask;
 
@@ -55,8 +51,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			Frameworks = frameworks;
 			AutomationEngine = automationEngine;
 
-			_methodChainOffset = Interlocked.Increment(ref _globalMethodChainOffset);
-
 			foreach (var framework in Frameworks)
 			{
 				_userAgentMethodChainQueue.Add(framework, new MethodChain());
@@ -67,11 +61,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		{
 			await _runAllSemaphore.WaitAsync();
 
-			ThrowExceptionIfPresent();
-
 			try
 			{
-				if (_cachedRunAllTask != null) { 
+				if (_cachedRunAllTask != null)
+				{
 					await _cachedRunAllTask;
 					return;
 				}
@@ -80,7 +73,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 				await _cachedRunAllTask;
 
 				_cachedRunAllTask = null;
-				ThrowExceptionIfPresent();
 			}
 			finally
 			{
@@ -116,31 +108,25 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 								methodChainQueue.PendingNodesToRun.Peek() :
 								null;
 
-							Log("[" + framework.UserAgentName + "] Executing: " + next);
-
 							tasks.Add(next.ExecuteAsync(framework));
-
-							Log("[" + framework.UserAgentName + "] Executed: " + next);
-
-							if (nextNext != null)
-								Log("[" + framework.UserAgentName + "] Next is: " + nextNext);
 						}
 
-						await Task.WhenAll(tasks);
+						foreach (var task in tasks)
+							await task;
 					}
 
 				}
 				catch (AggregateException ex)
 				{
-					AutomationEngine.LastEncounteredException =
-					   ex.InnerExceptions.Count == 1 ? ex.InnerExceptions.Single() : ex;
+					if (ex.InnerExceptions.Count == 1)
+						throw GetExceptionToThrow(ex.InnerExceptions.Single());
+
+					throw GetExceptionToThrow(ex);
 				}
 				catch (Exception ex)
 				{
-					AutomationEngine.LastEncounteredException = ex;
+					throw GetExceptionToThrow(ex);
 				}
-
-				ThrowExceptionIfPresent();
 			}
 			finally
 			{
@@ -176,8 +162,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 					methodChainQueue
 						.PendingNodesToRun
 						.Enqueue(newNode);
-
-					Log("[" + framework.UserAgentName + "] Queued: " + newNode);
 				}
 
 				NodeCount++;
@@ -190,36 +174,23 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		private void ThrowExceptionIfPresent()
+		private Exception GetExceptionToThrow(Exception exception)
 		{
-			var exception = GetExceptionToThrow();
 			if (exception == null)
-				return;
-
-			throw exception;
-		}
-
-		private Exception GetExceptionToThrow()
-		{
-			if (AutomationEngine.LastEncounteredException == null)
 				return null;
 
-			if (AutomationEngine.LastEncounteredException is ExpectationNotMetException ex)
+			if (exception is ExpectationNotMetException ex)
 				return ex;
 
 			return new ApplicationException(
 				"An error occured while performing one of the automation operations.",
-				AutomationEngine.LastEncounteredException);
-		}
-
-		private void Log(string message)
-		{
-			Console.WriteLine("[#" + _methodChainOffset + "] " + message);
+				exception);
 		}
 
 		public TaskAwaiter GetAwaiter()
 		{
-			return RunAllAsync().GetAwaiter();
+			return RunAllAsync()
+				.GetAwaiter();
 		}
 	}
 }

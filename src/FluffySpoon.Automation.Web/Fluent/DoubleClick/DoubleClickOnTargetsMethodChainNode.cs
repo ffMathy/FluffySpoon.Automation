@@ -2,7 +2,6 @@
 using FluffySpoon.Automation.Web.Fluent.Root;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluffySpoon.Automation.Web.Fluent.Click;
 
 namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 {
