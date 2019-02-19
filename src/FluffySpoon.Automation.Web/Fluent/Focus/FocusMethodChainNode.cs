@@ -1,5 +1,4 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Targets;
-using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Focus
 {
@@ -7,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Focus
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new FocusMethodChainNode();
+			var node = new FocusMethodChainNode();
+			TransferDelegation(node);
+
+			return node;
 		}
 	}
 }

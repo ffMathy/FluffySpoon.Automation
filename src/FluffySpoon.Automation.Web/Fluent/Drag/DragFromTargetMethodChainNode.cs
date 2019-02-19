@@ -6,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new DragFromTargetMethodChainNode();
+			var clone = new DragFromTargetMethodChainNode();
+			TransferDelegation(clone);
+
+			return clone;
 		}
 	}
 }

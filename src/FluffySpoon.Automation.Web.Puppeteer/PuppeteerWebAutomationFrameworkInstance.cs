@@ -1,16 +1,13 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
-using Newtonsoft.Json;
 using PuppeteerSharp;
 using PuppeteerSharp.Input;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace FluffySpoon.Automation.Web.Selenium
+namespace FluffySpoon.Automation.Web.Puppeteer
 {
 	class PuppeteerWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
 	{

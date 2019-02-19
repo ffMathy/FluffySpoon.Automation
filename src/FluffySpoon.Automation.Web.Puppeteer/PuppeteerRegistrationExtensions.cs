@@ -4,13 +4,14 @@ using FluffySpoon.Automation.Web.Dom;
 using Microsoft.Extensions.DependencyInjection;
 using PuppeteerSharp;
 
-namespace FluffySpoon.Automation.Web.Selenium
+namespace FluffySpoon.Automation.Web.Puppeteer
 {
 	public static class PuppeteerRegistrationExtensions
 	{
-		public static void AddPuppeteerWebAutomationFrameworkInstance(this ServiceCollection services, Func<Task<Browser>> driverConstructor)
+		public static void AddPuppeteerWebAutomationFrameworkInstance(this IServiceCollection services, Func<Task<Browser>> driverConstructor)
 		{
-			RegistrationExtensions.AddWebAutomationFrameworkInstance(provider => 
+			services.AddFluffySpoonAutomationWeb();
+			services.AddTransient<IWebAutomationFrameworkInstance>(provider => 
 				new PuppeteerWebAutomationFrameworkInstance(
 					driverConstructor,
 					provider.GetRequiredService<IDomTunnel>()));

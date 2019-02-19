@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using FluffySpoon.Automation.Web.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -22,31 +22,34 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		private static volatile int _globalMethodChainOffset;
-		private readonly int _methodChainOffset;
-
 		private Task _cachedRunAllTask;
 
-		private Exception _lastEncounteredException;
-
-		private readonly SemaphoreSlim _semaphore;
+		private readonly SemaphoreSlim _runNextSemaphore;
+		private readonly SemaphoreSlim _runAllSemaphore;
 
 		private readonly IDictionary<IWebAutomationFrameworkInstance, MethodChain> _userAgentMethodChainQueue;
 
-		public IEnumerable<IWebAutomationFrameworkInstance> Frameworks { get; private set; }
+		public IWebAutomationEngine AutomationEngine { get; private set; }
+
+		public IEnumerable<IWebAutomationFrameworkInstance> Frameworks
+		{
+			get;
+			private set;
+		}
 
 		public int NodeCount { get; private set; }
 
 		public MethodChainContext(
-			IEnumerable<IWebAutomationFrameworkInstance> frameworks)
+			IEnumerable<IWebAutomationFrameworkInstance> frameworks,
+			IWebAutomationEngine automationEngine)
 		{
 			_userAgentMethodChainQueue = new Dictionary<IWebAutomationFrameworkInstance, MethodChain>();
 
-			_semaphore = new SemaphoreSlim(1);
+			_runNextSemaphore = new SemaphoreSlim(1);
+			_runAllSemaphore = new SemaphoreSlim(1);
 
 			Frameworks = frameworks;
-
-			_methodChainOffset = Interlocked.Increment(ref _globalMethodChainOffset);
+			AutomationEngine = automationEngine;
 
 			foreach (var framework in Frameworks)
 			{
@@ -54,22 +57,26 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 		}
 
-		public Task RunAllAsync()
+		public async Task RunAllAsync()
 		{
-			lock (this)
+			await _runAllSemaphore.WaitAsync();
+
+			try
 			{
-				ThrowExceptionIfPresent();
-
 				if (_cachedRunAllTask != null)
-					return _cachedRunAllTask;
+				{
+					await _cachedRunAllTask;
+					return;
+				}
 
-				_cachedRunAllTask = ExecuteRunAllAsync()
-					.ContinueWith(t =>
-					{
-						_cachedRunAllTask = null;
-						ThrowExceptionIfPresent();
-					});
-				return _cachedRunAllTask;
+				_cachedRunAllTask = ExecuteRunAllAsync();
+				await _cachedRunAllTask;
+
+				_cachedRunAllTask = null;
+			}
+			finally
+			{
+				_runAllSemaphore.Release(1);
 			}
 		}
 
@@ -83,7 +90,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		{
 			try
 			{
-				await _semaphore.WaitAsync();
+				await _runNextSemaphore.WaitAsync();
 
 				try
 				{
@@ -101,33 +108,29 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 								methodChainQueue.PendingNodesToRun.Peek() :
 								null;
 
-							Log("[" + framework.UserAgentName + "] Executing: " + next);
-
-							if (nextNext != null)
-								Log("[" + framework.UserAgentName + "] Next is: " + nextNext);
-
 							tasks.Add(next.ExecuteAsync(framework));
 						}
 
-						await Task.WhenAll(tasks);
+						foreach (var task in tasks)
+							await task;
 					}
 
 				}
 				catch (AggregateException ex)
 				{
-					_lastEncounteredException =
-						ex.InnerExceptions.Count == 1 ? ex.InnerExceptions.Single() : ex;
+					if (ex.InnerExceptions.Count == 1)
+						throw GetExceptionToThrow(ex.InnerExceptions.Single());
+
+					throw GetExceptionToThrow(ex);
 				}
 				catch (Exception ex)
 				{
-					_lastEncounteredException = ex;
+					throw GetExceptionToThrow(ex);
 				}
-
-				ThrowExceptionIfPresent();
 			}
 			finally
 			{
-				_semaphore.Release(1);
+				_runNextSemaphore.Release(1);
 			}
 		}
 
@@ -135,8 +138,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		{
 			try
 			{
-				_semaphore.Wait();
-				ThrowExceptionIfPresent();
+				_runNextSemaphore.Wait();
 
 				node.MethodChainContext = this;
 
@@ -160,8 +162,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 					methodChainQueue
 						.PendingNodesToRun
 						.Enqueue(newNode);
-
-					Log("[" + framework.UserAgentName + "] Queued: " + newNode);
 				}
 
 				NodeCount++;
@@ -170,32 +170,27 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 			}
 			finally
 			{
-				_semaphore.Release(1);
+				_runNextSemaphore.Release(1);
 			}
 		}
 
-		private void ThrowExceptionIfPresent()
+		private Exception GetExceptionToThrow(Exception exception)
 		{
-			if (_lastEncounteredException != null)
-				throw new ApplicationException(
-					"An error occured while performing one of the automation operations.",
-					_lastEncounteredException);
-		}
+			if (exception == null)
+				return null;
 
-		private void Log(string message)
-		{
-			Console.WriteLine("[#" + _methodChainOffset + "] " + message);
-		}
+			if (exception is ExpectationNotMetException ex)
+				return ex;
 
-		public void ResetLastError()
-		{
-			_lastEncounteredException = null;
+			return new ApplicationException(
+				"An error occured while performing one of the automation operations.",
+				exception);
 		}
 
 		public TaskAwaiter GetAwaiter()
 		{
-			ThrowExceptionIfPresent();
-			return RunAllAsync().GetAwaiter();
+			return RunAllAsync()
+				.GetAwaiter();
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent;
@@ -9,6 +8,7 @@ using FluffySpoon.Automation.Web.Fluent.DoubleClick;
 using FluffySpoon.Automation.Web.Fluent.Drag;
 using FluffySpoon.Automation.Web.Fluent.Enter;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
+using FluffySpoon.Automation.Web.Fluent.Find;
 using FluffySpoon.Automation.Web.Fluent.Focus;
 using FluffySpoon.Automation.Web.Fluent.Hover;
 using FluffySpoon.Automation.Web.Fluent.Open;
@@ -27,10 +27,9 @@ using FluffySpoon.Automation.Web.Fluent.Wait;
 namespace FluffySpoon.Automation.Web
 {
 	class WebAutomationEngine : IWebAutomationEngine
-    {
+	{
 		private readonly IWebAutomationFrameworkInstance[] _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
-		private readonly ICollection<IMethodChainContext> _pendingQueues;
 
 		private bool _isInitialized;
 		private bool _isInitializing;
@@ -38,23 +37,21 @@ namespace FluffySpoon.Automation.Web
 		public WebAutomationEngine(
 			IWebAutomationFrameworkInstance[] frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
-        {
-            _pendingQueues = new HashSet<IMethodChainContext>();
-			
+		{
 			_frameworks = frameworks;
 			_domSelectorStrategy = domSelectorStrategy;
-        }
-		
+		}
+
 		public async Task InitializeAsync()
 		{
 			if (_isInitializing || _isInitialized)
 				throw new InvalidOperationException("Can't call initialize twice.");
-				
+
 			_isInitializing = true;
 
 			await _domSelectorStrategy.InitializeAsync();
 
-			foreach(var framework in _frameworks)
+			foreach (var framework in _frameworks)
 				await framework.InitializeAsync();
 
 			_isInitialized = true;
@@ -85,6 +82,8 @@ namespace FluffySpoon.Automation.Web
 
 		public IUploadMethodChainNode Upload(string filePath) => StartNewSession().Upload(filePath);
 
+		public IFindMethodChainNode Find(string selector) => StartNewSession().Find(selector);
+
 		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IEnterInTargetMethodChainNode> Enter(string text) => StartNewSession().Enter(text);
 
 		private IMethodChainRoot StartNewSession()
@@ -103,17 +102,15 @@ namespace FluffySpoon.Automation.Web
 
 		private IMethodChainContext CreateNewQueue()
 		{
-			var methodChainQueue = new MethodChainContext(_frameworks);
-			_pendingQueues.Add(methodChainQueue);
-
+			var methodChainQueue = new MethodChainContext(_frameworks, this);
 			return methodChainQueue;
 		}
 
 		public void Dispose()
 		{
-			foreach(var framework in _frameworks)
+			foreach (var framework in _frameworks)
 			{
-				framework.Dispose();
+				framework?.Dispose();
 			}
 		}
 	}

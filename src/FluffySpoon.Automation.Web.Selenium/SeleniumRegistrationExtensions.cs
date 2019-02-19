@@ -8,9 +8,9 @@ namespace FluffySpoon.Automation.Web.Selenium
 {
 	public static class SeleniumRegistrationExtensions
 	{
-		public static void AddSeleniumWebAutomationFrameworkInstance(this ServiceCollection services, Func<Task<IWebDriver>> driverConstructor)
+		public static void AddSeleniumWebAutomationFrameworkInstance(this IServiceCollection services, Func<Task<IWebDriver>> driverConstructor)
 		{
-			RegistrationExtensions.AddWebAutomationFrameworkInstance(provider => 
+			services.AddTransient<IWebAutomationFrameworkInstance>(provider => 
 				new SeleniumWebAutomationFrameworkInstance(
 					driverConstructor,
 					provider.GetRequiredService<IDomTunnel>()));

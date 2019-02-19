@@ -5,9 +5,9 @@ namespace FluffySpoon.Automation.Web.JQuery
 {
 	public static class JQueryRegistrationExtensions
 	{
-		public static void UseJQueryDomSelector(this ServiceCollection services)
+		public static void AddJQueryDomSelector(this IServiceCollection services)
 		{
-			services.UseFluffySpoonAutomationWeb();
+			services.AddFluffySpoonAutomationWeb();
 			services.AddSingleton<IDomSelectorStrategy, JQueryDomSelectorStrategy>();
 		}
 	}

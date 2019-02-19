@@ -1,6 +1,5 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Root;
 using SkiaSharp;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 

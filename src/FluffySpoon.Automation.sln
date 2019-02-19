@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.JQuery", "FluffySpoon.Automation.Web.JQuery\FluffySpoon.Automation.Web.JQuery.csproj", "{6CAAF0C5-0CC2-448B-8BD4-E8352B974608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Puppeteer", "FluffySpoon.Automation.Web.Puppeteer\FluffySpoon.Automation.Web.Puppeteer.csproj", "{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.Puppeteer", "FluffySpoon.Automation.Web.Puppeteer\FluffySpoon.Automation.Web.Puppeteer.csproj", "{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Tests", "FluffySpoon.Automation.Web.Tests\FluffySpoon.Automation.Web.Tests.csproj", "{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

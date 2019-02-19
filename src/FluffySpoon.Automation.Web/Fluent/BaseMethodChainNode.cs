@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
+using System;
+using System.Linq;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
@@ -31,16 +33,18 @@ namespace FluffySpoon.Automation.Web.Fluent
 			}
 		}
 
-		public virtual IReadOnlyList<IDomElement> Elements { 
-			get => _elements; 
-			protected set => _elements = value; 
+		public virtual IReadOnlyList<IDomElement> Elements
+		{
+			get => _elements;
+			protected set => _elements = value;
 		}
 
 		public int MethodChainOffset { get; set; }
 
-		protected internal TParentMethodChainNode Parent { 
-			get; 
-			private set; 
+		protected internal TParentMethodChainNode Parent
+		{
+			get;
+			private set;
 		}
 
 		public BaseMethodChainNode()
@@ -51,12 +55,19 @@ namespace FluffySpoon.Automation.Web.Fluent
 		public async Task ExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			await _executeSemaphore.WaitAsync();
-			await OnExecuteAsync(framework);
-			_executeSemaphore.Release(1);
+			try
+			{
+				await OnExecuteAsync(framework);
+			}
+			finally
+			{
+				_executeSemaphore.Release(1);
+			}
 		}
 
 		protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
+			Console.WriteLine("OnExecute");
 			return Task.CompletedTask;
 		}
 
@@ -71,7 +82,19 @@ namespace FluffySpoon.Automation.Web.Fluent
 		{
 			return MethodChainContext
 				.RunAllAsync()
-				.ContinueWith(t => Elements)
+				.ContinueWith(
+					t =>
+					{
+						if (t.Exception != null)
+						{
+							throw t.Exception.InnerExceptions.Count == 1 ?
+								t.Exception.InnerExceptions.Single() :
+								t.Exception;
+						}
+
+						return Elements;
+					},
+					TaskUtilities.ContinuationOptions)
 				.GetAwaiter();
 		}
 
