@@ -1,6 +1,7 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Http;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.JQuery
@@ -28,8 +29,14 @@ namespace FluffySpoon.Automation.Web.JQuery
 
 		public async Task InitializeAsync()
 		{
-			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
-			DomSelectorLibraryJavaScript = _uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()";
+			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://cdnjs.cloudflare.com/ajax/libs/sizzle/2.3.3/sizzle.min.js"));
+            var trimmedScript = jQueryScriptContents
+                .Split('\n')
+                .Select(x => x.Trim())
+                .Where(x => !x.StartsWith("//"))
+                .Aggregate(string.Empty, (a, b) => a + b)
+                .Trim(';');
+            DomSelectorLibraryJavaScript = _uniqueJQueryInstanceReference + @"=(" + trimmedScript + ")";
 		}
 
 		private static string PrepareSelectorForInlining(string selector)

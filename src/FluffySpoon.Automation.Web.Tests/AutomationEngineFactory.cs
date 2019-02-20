@@ -14,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Tests
 			await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 			return await PuppeteerSharp.Puppeteer.LaunchAsync(new LaunchOptions
 			{
-				Headless = false,
+				Headless = !Debugger.IsAttached,
 				DefaultViewport = new ViewPortOptions()
 				{
 					Width = 1100,
