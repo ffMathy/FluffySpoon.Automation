@@ -30,6 +30,21 @@ namespace FluffySpoon.Automation.Web.Dom
 				scriptToExecute);
 		}
 
+		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(
+			IWebAutomationFrameworkInstance automationFrameworkInstance,
+			int methodChainOffset,
+			string[] selectors)
+		{
+			var combinedSelector = selectors
+				.Aggregate((a, b) => a + ", " + b)
+				.TrimStart(',', ' ');
+			var sanitizedSelector = combinedSelector.Replace("'", "\\'");
+			return await GetDomElementsFromJavaScriptCode(
+				automationFrameworkInstance,
+				methodChainOffset,
+				@"return document.querySelectorAll('" + sanitizedSelector + "')");
+		}
+
 		public async Task<IReadOnlyList<IDomElement>> GetDomElementsFromJavaScriptCode(
 			IWebAutomationFrameworkInstance automationFrameworkInstance, 
 			int methodChainOffset, 
@@ -78,6 +93,7 @@ namespace FluffySpoon.Automation.Web.Dom
 							attributes: attributes,
 							computedStyle: computedStyleProperties,
 							textContent: element.textContent,
+							innerText: element.innerText,
 							value: element.value,
 							clientLeft: element.clientLeft,
 							clientTop: element.clientTop,
@@ -110,6 +126,7 @@ namespace FluffySpoon.Automation.Web.Dom
 					var domElement = new DomElement(
 						cssSelector: "[fluffyspoon-tag='" + x.Tag + "']",
 						textContent: x.TextContent,
+						innerText: x.InnerText,
 						value: x.Value,
 						clientLeft: x.ClientLeft,
 						clientTop: x.ClientTop,
@@ -133,6 +150,7 @@ namespace FluffySpoon.Automation.Web.Dom
 		{
 			public string Tag { get; set; }
 			public string TextContent { get; set; }
+			public string InnerText { get; set; }
 			public string Value { get; set; }
 
 			public int ClientLeft { get; set; }

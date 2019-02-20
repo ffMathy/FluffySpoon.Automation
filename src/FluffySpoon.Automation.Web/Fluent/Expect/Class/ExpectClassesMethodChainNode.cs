@@ -6,6 +6,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 	{
 		internal string[] Classes { get; }
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public ExpectClassesMethodChainNode(params string[] classes)
 		{
 			Classes = classes;

@@ -11,6 +11,8 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 	{
 		internal IReadOnlyList<SKBitmap> Screenshots { get; private set; }
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent.Elements;

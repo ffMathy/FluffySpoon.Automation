@@ -8,6 +8,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 {
     class SelectByFromTargetMethodChainNode: MethodChainRoot<SelectByMethodChainNode>, ISelectByFromTargetMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent.Elements;

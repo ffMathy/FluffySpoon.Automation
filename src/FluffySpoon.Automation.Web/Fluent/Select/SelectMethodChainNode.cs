@@ -7,6 +7,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 	class SelectMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectMethodChainNode, SelectByFromTargetMethodChainNode>,
 		ISelectMethodChainNode
     {
+
 		public IDomElementFromTargetsMethodChainNode<IBaseMethodChainNode, ISelectByFromTargetMethodChainNode> ByIndex(int index)
 		{
 			return ByIndices(new[] { index });

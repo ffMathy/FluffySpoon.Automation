@@ -8,6 +8,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Wait
 	{
 		private readonly Func<Task<bool>> _predicate;
 
+		protected override bool MayCauseElementSideEffects => true;
+
 		public WaitMethodChainNode(Func<Task<bool>> predicate)
 		{
 			_predicate = predicate;

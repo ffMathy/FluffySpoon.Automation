@@ -6,6 +6,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 	{
 		internal string Value { get; }
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public ExpectValueMethodChainNode(string value)
 		{
 			Value = value;

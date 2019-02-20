@@ -7,6 +7,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 {
     class EnterInTargetMethodChainNode: MethodChainRoot<EnterMethodChainNode>, IEnterInTargetMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent.Elements;

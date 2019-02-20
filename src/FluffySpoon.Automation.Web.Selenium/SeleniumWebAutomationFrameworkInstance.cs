@@ -292,11 +292,9 @@ namespace FluffySpoon.Automation.Web.Selenium
 			int methodChainOffset,
 			string[] selectors)
 		{
-			var combinedSelector = selectors.Aggregate((a, b) => a + ", " + b);
-			var sanitizedSelector = combinedSelector.Replace("'", "\\'");
-			return await _domTunnel.GetDomElementsFromSelector(this,
+			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
 				methodChainOffset,
-				@"return document.querySelectorAll('" + sanitizedSelector + "')");
+				selectors);
 		}
 
 		public async Task InitializeAsync()

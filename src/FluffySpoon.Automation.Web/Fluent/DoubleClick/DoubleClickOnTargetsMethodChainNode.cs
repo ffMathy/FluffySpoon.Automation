@@ -12,6 +12,8 @@ namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 			get => Parent.Elements;
 		}
 
+		protected override bool MayCauseElementSideEffects => true;
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			await framework.DoubleClickAsync(Elements, Parent.OffsetX, Parent.OffsetY);

@@ -7,6 +7,8 @@ namespace FluffySpoon.Automation.Web.Fluent.RightClick
 {
 	class RightClickOnTargetsMethodChainNode : MethodChainRoot<RightClickMethodChainNode>, IRightClickOnTargetsMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent.Elements;

@@ -10,6 +10,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Class
 {
 	class ExpectClassesOfTargetsMethodChainNode : ExpectMethodChainRoot<ExpectClassesMethodChainNode>, IExpectClassesOfTargetsMethodChainNode
 	{
+
+		protected override bool MayCauseElementSideEffects => false;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent?.Elements;

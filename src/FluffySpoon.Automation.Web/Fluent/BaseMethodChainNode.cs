@@ -19,6 +19,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 		private IMethodChainContext _methodChainContext;
 		private IReadOnlyList<IDomElement> _elements;
 
+		protected abstract bool MayCauseElementSideEffects { get; }
+
 		public IMethodChainContext MethodChainContext
 		{
 			protected get
@@ -65,10 +67,24 @@ namespace FluffySpoon.Automation.Web.Fluent
 			}
 		}
 
-		protected virtual Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+		protected virtual async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			Console.WriteLine("OnExecute");
-			return Task.CompletedTask;
+			if (MayCauseElementSideEffects)
+				await RefreshElements(framework);
+		}
+
+		private async Task RefreshElements(IWebAutomationFrameworkInstance framework)
+		{
+			if (Elements == null || Elements.Count <= 0)
+				return;
+
+			var selectors = Elements
+				.Select(x => x.CssSelector)
+				.ToArray();
+			var refreshedElements = await framework.FindDomElementsByCssSelectorsAsync(
+				MethodChainOffset,
+				selectors);
+			Elements = refreshedElements;
 		}
 
 		public void SetParent(IBaseMethodChainNode parent)

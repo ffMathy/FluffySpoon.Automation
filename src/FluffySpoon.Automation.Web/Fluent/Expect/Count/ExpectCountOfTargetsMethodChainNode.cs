@@ -14,6 +14,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 			get => Parent?.Elements;
 		}
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public ExpectCountOfTargetsMethodChainNode()
 		{
 
@@ -21,14 +23,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			Console.WriteLine("BeforeExecute");
-
 			if (Elements?.Count != Parent.Count)
 				throw ExpectationNotMetException.FromMethodChainNode(this, framework.UserAgentName, "Expected " + Parent.Count + " elements but found " + (Parent.Elements?.Count ?? 0) + ".");
 
 			await base.OnExecuteAsync(framework);
-
-			Console.WriteLine("AfterExecute");
 		}
 
 		public override IBaseMethodChainNode Clone()

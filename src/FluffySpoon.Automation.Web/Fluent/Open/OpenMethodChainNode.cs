@@ -7,6 +7,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Open
 	{
 		private readonly string _uri;
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public OpenMethodChainNode(string uri)
 		{
 			_uri = uri;

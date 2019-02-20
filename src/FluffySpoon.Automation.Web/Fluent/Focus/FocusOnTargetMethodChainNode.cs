@@ -8,6 +8,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Focus
 {
 	class FocusOnTargetMethodChainNode : MethodChainRoot<FocusMethodChainNode>, IFocusOnTargetMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IReadOnlyList<IDomElement> Elements { 
 			get => Parent.Elements; 
 		}

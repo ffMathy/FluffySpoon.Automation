@@ -8,6 +8,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 {
 	internal class DragFromTargetToTargetMethodChainNode : MethodChainRoot<DragFromTargetMethodChainNode>, IDragFromTargetToTargetMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			var fromNode = Parent.Parent;
@@ -25,8 +27,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 			if (toNode.Elements.Count > 1)
 				throw new AutomationException("The drag/drop operation failed because the \"to\" selector matched more than one element.");
 
-			Console.WriteLine("BeforeExecute");
-
 			await framework.DragDropAsync(
 				fromNode.Elements.Single(),
 				fromNode.OffsetX,
@@ -35,8 +35,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Drag
 				toNode.OffsetX,
 				toNode.OffsetY);
 			await base.OnExecuteAsync(framework);
-
-			Console.WriteLine("AfterExecute");
 		}
 
 		public override IBaseMethodChainNode Clone()

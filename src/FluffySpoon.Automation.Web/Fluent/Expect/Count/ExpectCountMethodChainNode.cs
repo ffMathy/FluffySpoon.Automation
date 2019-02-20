@@ -18,5 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Count
 
 			return clone;
 		}
+
+		protected override bool MayCauseElementSideEffects => false;
 	}
 }

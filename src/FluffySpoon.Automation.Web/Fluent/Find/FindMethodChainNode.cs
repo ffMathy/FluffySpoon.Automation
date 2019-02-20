@@ -11,6 +11,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Find
 	{
 		private readonly string selector;
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		private FindMethodChainNode DelegatedFrom { get; set; }
 
 		public FindMethodChainNode(string selector)

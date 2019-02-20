@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent;
@@ -28,14 +29,14 @@ namespace FluffySpoon.Automation.Web
 {
 	class WebAutomationEngine : IWebAutomationEngine
 	{
-		private readonly IWebAutomationFrameworkInstance[] _frameworks;
+		private readonly IEnumerable<IWebAutomationFrameworkInstance> _frameworks;
 		private readonly IDomSelectorStrategy _domSelectorStrategy;
 
 		private bool _isInitialized;
 		private bool _isInitializing;
 
 		public WebAutomationEngine(
-			IWebAutomationFrameworkInstance[] frameworks,
+			IEnumerable<IWebAutomationFrameworkInstance> frameworks,
 			IDomSelectorStrategy domSelectorStrategy)
 		{
 			_frameworks = frameworks;

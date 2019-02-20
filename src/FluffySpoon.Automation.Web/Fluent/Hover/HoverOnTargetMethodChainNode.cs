@@ -8,6 +8,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Hover
 {
 	class HoverOnTargetMethodChainNode : MethodChainRoot<HoverMethodChainNode>, IHoverOnTargetMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IReadOnlyList<IDomElement> Elements { 
 			get => Parent.Elements; 
 		}

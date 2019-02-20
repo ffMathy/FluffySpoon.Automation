@@ -9,6 +9,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 {
 	class ExpectValueInTargetsMethodChainNode : ExpectMethodChainRoot<ExpectValueMethodChainNode>, IExpectValueInTargetsMethodChainNode
 	{
+		protected override bool MayCauseElementSideEffects => false;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent?.Elements;

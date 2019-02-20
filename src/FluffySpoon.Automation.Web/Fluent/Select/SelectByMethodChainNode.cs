@@ -34,6 +34,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 			};
 		}
 
+		protected override bool MayCauseElementSideEffects => true;
+
 		public override IBaseMethodChainNode Clone()
 		{
 			return new SelectByMethodChainNode() {

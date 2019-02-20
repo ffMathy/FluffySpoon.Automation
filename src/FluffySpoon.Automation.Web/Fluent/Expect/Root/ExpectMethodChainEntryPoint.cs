@@ -2,6 +2,9 @@
 {
 	class ExpectMethodChainEntryPoint : ExpectMethodChainRoot<IBaseMethodChainNode>
 	{
+
+		protected override bool MayCauseElementSideEffects => false;
+
 		public ExpectMethodChainEntryPoint()
 		{
 

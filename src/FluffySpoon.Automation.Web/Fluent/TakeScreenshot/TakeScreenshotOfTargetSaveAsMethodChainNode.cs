@@ -9,6 +9,8 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 	{
 		private readonly string _jpegFilePath;
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public TakeScreenshotOfTargetSaveAsMethodChainNode(string jpegFileName)
 		{
 			_jpegFilePath = jpegFileName;

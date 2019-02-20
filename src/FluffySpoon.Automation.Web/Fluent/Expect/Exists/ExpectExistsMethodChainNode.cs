@@ -14,6 +14,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Exists
 
 		private readonly IReadOnlyList<IDomElement> _domElements;
 
+		protected override bool MayCauseElementSideEffects => false;
+
 		public ExpectExistsMethodChainNode(string selector) {
 			_selector = selector;
 		}

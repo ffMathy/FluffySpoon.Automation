@@ -9,6 +9,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Text
 {
 	class ExpectTextInTargetsMethodChainNode : ExpectMethodChainRoot<ExpectTextMethodChainNode>, IExpectTextInTargetsMethodChainNode
 	{
+
+		protected override bool MayCauseElementSideEffects => false;
+
 		public override IReadOnlyList<IDomElement> Elements
 		{
 			get => Parent?.Elements;

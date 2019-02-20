@@ -200,9 +200,9 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
 		{
-			return await FindDomElementsBySelectorAsync(
+			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
 				methodChainOffset,
-				selectors.Aggregate(string.Empty, (a, b) => $"{a}, {b}"));
+				selectors);
 		}
 	}
 }

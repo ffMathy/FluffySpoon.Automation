@@ -4,6 +4,7 @@
 	{
 		public string CssSelector { get; }
 		public string TextContent { get; }
+		public string InnerText { get; }
 		public string Value { get; }
 
 		public int ClientLeft { get; }
@@ -18,6 +19,7 @@
 		public DomElement(
 			string cssSelector,
 			string textContent,
+			string innerText,
 			string value,
 			int clientLeft,
 			int clientTop,
@@ -29,6 +31,7 @@
 		{
 			CssSelector = cssSelector;
 			TextContent = textContent;
+			InnerText = innerText;
 			Value = value;
 
 			ClientLeft = clientLeft;

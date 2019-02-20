@@ -8,8 +8,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Click
 	class ClickOnTargetsMethodChainNode : MethodChainRoot<ClickMethodChainNode>, IClickOnTargetsMethodChainNode
 	{
 		public override IReadOnlyList<IDomElement> Elements { 
-			get => Parent.Elements; 
+			get => Parent.Elements;
 		}
+
+		protected override bool MayCauseElementSideEffects => true;
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
