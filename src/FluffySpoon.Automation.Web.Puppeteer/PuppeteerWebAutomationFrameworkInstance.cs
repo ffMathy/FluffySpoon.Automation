@@ -129,7 +129,6 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		public async Task OpenAsync(string uri)
 		{
 			await _page.GoToAsync(uri);
-			await _page.WaitForExpressionAsync("document.readyState === 'complete'");
 		}
 
 		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)

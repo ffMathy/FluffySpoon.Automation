@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -99,6 +100,7 @@ namespace FluffySpoon.Automation.Web.Dom
 							clientTop: element.clientTop,
 							clientWidth: element.clientWidth,
 							clientHeight: element.clientHeight,
+                            updatedAt: new Date(),
 							boundingClientRectangle: {
 								left: boundingClientRectangle.left,
 								right: boundingClientRectangle.right,
@@ -134,7 +136,8 @@ namespace FluffySpoon.Automation.Web.Dom
 						clientHeight: x.ClientHeight,
 						boundingClientRectangle: x.BoundingClientRectangle,
 						attributes: attributes,
-						computedStyle: computedStyle);
+						computedStyle: computedStyle,
+                        updatedAt: x.UpdatedAt);
 
 					return domElement;
 				})
@@ -162,6 +165,8 @@ namespace FluffySpoon.Automation.Web.Dom
 
 			public DomAttribute[] Attributes { get; set; }
 			public DomStyleProperty[] ComputedStyle { get; set; }
+
+            public DateTime UpdatedAt { get; set; }
 		}
 	}
 }

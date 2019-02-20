@@ -85,7 +85,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 				MethodChainOffset,
 				selectors);
 			Elements = refreshedElements;
-		}
+        }
 
 		public void SetParent(IBaseMethodChainNode parent)
 		{

@@ -14,5 +14,6 @@
 		IDomRectangle BoundingClientRectangle { get; }
 		IDomAttributes Attributes { get; }
 		IDomStyle ComputedStyle { get; }
-	}
+        System.DateTime UpdatedAt { get; }
+    }
 }
