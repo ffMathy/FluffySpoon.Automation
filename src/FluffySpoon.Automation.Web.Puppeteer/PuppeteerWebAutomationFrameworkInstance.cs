@@ -32,7 +32,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		{
 			var selector = domElements
 				.Select(x => x.CssSelector)
-				.Aggregate((a, b) => $"{a}, {b}")
+				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
                 .TrimStart(',', ' ');
 
             return await _page.QuerySelectorAllAsync(selector);

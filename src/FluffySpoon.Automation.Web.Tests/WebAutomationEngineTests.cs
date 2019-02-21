@@ -48,13 +48,26 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
+                                await engine.OpenTest("engine/enter.html");
+
+                                await engine.Enter("foo").In("input");
+
+                                var labelElements = await engine.Find("label");
+                                var labelElement = labelElements.Single();
+                                Assert.AreEqual("-foo-", labelElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
                                 await engine.OpenTest("engine/select.html");
 
                                 await engine.Select.ByText("Bar").From("select");
 
                                 var selectElements = await engine.Find("label");
                                 var selectElement = selectElements.Single();
-                                Assert.AreEqual("vbar", selectElement.TextContent);
+                                Assert.AreEqual("2", selectElement.TextContent);
                             });
 
                         await RunTestAsync(
@@ -67,7 +80,7 @@ namespace FluffySpoon.Automation.Web.Tests
 
                                 var selectElements = await engine.Find("label");
                                 var selectElement = selectElements.Single();
-                                Assert.AreEqual("vbar", selectElement.TextContent);
+                                Assert.AreEqual("2", selectElement.TextContent);
                             });
 
                         await RunTestAsync(
@@ -76,11 +89,102 @@ namespace FluffySpoon.Automation.Web.Tests
                             {
                                 await engine.OpenTest("engine/select.html");
 
-                                await engine.Select.ByValue("vbar").From("select");
+                                await engine.Select.ByValue("2").From("select");
 
                                 var selectElements = await engine.Find("label");
                                 var selectElement = selectElements.Single();
-                                Assert.AreEqual("vbar", selectElement.TextContent);
+                                Assert.AreEqual("2", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/select.html");
+
+                                await engine.Select.ByValue(2).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/select.html");
+
+                                await engine.Select.ByValue((object)2).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/multi-select.html");
+
+                                await engine.Select.ByTexts("Bar", "Baz").From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2, 3", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/multi-select.html");
+
+                                await engine.Select.ByIndices(1, 2).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2, 3", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/multi-select.html");
+
+                                await engine.Select.ByValues("2", "3").From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2, 3", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/multi-select.html");
+
+                                await engine.Select.ByValues(2, 3).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2, 3", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/multi-select.html");
+
+                                await engine.Select.ByValues((object)2, (object)3).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("2, 3", selectElement.TextContent);
                             });
 
                         await RunTestAsync(
