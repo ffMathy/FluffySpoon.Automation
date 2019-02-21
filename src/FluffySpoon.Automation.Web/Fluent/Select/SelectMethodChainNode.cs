@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Fluent.Targets;
 using FluffySpoon.Automation.Web.Fluent.Targets.From;
 
@@ -62,9 +63,17 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 				.ToArray());
 		}
 
-		public override IBaseMethodChainNode Clone()
+        protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+        {
+            return Task.CompletedTask;
+        }
+
+        public override IBaseMethodChainNode Clone()
 		{
-			return new SelectMethodChainNode();
-		}
+			var node = new SelectMethodChainNode();
+            TransferDelegation(node);
+
+            return node;
+        }
 	}
 }

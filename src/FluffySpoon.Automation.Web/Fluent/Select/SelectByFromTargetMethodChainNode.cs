@@ -12,7 +12,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		public override IReadOnlyList<IDomElement> Elements
 		{
-			get => Parent.Elements; protected internal set => Parent.Elements = value;
+			get => Parent.Elements;
+			protected internal set => Parent.Elements = value;
 		}
 
         protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)

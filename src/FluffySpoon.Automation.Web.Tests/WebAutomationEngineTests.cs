@@ -49,6 +49,45 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
+                                await engine.OpenTest("engine/select.html");
+
+                                await engine.Select.ByText("Bar").From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("vbar", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/select.html");
+
+                                await engine.Select.ByIndex(1).From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("vbar", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest("engine/select.html");
+
+                                await engine.Select.ByValue("vbar").From("select");
+
+                                var selectElements = await engine.Find("label");
+                                var selectElement = selectElements.Single();
+                                Assert.AreEqual("vbar", selectElement.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
                                 await engine.OpenTest("engine/double-click.html");
 
                                 var clickedButtons = await engine.DoubleClick.On("button");
