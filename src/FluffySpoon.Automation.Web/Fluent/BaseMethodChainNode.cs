@@ -38,7 +38,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 		public virtual IReadOnlyList<IDomElement> Elements
 		{
 			get => _elements;
-			protected set => _elements = value;
+			protected internal set => _elements = value;
 		}
 
 		public int MethodChainOffset { get; set; }

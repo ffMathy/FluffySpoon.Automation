@@ -8,13 +8,10 @@ namespace FluffySpoon.Automation.Web.Tests
 	{
 		public static async Task<Browser> GetPuppeteerDriverAsync()
 		{
-			foreach (var process in Process.GetProcessesByName("chrome"))
-				process.Kill();
-
 			await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 			return await PuppeteerSharp.Puppeteer.LaunchAsync(new LaunchOptions
 			{
-				Headless = false,
+				Headless = true,
 				DefaultViewport = new ViewPortOptions()
 				{
 					Width = 1100,

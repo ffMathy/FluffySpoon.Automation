@@ -9,7 +9,7 @@ namespace FluffySpoon.Automation.Web.Fluent.DoubleClick
 	{
 		public override IReadOnlyList<IDomElement> Elements
 		{
-			get => Parent.Elements;
+			get => Parent.Elements; protected internal set => Parent.Elements = value;
 		}
 
 		protected override bool MayCauseElementSideEffects => true;

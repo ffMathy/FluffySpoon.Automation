@@ -11,7 +11,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Enter
 
 		public override IReadOnlyList<IDomElement> Elements
 		{
-			get => Parent.Elements;
+			get => Parent.Elements; protected internal set => Parent.Elements = value;
 		}
 
         protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)

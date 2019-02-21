@@ -15,7 +15,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 
 		public override IReadOnlyList<IDomElement> Elements
 		{
-			get => Parent.Elements;
+			get => Parent.Elements; protected internal set => Parent.Elements = value;
 		}
 
 		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(string jpegFileName)

@@ -113,7 +113,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 					{
 					}
 
-					throw new NotImplementedException();
 					await Task.Delay(100);
 				}
 			});
