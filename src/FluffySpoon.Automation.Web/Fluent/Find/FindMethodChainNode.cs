@@ -1,30 +1,24 @@
-﻿using FluffySpoon.Automation.Web.Fluent.Targets;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.Find
 {
 	class FindMethodChainNode :
 		BaseMethodChainNode<IBaseMethodChainNode>, IFindMethodChainNode
 	{
-		private readonly string selector;
-
-		protected override bool MayCauseElementSideEffects => false;
+		private readonly string _selector;
 
 		private FindMethodChainNode DelegatedFrom { get; set; }
 
 		public FindMethodChainNode(string selector)
 		{
-			this.selector = selector;
+			_selector = selector;
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			Elements = await framework.FindDomElementsBySelectorAsync(
 				MethodChainOffset,
-				selector);
+				_selector);
 
 			if (DelegatedFrom != null)
 				DelegatedFrom.Elements = Elements;
@@ -32,7 +26,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Find
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return new FindMethodChainNode(selector) {
+			return new FindMethodChainNode(_selector) {
 				DelegatedFrom = this
 			};
 		}

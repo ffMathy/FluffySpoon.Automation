@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
-using System;
 using System.Linq;
 
 namespace FluffySpoon.Automation.Web.Fluent
@@ -19,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 		private IMethodChainContext _methodChainContext;
 		private IReadOnlyList<IDomElement> _elements;
 
-		protected abstract bool MayCauseElementSideEffects { get; }
+        protected virtual bool MayCauseElementSideEffects => false;
 
 		public IMethodChainContext MethodChainContext
 		{

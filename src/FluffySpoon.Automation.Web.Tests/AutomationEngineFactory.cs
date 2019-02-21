@@ -1,5 +1,4 @@
 ﻿using PuppeteerSharp;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Tests

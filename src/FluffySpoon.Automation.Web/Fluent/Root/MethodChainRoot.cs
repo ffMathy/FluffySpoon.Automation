@@ -94,27 +94,24 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		{
 			return Wait(async () =>
 			{
-				while (true)
+				var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks, MethodChainContext.AutomationEngine);
+				var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
+
+				predicate(expectNode);
+
+				try
 				{
-					var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks, MethodChainContext.AutomationEngine);
-					var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
-
-					predicate(expectNode);
-
-					try
-					{
-						await methodChainContext.RunAllAsync();
-						return true;
-					}
-					catch (Exception ex) when (ex.InnerException is ExpectationNotMetException)
-					{
-					}
-					catch (ExpectationNotMetException)
-					{
-					}
-
-					await Task.Delay(100);
+					await methodChainContext.RunAllAsync();
+					return true;
 				}
+				catch (Exception ex) when (ex.InnerException is ExpectationNotMetException)
+				{
+				}
+				catch (ExpectationNotMetException)
+				{
+				}
+
+                return false;
 			});
 		}
 
