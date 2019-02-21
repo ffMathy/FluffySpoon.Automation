@@ -49,11 +49,26 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
+                                await engine.OpenTest("engine/double-click.html");
+
+                                var clickedButtons = await engine.DoubleClick.On("button");
+                                var clickedButton = clickedButtons.Single();
+                                Assert.AreEqual("clicked", clickedButton.TextContent);
+                            });
+
+                        await RunTestAsync(
+                            serviceProvider,
+                            async engine =>
+                            {
                                 await engine.OpenTest("engine/right-click.html");
 
                                 var clickedButtons = await engine.Click.On("button");
                                 var clickedButton = clickedButtons.Single();
-                                Assert.AreEqual("clicked", clickedButton.TextContent);
+                                Assert.AreEqual("not", clickedButton.TextContent);
+
+                                var newClickedButtons = await engine.RightClick.On("button");
+                                var newClickedButton = newClickedButtons.Single();
+                                Assert.AreEqual("clicked", newClickedButton.TextContent);
                             });
 
                         await RunTestAsync(

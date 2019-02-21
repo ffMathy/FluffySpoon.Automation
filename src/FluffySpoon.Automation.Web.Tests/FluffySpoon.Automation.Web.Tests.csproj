@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="wwwroot\engine\double-click.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="wwwroot\engine\right-click.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
