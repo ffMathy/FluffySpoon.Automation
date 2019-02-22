@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="wwwroot\engine\drag.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="wwwroot\engine\focus.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
