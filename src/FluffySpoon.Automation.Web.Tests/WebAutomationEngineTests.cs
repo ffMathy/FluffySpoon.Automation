@@ -43,12 +43,25 @@ namespace FluffySpoon.Automation.Web.Tests
                     var serviceProvider = serviceCollection.BuildServiceProvider();
 
                     try
-                    {
-                        await RunTestAsync(
+					{
+						await RunTestAsync(
+							serviceProvider,
+							async engine =>
+							{
+								await engine.OpenTest(server, "engine/focus.html");
+
+								await engine.Focus.On("input");
+
+								var labels = await engine.Find("label");
+								var label = labels.Single();
+								Assert.AreEqual("focused", label.TextContent);
+							});
+
+						await RunTestAsync(
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/enter.html");
+                                await engine.OpenTest(server, "engine/enter.html");
 
                                 await engine.Enter("foo").In("input");
 
@@ -61,7 +74,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/select.html");
+                                await engine.OpenTest(server, "engine/select.html");
 
                                 await engine.Select.ByText("Bar").From("select");
 
@@ -74,7 +87,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/select.html");
+                                await engine.OpenTest(server, "engine/select.html");
 
                                 await engine.Select.ByIndex(1).From("select");
 
@@ -87,7 +100,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/select.html");
+                                await engine.OpenTest(server, "engine/select.html");
 
                                 await engine.Select.ByValue("2").From("select");
 
@@ -100,7 +113,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/select.html");
+                                await engine.OpenTest(server, "engine/select.html");
 
                                 await engine.Select.ByValue(2).From("select");
 
@@ -113,7 +126,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/select.html");
+                                await engine.OpenTest(server, "engine/select.html");
 
                                 await engine.Select.ByValue((object)2).From("select");
 
@@ -126,7 +139,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/multi-select.html");
+                                await engine.OpenTest(server, "engine/multi-select.html");
 
                                 await engine.Select.ByTexts("Bar", "Baz").From("select");
 
@@ -139,7 +152,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/multi-select.html");
+                                await engine.OpenTest(server, "engine/multi-select.html");
 
                                 await engine.Select.ByIndices(1, 2).From("select");
 
@@ -152,7 +165,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/multi-select.html");
+                                await engine.OpenTest(server, "engine/multi-select.html");
 
                                 await engine.Select.ByValues("2", "3").From("select");
 
@@ -165,7 +178,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/multi-select.html");
+                                await engine.OpenTest(server, "engine/multi-select.html");
 
                                 await engine.Select.ByValues(2, 3).From("select");
 
@@ -178,7 +191,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/multi-select.html");
+                                await engine.OpenTest(server, "engine/multi-select.html");
 
                                 await engine.Select.ByValues((object)2, (object)3).From("select");
 
@@ -191,7 +204,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/double-click.html");
+                                await engine.OpenTest(server, "engine/double-click.html");
 
                                 var clickedButtons = await engine.DoubleClick.On("button");
                                 var clickedButton = clickedButtons.Single();
@@ -202,7 +215,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/right-click.html");
+                                await engine.OpenTest(server, "engine/right-click.html");
 
                                 var clickedButtons = await engine.Click.On("button");
                                 var clickedButton = clickedButtons.Single();
@@ -217,7 +230,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/wait-until.html");
+                                await engine.OpenTest(server, "engine/wait-until.html");
 
                                 var clickedButtons = await engine.Click.On("button");
                                 var clickedButton = clickedButtons.Single();
@@ -236,7 +249,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async engine =>
                             {
-                                await engine.OpenTest("engine/click.html");
+                                await engine.OpenTest(server, "engine/click.html");
 
                                 var clickedButtons = await engine.Click.On("button");
                                 var clickedButton = clickedButtons.Single();
@@ -247,7 +260,7 @@ namespace FluffySpoon.Automation.Web.Tests
                             serviceProvider,
                             async x =>
                             {
-                                await x.OpenTest("engine/find.html");
+                                await x.OpenTest(server, "engine/find.html");
 
                                 var aMatches = await x.Find(".a");
                                 var bMatches = await x.Find(".b");

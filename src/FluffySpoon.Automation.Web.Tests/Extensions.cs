@@ -12,7 +12,7 @@ namespace FluffySpoon.Automation.Web.Tests
 			var address = server.ServerFeatures
 				.Get<IServerAddressesFeature>()
 				.Addresses
-				.Single();
+				.FirstOrDefault();
 			await engine.Open(address + "/" + page);
 		}
 	}
