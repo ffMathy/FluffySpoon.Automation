@@ -6,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.RightClick
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new RightClickMethodChainNode();
-		}
+			var node = new RightClickMethodChainNode();
+            TransferDelegation(node);
+
+            return node;
+        }
 	}
 }

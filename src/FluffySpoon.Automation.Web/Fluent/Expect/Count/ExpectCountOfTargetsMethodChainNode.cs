@@ -1,7 +1,6 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Exceptions;
 using FluffySpoon.Automation.Web.Fluent.Expect.Root;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

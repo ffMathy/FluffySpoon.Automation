@@ -1,8 +1,5 @@
 ﻿using FluffySpoon.Automation.Web.Dom;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FluffySpoon.Automation.Web
 {

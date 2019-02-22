@@ -1,8 +1,9 @@
-﻿using FluffySpoon.Automation.Web.Fluent.Targets;
+﻿using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Fluent.Targets;
 
 namespace FluffySpoon.Automation.Web.Fluent.Select
 {
-    class SelectByMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectByMethodChainNode, SelectByFromTargetMethodChainNode>
+    internal class SelectByMethodChainNode: BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, SelectByMethodChainNode, SelectByFromTargetMethodChainNode>
 	{
 		internal string[] Values { get; private set; }
 		internal int[] Indices { get; private set; }
@@ -10,7 +11,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		private SelectByMethodChainNode() { }
 		
-		public static SelectByMethodChainNode ByValues(string[] values)
+		internal static SelectByMethodChainNode ByValues(string[] values)
 		{
 			return new SelectByMethodChainNode()
 			{
@@ -18,7 +19,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 			};
 		}
 
-		public static SelectByMethodChainNode ByTexts(string[] texts)
+        internal static SelectByMethodChainNode ByTexts(string[] texts)
 		{
 			return new SelectByMethodChainNode()
 			{
@@ -26,7 +27,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 			};
 		}
 
-		public static SelectByMethodChainNode ByIndices(int[] indices)
+        internal static SelectByMethodChainNode ByIndices(int[] indices)
 		{
 			return new SelectByMethodChainNode()
 			{
@@ -36,13 +37,21 @@ namespace FluffySpoon.Automation.Web.Fluent.Select
 
 		protected override bool MayCauseElementSideEffects => true;
 
-		public override IBaseMethodChainNode Clone()
+        protected override Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
+        {
+            return base.OnExecuteAsync(framework);
+        }
+
+        public override IBaseMethodChainNode Clone()
 		{
-			return new SelectByMethodChainNode() {
+			var node = new SelectByMethodChainNode() {
 				Indices = Indices,
 				Texts = Texts,
 				Values = Values
 			};
-		}
+            TransferDelegation(node);
+
+            return node;
+        }
 	}
 }

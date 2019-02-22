@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace FluffySpoon.Automation.Web.Puppeteer
 {
@@ -31,9 +32,10 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		{
 			var selector = domElements
 				.Select(x => x.CssSelector)
-				.Aggregate((a, b) => $"{a}, {b}");
+				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                .TrimStart(',', ' ');
 
-			return await _page.QuerySelectorAllAsync(selector);
+            return await _page.QuerySelectorAllAsync(selector);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
@@ -129,7 +131,6 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		public async Task OpenAsync(string uri)
 		{
 			await _page.GoToAsync(uri);
-			await _page.WaitForExpressionAsync("document.readyState === 'complete'");
 		}
 
 		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
@@ -151,11 +152,15 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			{
 				var selector = byIndices
 					.Select(x => $"{element.CssSelector} > option:nth-child({x+1})")
-					.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
-				var handles = await _page.QuerySelectorAllAsync(selector);
+					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                    .TrimStart(',', ' ');
+                var handles = await _page.QuerySelectorAllAsync(selector);
 				var valueTasks = handles.Select(x => _page.EvaluateFunctionAsync("x => x.value", x));
 				var valueTokens = await Task.WhenAll(valueTasks);
-				var values = valueTokens.Cast<string>();
+				var values = valueTokens
+                    .Cast<JValue>()
+                    .Select(x => x.Value)
+                    .Cast<string>();
 				await _page.SelectAsync(element.CssSelector, values.ToArray());
 			}
 		}
@@ -169,7 +174,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			{
 				var selector = byTexts
 					.Select(x => $"{element.CssSelector} > option")
-					.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
+					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                    .TrimStart(',', ' ');
 				var handles = await _page.QuerySelectorAllAsync(selector);
 				var tasks = handles.Select(x => _page.EvaluateFunctionAsync("x => { return { value: x.value, textContent: x.textContent } }", x));
 				var tokens = await Task.WhenAll(tasks);
@@ -188,8 +194,9 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		{
 			var selector = elements
 				.Select(x => x.CssSelector)
-				.Aggregate(string.Empty, (a, b) => $"{a}, {b}");
-			await _page.SelectAsync(selector, byValues);
+				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                .TrimStart(',', ' ');
+            await _page.SelectAsync(selector, byValues);
 		}
 
 		public async Task<SKBitmap> TakeScreenshotAsync()

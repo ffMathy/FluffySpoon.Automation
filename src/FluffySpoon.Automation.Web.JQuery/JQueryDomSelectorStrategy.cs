@@ -23,13 +23,13 @@ namespace FluffySpoon.Automation.Web.JQuery
 		public string GetJavaScriptForRetrievingDomElements(string selector)
 		{
 			var sanitizedSelector = PrepareSelectorForInlining(selector);
-			return "return " + _uniqueJQueryInstanceReference + "('" + sanitizedSelector + "').get()";
+			return "return " + _uniqueJQueryInstanceReference + "('" + sanitizedSelector + "')";
 		}
 
 		public async Task InitializeAsync()
 		{
-			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"));
-			DomSelectorLibraryJavaScript = _uniqueJQueryInstanceReference + @"=(function() {" + jQueryScriptContents + @"})()||jQuery.noConflict()";
+			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://cdnjs.cloudflare.com/ajax/libs/sizzle/2.3.3/sizzle.min.js"));
+            DomSelectorLibraryJavaScript = "var module = { exports: { } };\n" + jQueryScriptContents + ";\n" + _uniqueJQueryInstanceReference + " = module.exports;\n";
 		}
 
 		private static string PrepareSelectorForInlining(string selector)
