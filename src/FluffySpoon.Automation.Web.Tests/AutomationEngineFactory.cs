@@ -1,4 +1,7 @@
-﻿using PuppeteerSharp;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using PuppeteerSharp;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Tests

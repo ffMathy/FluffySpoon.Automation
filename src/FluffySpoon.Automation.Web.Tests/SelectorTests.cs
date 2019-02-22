@@ -56,7 +56,7 @@ namespace FluffySpoon.Automation.Web.Tests
 					{
 						await automationEngine.InitializeAsync();
 
-						await automationEngine.OpenTest("selector/index.html");
+						await automationEngine.OpenTest(server, "selector/index.html");
 
 						var outerElements = await automationEngine.Find(testCase.OuterElementSelector);
 						Assert.IsNotNull(outerElements);
