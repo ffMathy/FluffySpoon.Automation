@@ -13,11 +13,11 @@ namespace FluffySpoon.Automation.Web.Tests
 			await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 			return await PuppeteerSharp.Puppeteer.LaunchAsync(new LaunchOptions
 			{
-				Headless = true,
+				Headless = false,
 				DefaultViewport = new ViewPortOptions()
 				{
 					Width = 1100,
-					Height = 500
+					Height = 1000
 				}
 			});
 		}

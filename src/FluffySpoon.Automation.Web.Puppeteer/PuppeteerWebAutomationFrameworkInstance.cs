@@ -33,9 +33,9 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			var selector = domElements
 				.Select(x => x.CssSelector)
 				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-                .TrimStart(',', ' ');
+				.TrimStart(',', ' ');
 
-            return await _page.QuerySelectorAllAsync(selector);
+			return await _page.QuerySelectorAllAsync(selector);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
@@ -61,7 +61,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 				await _page.Mouse.ClickAsync(
 					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
 					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
-					new ClickOptions() {
+					new ClickOptions()
+					{
 						ClickCount = 2
 					});
 			}
@@ -76,14 +77,19 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 			await _page.Mouse.MoveAsync(
 				(int)Math.Ceiling(to.BoundingClientRectangle.Left) + toOffsetX,
-				(int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY);
+				(int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY,
+				new MoveOptions()
+				{
+					Steps = 100
+				});
 			await _page.Mouse.UpAsync();
 		}
 
 		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
 			var handles = await GetElementHandlesFromDomElementsAsync(elements);
-			foreach(var handle in handles) { 
+			foreach (var handle in handles)
+			{
 				await handle.TypeAsync(text);
 			}
 		}
@@ -126,6 +132,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 			var pages = await _browser.PagesAsync();
 			_page = pages.Single();
+
+			await _page.SetCacheEnabledAsync(false);
 		}
 
 		public async Task OpenAsync(string uri)
@@ -140,7 +148,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 				await _page.Mouse.ClickAsync(
 					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
 					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
-					new ClickOptions() {
+					new ClickOptions()
+					{
 						Button = MouseButton.Right
 					});
 			}
@@ -151,16 +160,16 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			foreach (var element in elements)
 			{
 				var selector = byIndices
-					.Select(x => $"{element.CssSelector} > option:nth-child({x+1})")
+					.Select(x => $"{element.CssSelector} > option:nth-child({x + 1})")
 					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-                    .TrimStart(',', ' ');
-                var handles = await _page.QuerySelectorAllAsync(selector);
+					.TrimStart(',', ' ');
+				var handles = await _page.QuerySelectorAllAsync(selector);
 				var valueTasks = handles.Select(x => _page.EvaluateFunctionAsync("x => x.value", x));
 				var valueTokens = await Task.WhenAll(valueTasks);
 				var values = valueTokens
-                    .Cast<JValue>()
-                    .Select(x => x.Value)
-                    .Cast<string>();
+					.Cast<JValue>()
+					.Select(x => x.Value)
+					.Cast<string>();
 				await _page.SelectAsync(element.CssSelector, values.ToArray());
 			}
 		}
@@ -175,12 +184,13 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 				var selector = byTexts
 					.Select(x => $"{element.CssSelector} > option")
 					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-                    .TrimStart(',', ' ');
+					.TrimStart(',', ' ');
 				var handles = await _page.QuerySelectorAllAsync(selector);
 				var tasks = handles.Select(x => _page.EvaluateFunctionAsync("x => { return { value: x.value, textContent: x.textContent } }", x));
 				var tokens = await Task.WhenAll(tasks);
 				var values = tokens
-					.Select(x => new {
+					.Select(x => new
+					{
 						Value = x.Value<string>("value"),
 						TextContent = x.Value<string>("textContent")
 					})
@@ -195,8 +205,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			var selector = elements
 				.Select(x => x.CssSelector)
 				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-                .TrimStart(',', ' ');
-            await _page.SelectAsync(selector, byValues);
+				.TrimStart(',', ' ');
+			await _page.SelectAsync(selector, byValues);
 		}
 
 		public async Task<SKBitmap> TakeScreenshotAsync()

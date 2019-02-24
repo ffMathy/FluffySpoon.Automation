@@ -20,9 +20,20 @@
 			margin: 10px;
 		}
 	</style>
+	<script>
+		function stringify(t, e) {
+			return JSON.stringify({
+				t,
+				x: e.clientX,
+				y: e.clientY
+			});
+		}
+	</script>
 </head>
-<body>
-	<div draggable="true" class="draggable a"></div>
-	<div draggable="true" class="draggable b"></div>
+<body onmousemove="document.querySelector('#debug').textContent = stringify('mm', event)" onmousedown="document.querySelector('#debug').textContent = stringify('md', event)" onmouseup="document.querySelector('#debug').textContent = stringify('mu', event)">
+	<div draggable="true" class="draggable a" ondragstart="event.dataTransfer.setData('text/plain', 'draggable-a')"></div>
+	<div draggable="true" class="draggable b" ondragover="event.preventDefault()" ondrop="document.querySelector('#result').textContent = event.dataTransfer.getData('text/plain')"></div>
+	<label id="result"></label>
+	<label id="debug"></label>
 </body>
 </html>

@@ -48,6 +48,19 @@ namespace FluffySpoon.Automation.Web.Tests
 							serviceProvider,
 							async engine =>
 							{
+								await engine.OpenTest(server, "engine/drag.html");
+
+								await engine.Drag.From(".draggable.a").To(".draggable.b");
+
+								var labels = await engine.Find("#result");
+								var label = labels.Single();
+								Assert.AreEqual("draggable-a", label.TextContent);
+							});
+
+						await RunTestAsync(
+							serviceProvider,
+							async engine =>
+							{
 								await engine.OpenTest(server, "engine/focus.html");
 
 								await engine.Focus.On("input");
