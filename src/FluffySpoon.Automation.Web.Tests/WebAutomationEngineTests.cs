@@ -46,13 +46,24 @@ namespace FluffySpoon.Automation.Web.Tests
 						serviceProvider,
 						async engine =>
 						{
+							await engine.OpenTest(server, "engine/hover.html");
+
+							await engine.Hover.On("div");
+
+							await engine.Expect
+								.Text("hover").In("label");
+						});
+
+					await RunTestAsync(
+						serviceProvider,
+						async engine =>
+						{
 							await engine.OpenTest(server, "engine/focus.html");
 
 							await engine.Focus.On("input");
 
-							var labels = await engine.Find("label");
-							var label = labels.Single();
-							Assert.AreEqual("focused", label.TextContent);
+							await engine.Expect
+								.Text("focused").In("label");
 						});
 
 					await RunTestAsync(
@@ -63,9 +74,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Enter("foo").In("input");
 
-							var labelElements = await engine.Find("label");
-							var labelElement = labelElements.Single();
-							Assert.AreEqual("-foo-", labelElement.TextContent);
+							await engine.Expect
+								.Text("-foo-").In("label");
 						});
 
 					await RunTestAsync(
@@ -76,9 +86,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByText("Bar").From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2", selectElement.TextContent);
+							await engine.Expect
+								.Text("2").In("label");
 						});
 
 					await RunTestAsync(
@@ -89,9 +98,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByIndex(1).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2", selectElement.TextContent);
+							await engine.Expect
+								.Text("2").In("label");
 						});
 
 					await RunTestAsync(
@@ -102,9 +110,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValue("2").From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2", selectElement.TextContent);
+							await engine.Expect
+								.Text("2").In("label");
 						});
 
 					await RunTestAsync(
@@ -115,9 +122,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValue(2).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2", selectElement.TextContent);
+							await engine.Expect
+								.Text("2").In("label");
 						});
 
 					await RunTestAsync(
@@ -128,9 +134,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValue((object)2).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2", selectElement.TextContent);
+							await engine.Expect
+								.Text("2").In("label");
 						});
 
 					await RunTestAsync(
@@ -141,9 +146,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByTexts("Bar", "Baz").From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2, 3", selectElement.TextContent);
+							await engine.Expect
+								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -154,9 +158,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByIndices(1, 2).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2, 3", selectElement.TextContent);
+							await engine.Expect
+								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -167,9 +170,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValues("2", "3").From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2, 3", selectElement.TextContent);
+							await engine.Expect
+								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -180,9 +182,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValues(2, 3).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2, 3", selectElement.TextContent);
+							await engine.Expect
+								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -193,9 +194,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Select.ByValues((object)2, (object)3).From("select");
 
-							var selectElements = await engine.Find("label");
-							var selectElement = selectElements.Single();
-							Assert.AreEqual("2, 3", selectElement.TextContent);
+							await engine.Expect
+								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -204,9 +204,13 @@ namespace FluffySpoon.Automation.Web.Tests
 						{
 							await engine.OpenTest(server, "engine/double-click.html");
 
-							var clickedButtons = await engine.DoubleClick.On("button");
+							var clickedButtons = await engine.Click.On("button");
 							var clickedButton = clickedButtons.Single();
-							Assert.AreEqual("clicked", clickedButton.TextContent);
+							Assert.AreEqual("not", clickedButton.TextContent);
+
+							var newClickedButtons = await engine.DoubleClick.On("button");
+							var newClickedButton = newClickedButtons.Single();
+							Assert.AreEqual("clicked", newClickedButton.TextContent);
 						});
 
 					await RunTestAsync(
@@ -234,13 +238,8 @@ namespace FluffySpoon.Automation.Web.Tests
 							var clickedButton = clickedButtons.Single();
 							Assert.AreEqual("loading", clickedButton.TextContent);
 
-							var newClickedButtons = await engine
-								.Wait(until => until
-									.Text("loaded").In("button"))
-								.Find("button");
-							var newClickedButton = newClickedButtons.Single();
-							Assert.AreEqual("loaded", newClickedButton.TextContent);
-
+							await engine.Wait(until => until
+								.Text("loaded").In("button"));
 						});
 
 					await RunTestAsync(
@@ -277,9 +276,8 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Drag.From(".draggable.a").To(".draggable.b");
 
-							var labels = await engine.Find("#result");
-							var label = labels.Single();
-							Assert.AreEqual("draggable-a", label.TextContent);
+							await engine.Expect
+								.Text("draggable-a").In("#result");
 						});
 				}
 			}

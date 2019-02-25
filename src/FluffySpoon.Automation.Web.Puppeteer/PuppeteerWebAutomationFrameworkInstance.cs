@@ -120,7 +120,6 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public async Task HoverAsync(IDomElement domElement, int offsetX, int offsetY)
 		{
-			var handle = await GetElementHandleFromDomElementAsync(domElement);
 			await _page.Mouse.MoveAsync(
 				(int)Math.Ceiling(domElement.BoundingClientRectangle.Left) + offsetX,
 				(int)Math.Ceiling(domElement.BoundingClientRectangle.Top) + offsetY);

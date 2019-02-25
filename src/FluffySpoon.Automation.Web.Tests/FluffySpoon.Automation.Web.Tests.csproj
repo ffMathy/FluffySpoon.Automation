@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="wwwroot\engine\hover.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="wwwroot\engine\drag.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

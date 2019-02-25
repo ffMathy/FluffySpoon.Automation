@@ -6,7 +6,10 @@ namespace FluffySpoon.Automation.Web.Fluent.Hover
 	{
 		public override IBaseMethodChainNode Clone()
 		{
-			return new HoverMethodChainNode();
+			var node = new HoverMethodChainNode();
+			TransferDelegation(node);
+
+			return node;
 		}
 	}
 }
