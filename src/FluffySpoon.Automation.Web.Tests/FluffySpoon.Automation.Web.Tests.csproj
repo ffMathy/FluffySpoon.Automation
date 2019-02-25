@@ -73,10 +73,6 @@
 			<Link>Drivers\geckodriver.exe</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Include="..\FluffySpoon.Automation.Web.Sample\MicrosoftWebDriver.exe">
-			<Link>Drivers\MicrosoftWebDriver.exe</Link>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 </Project>

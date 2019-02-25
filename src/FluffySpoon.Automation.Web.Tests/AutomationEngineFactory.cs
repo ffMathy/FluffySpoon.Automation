@@ -37,11 +37,8 @@ namespace FluffySpoon.Automation.Web.Tests
 				PageLoadStrategy = PageLoadStrategy.Eager
 			};
 
-			var driver = new EdgeDriver(
-				Path.Combine(
-					Environment.CurrentDirectory, 
-					"Drivers"),
-				options);
+			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64\\", "MicrosoftWebDriver.exe", 52296);
+			var driver = new EdgeDriver(service, options);
 			return driver;
 		}
 
