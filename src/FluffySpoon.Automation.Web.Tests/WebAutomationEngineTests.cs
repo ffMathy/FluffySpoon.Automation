@@ -51,6 +51,18 @@ namespace FluffySpoon.Automation.Web.Tests
 						serviceProvider,
 						async engine =>
 						{
+							await engine.OpenTest(server, "engine/multi-select.html");
+
+							await engine.Select.ByTexts("Bar", "Baz").From("select");
+
+							await engine.Expect
+								.Text("2, 3").In("label");
+						});
+
+					await RunTestAsync(
+						serviceProvider,
+						async engine =>
+						{
 							await engine.OpenTest(server, "engine/hover.html");
 
 							await engine.Hover.On("div");
@@ -141,18 +153,6 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Expect
 								.Text("2").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
-
-							await engine.Select.ByTexts("Bar", "Baz").From("select");
-
-							await engine.Expect
-								.Text("2, 3").In("label");
 						});
 
 					await RunTestAsync(
@@ -269,17 +269,17 @@ namespace FluffySpoon.Automation.Web.Tests
 							Assert.AreEqual(2, cMatches.Count);
 						});
 
-					//await RunTestAsync(
-					//	serviceProvider,
-					//	async engine =>
-					//	{
-					//		await engine.OpenTest(server, "engine/drag.html");
+					await RunTestAsync(
+						serviceProvider,
+						async engine =>
+						{
+							await engine.OpenTest(server, "engine/drag.html");
 
-					//		await engine.Drag.From(".draggable.a").To(".draggable.b");
+							await engine.Drag.From(".draggable.a").To(".draggable.b");
 
-					//		await engine.Expect
-					//			.Text("draggable-a").In("#result");
-					//	});
+							await engine.Expect
+								.Text("draggable-a").In("#result");
+						});
 				}
 			}
 		}

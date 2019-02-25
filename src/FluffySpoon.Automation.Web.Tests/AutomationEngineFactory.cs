@@ -30,14 +30,9 @@ namespace FluffySpoon.Automation.Web.Tests
 
 		public static async Task<IWebDriver> GetEdgeDriverAsync()
 		{
-			var options = new EdgeOptions()
-			{
-				AcceptInsecureCertificates = true,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
-				PageLoadStrategy = PageLoadStrategy.Eager
-			};
+			var options = new EdgeOptions();
 
-			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64\\", "MicrosoftWebDriver.exe", 52296);
+			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64", "MicrosoftWebDriver.exe", 52296);
 			var driver = new EdgeDriver(service, options);
 			return driver;
 		}
