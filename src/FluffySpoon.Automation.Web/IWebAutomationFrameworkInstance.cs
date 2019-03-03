@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web
 {
-	public interface IWebAutomationFrameworkInstance: IDisposable
+	public interface IWebAutomationFrameworkInstance : IDisposable
 	{
+		bool IsNavigating { get; }
 		string UserAgentName { get; }
 
 		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector);
 		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors);
 		Task<string> EvaluateJavaScriptAsync(string code);
 
-        Task OpenAsync(string uri);
+		Task OpenAsync(string uri);
 		Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY);
 		Task FocusAsync(IDomElement domElement);
 		Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text);

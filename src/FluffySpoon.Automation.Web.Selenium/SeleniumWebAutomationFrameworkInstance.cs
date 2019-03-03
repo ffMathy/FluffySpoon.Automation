@@ -28,6 +28,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public string UserAgentName { get; private set; }
 
+		public bool IsNavigating { get; private set; }
+
 		public SeleniumWebAutomationFrameworkInstance(
 			Func<Task<IWebDriver>> driverConstructor,
 			IDomTunnel domTunnel)
@@ -46,12 +48,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return Task.CompletedTask;
 		}
 
-		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
+		public Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
 		{
 			var nativeElements = GetWebDriverElementsFromDomElements(new[] { from, to });
 			var nativeFromElement = nativeElements[0];
 			var nativeToElement = nativeElements[1];
-			
+
 			Actions
 				.MoveToElement(
 					nativeFromElement,
@@ -65,6 +67,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 				.Release()
 				.Build()
 				.Perform();
+
+			return Task.CompletedTask;
 		}
 
 		public async Task HoverAsync(IDomElement element, int relativeX, int relativeY)
@@ -93,7 +97,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			_driver?.Dispose();
 		}
 
-		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
+		public Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
 		{
 			var nativeElements = GetWebDriverElementsFromDomElements(elements);
 			foreach (var nativeElement in nativeElements)
@@ -101,6 +105,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 				nativeElement.Clear();
 				nativeElement.SendKeys(text);
 			}
+
+			return Task.CompletedTask;
 		}
 
 		public Task<string> EvaluateJavaScriptAsync(string code)
@@ -128,7 +134,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 			async void DriverNavigated(object sender, WebDriverNavigationEventArgs e)
 			{
-				if (e.Url != uri) return;
+				if (e.Url != uri)
+					return;
 
 				_driver.Navigated -= DriverNavigated;
 
@@ -301,7 +308,20 @@ namespace FluffySpoon.Automation.Web.Selenium
 		{
 			var driver = await _driverConstructor();
 			UserAgentName = driver.GetType().Name;
+
 			_driver = new EventFiringWebDriver(driver);
+			_driver.Navigating += DriverNavigating;
+			_driver.Navigated += DriverNavigated;
+		}
+
+		private void DriverNavigated(object sender, WebDriverNavigationEventArgs e)
+		{
+			IsNavigating = false;
+		}
+
+		private void DriverNavigating(object sender, WebDriverNavigationEventArgs e)
+		{
+			IsNavigating = true;
 		}
 
 		private class DimensionsWrapper

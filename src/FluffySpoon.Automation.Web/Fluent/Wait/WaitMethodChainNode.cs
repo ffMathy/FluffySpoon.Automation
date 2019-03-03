@@ -18,7 +18,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Wait
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
 			while (!await _predicate())
-				await Task.Delay(100);
+				await Task.Delay(1);
 
 			await base.OnExecuteAsync(framework);
 		}

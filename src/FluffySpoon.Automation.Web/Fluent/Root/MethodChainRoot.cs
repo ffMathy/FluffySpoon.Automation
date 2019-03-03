@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Exceptions;
@@ -94,6 +95,9 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		{
 			return Wait(async () =>
 			{
+				while(MethodChainContext.Frameworks.Any(x => x.IsNavigating))
+					await Task.Delay(1);
+
 				var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks, MethodChainContext.AutomationEngine);
 				var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
 

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Threading;
+using FluffySpoon.Automation.Web.Exceptions;
 
 namespace FluffySpoon.Automation.Web.Puppeteer
 {
@@ -15,7 +17,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		private Browser _browser;
 		private Page _page;
 
-		private bool _isNavigating;
+		private int _pendingNavigationRequestCount;
 
 		private readonly Func<Task<Browser>> _driverConstructor;
 		private readonly IDomTunnel _domTunnel;
@@ -29,6 +31,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		}
 
 		public string UserAgentName => GetType().Name;
+
+		public bool IsNavigating => _pendingNavigationRequestCount > 0;
 
 		private async Task<ElementHandle[]> GetElementHandlesFromDomElementsAsync(IReadOnlyList<IDomElement> domElements)
 		{
@@ -52,7 +56,15 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public void Dispose()
 		{
-			_page?.Dispose();
+			if (_page != null)
+			{
+				_page.Request -= PageRequest;
+				_page.RequestFinished -= PageRequestFinished;
+				_page.RequestFailed -= PageRequestFinished;
+
+				_page?.Dispose();
+			}
+
 			_browser?.Dispose();
 		}
 
@@ -134,7 +146,27 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			var pages = await _browser.PagesAsync();
 			_page = pages.Single();
 
+			_page.Request += PageRequest;
+			_page.RequestFinished += PageRequestFinished;
+			_page.RequestFailed += PageRequestFinished;
+
 			await _page.SetCacheEnabledAsync(false);
+		}
+
+		private void PageRequestFinished(object sender, RequestEventArgs e)
+		{
+			if(!e.Request.IsNavigationRequest)
+				return;
+			   
+			Interlocked.Decrement(ref _pendingNavigationRequestCount);
+		}
+
+		private void PageRequest(object sender, RequestEventArgs e)
+		{
+			if(!e.Request.IsNavigationRequest)
+				return;
+
+			Interlocked.Increment(ref _pendingNavigationRequestCount);
 		}
 
 		public async Task OpenAsync(string uri)
@@ -218,6 +250,9 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
 		{
+			if(_pendingNavigationRequestCount > 0)
+				throw new NavigationUnderwayException();
+
 			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
 				methodChainOffset,
 				selectors);
