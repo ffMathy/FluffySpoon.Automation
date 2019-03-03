@@ -28,7 +28,7 @@ namespace FluffySpoon.Automation.Web.JQuery
 
 		public async Task InitializeAsync()
 		{
-			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://cdnjs.cloudflare.com/ajax/libs/sizzle/2.3.3/sizzle.min.js"));
+			var jQueryScriptContents = await _webClient.GetAsync<string>(new Uri("https://code.jquery.com/jquery-git.min.js"));
             DomSelectorLibraryJavaScript = "var module = { exports: { } };\n" + jQueryScriptContents + ";\n" + _uniqueJQueryInstanceReference + " = module.exports;\n";
 		}
 

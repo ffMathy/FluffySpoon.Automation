@@ -65,8 +65,8 @@ namespace FluffySpoon.Automation.Web.Dom
 						var attributes = [];
 						var computedStyleProperties = [];
 
-						var tag = element.getAttribute('fluffyspoon-tag') || '" + methodChainOffset + @"-'+i;
-						element.setAttribute('fluffyspoon-tag', tag);
+						var tag = element.getAttribute('data-fluffyspoon-tag') || '" + methodChainOffset + @"-'+i;
+						element.setAttribute('data-fluffyspoon-tag', tag);
 
 						var o;
 
@@ -126,7 +126,7 @@ namespace FluffySpoon.Automation.Web.Dom
 					var computedStyle = new DomStyle(x.ComputedStyle);
 
 					var domElement = new DomElement(
-						cssSelector: "[fluffyspoon-tag='" + x.Tag + "']",
+						cssSelector: "[data-fluffyspoon-tag='" + x.Tag + "']",
 						textContent: x.TextContent,
 						innerText: x.InnerText,
 						value: x.Value,

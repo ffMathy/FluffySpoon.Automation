@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluffySpoon.Automation.Web.Selenium.Properties;
 
 namespace FluffySpoon.Automation.Web.Selenium
 {

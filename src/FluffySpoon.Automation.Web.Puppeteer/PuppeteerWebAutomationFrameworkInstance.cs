@@ -15,6 +15,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 		private Browser _browser;
 		private Page _page;
 
+		private bool _isNavigating;
+
 		private readonly Func<Task<Browser>> _driverConstructor;
 		private readonly IDomTunnel _domTunnel;
 
