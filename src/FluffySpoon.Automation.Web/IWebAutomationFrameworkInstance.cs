@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web
 {
-	public interface IWebAutomationFrameworkInstance : IDisposable
+	public interface IWebAutomationFrameworkInstance
 	{
+		Task DisposeAsync();
+
 		bool IsNavigating { get; }
 		string UserAgentName { get; }
 

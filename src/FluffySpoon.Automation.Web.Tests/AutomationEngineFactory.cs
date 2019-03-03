@@ -28,16 +28,16 @@ namespace FluffySpoon.Automation.Web.Tests
 			});
 		}
 
-		public static async Task<IWebDriver> GetEdgeDriverAsync()
+		public static Task<IWebDriver> GetEdgeDriverAsync()
 		{
 			var options = new EdgeOptions();
 
 			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64", "MicrosoftWebDriver.exe", 52296);
 			var driver = new EdgeDriver(service, options);
-			return driver;
+			return Task.FromResult<IWebDriver>(driver);
 		}
 
-		public static async Task<IWebDriver> GetFirefoxDriverAsync()
+		public static Task<IWebDriver> GetFirefoxDriverAsync()
 		{
 			var options = new FirefoxOptions()
 			{
@@ -51,10 +51,10 @@ namespace FluffySpoon.Automation.Web.Tests
 					Environment.CurrentDirectory,
 					"Drivers"),
 				options);
-			return driver;
+			return Task.FromResult<IWebDriver>(driver);
 		}
 
-		public static async Task<IWebDriver> GetChromeDriverAsync()
+		public static Task<IWebDriver> GetChromeDriverAsync()
 		{
 			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
 			service.EnableVerboseLogging = false;
@@ -75,7 +75,7 @@ namespace FluffySpoon.Automation.Web.Tests
 				options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
 
-			return chromeDriver;
+			return Task.FromResult<IWebDriver>(chromeDriver);
 		}
 	}
 }

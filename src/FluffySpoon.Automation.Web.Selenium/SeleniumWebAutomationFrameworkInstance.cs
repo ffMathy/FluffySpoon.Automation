@@ -91,10 +91,12 @@ namespace FluffySpoon.Automation.Web.Selenium
 			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a.ContextClick(b), elements, relativeX, relativeY);
 		}
 
-		public void Dispose()
+		public Task DisposeAsync()
 		{
 			_driver?.Quit();
 			_driver?.Dispose();
+
+			return Task.CompletedTask;
 		}
 
 		public Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)

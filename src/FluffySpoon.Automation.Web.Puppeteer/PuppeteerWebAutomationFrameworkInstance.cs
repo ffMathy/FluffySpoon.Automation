@@ -54,7 +54,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			}
 		}
 
-		public void Dispose()
+		public Task DisposeAsync()
 		{
 			if (_page != null)
 			{
@@ -66,6 +66,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			}
 
 			_browser?.Dispose();
+
+			return Task.CompletedTask;
 		}
 
 		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
@@ -155,15 +157,15 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		private void PageRequestFinished(object sender, RequestEventArgs e)
 		{
-			if(!e.Request.IsNavigationRequest)
+			if (!e.Request.IsNavigationRequest)
 				return;
-			   
+
 			Interlocked.Decrement(ref _pendingNavigationRequestCount);
 		}
 
 		private void PageRequest(object sender, RequestEventArgs e)
 		{
-			if(!e.Request.IsNavigationRequest)
+			if (!e.Request.IsNavigationRequest)
 				return;
 
 			Interlocked.Increment(ref _pendingNavigationRequestCount);
@@ -250,7 +252,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
 		{
-			if(_pendingNavigationRequestCount > 0)
+			if (_pendingNavigationRequestCount > 0)
 				throw new NavigationUnderwayException();
 
 			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,

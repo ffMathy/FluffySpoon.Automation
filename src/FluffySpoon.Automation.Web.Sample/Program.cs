@@ -24,7 +24,6 @@ namespace FluffySpoon.Automation.Web.Sample
 				serviceCollection.AddJQueryDomSelector();
 
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
 
 				serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
@@ -77,21 +76,16 @@ namespace FluffySpoon.Automation.Web.Sample
 			});
 		}
 
-		private static async Task<IWebDriver> GetEdgeDriverAsync()
+		public static Task<IWebDriver> GetEdgeDriverAsync()
 		{
-			var options = new EdgeOptions()
-			{
-				AcceptInsecureCertificates = true,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
-				PageLoadStrategy = PageLoadStrategy.Eager
-			};
+			var options = new EdgeOptions();
 
-			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64\\", "MicrosoftWebDriver.exe", 52296);
+			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64", "MicrosoftWebDriver.exe", 52296);
 			var driver = new EdgeDriver(service, options);
-			return driver;
+			return Task.FromResult<IWebDriver>(driver);
 		}
 
-		private static async Task<IWebDriver> GetFirefoxDriverAsync()
+		private static Task<IWebDriver> GetFirefoxDriverAsync()
 		{
 			var options = new FirefoxOptions()
 			{
@@ -101,27 +95,7 @@ namespace FluffySpoon.Automation.Web.Sample
 			};
 
 			var driver = new FirefoxDriver(Environment.CurrentDirectory, options);
-			return driver;
-		}
-
-		private static async Task<IWebDriver> GetChromeDriverAsync()
-		{
-			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
-			service.EnableVerboseLogging = false;
-			service.HideCommandPromptWindow = true;
-			service.SuppressInitialDiagnosticInformation = true;
-
-			var options = new ChromeOptions()
-			{
-				Proxy = null,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
-				AcceptInsecureCertificates = true
-			};
-
-			var chromeDriver = new ChromeDriver(Environment.CurrentDirectory, options);
-			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
-
-			return chromeDriver;
+			return Task.FromResult<IWebDriver>(driver);
 		}
 	}
 }

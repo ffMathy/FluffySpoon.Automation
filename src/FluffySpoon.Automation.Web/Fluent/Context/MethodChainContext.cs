@@ -108,11 +108,12 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 								methodChainQueue.PendingNodesToRun.Peek() :
 								null;
 
-							tasks.Add(next.ExecuteAsync(framework));
+							tasks.Add(Task.Factory.StartNew(
+								async () => await next.ExecuteAsync(framework),
+								TaskCreationOptions.LongRunning));
 						}
 
-						foreach (var task in tasks)
-							await task;
+						await Task.WhenAll(tasks);
 					}
 
 				}

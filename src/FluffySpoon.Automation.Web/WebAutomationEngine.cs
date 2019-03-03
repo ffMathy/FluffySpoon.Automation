@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using FluffySpoon.Automation.Web.Fluent;
@@ -50,10 +51,15 @@ namespace FluffySpoon.Automation.Web
 
 			_isInitializing = true;
 
-			await _domSelectorStrategy.InitializeAsync();
+			var tasks = _frameworks
+				.Select(x => Task.Factory.StartNew(
+					async () => await x.InitializeAsync(),
+					TaskCreationOptions.LongRunning))
+				.ToArray();
 
-			foreach (var framework in _frameworks)
-				await framework.InitializeAsync();
+			await Task.WhenAll(
+				_domSelectorStrategy.InitializeAsync(),
+				Task.WhenAll(tasks));
 
 			_isInitialized = true;
 			_isInitializing = false;
@@ -109,10 +115,12 @@ namespace FluffySpoon.Automation.Web
 
 		public void Dispose()
 		{
-			foreach (var framework in _frameworks)
-			{
-				framework?.Dispose();
-			}
+			var tasks = _frameworks
+				.Select(x => Task.Factory.StartNew(
+					async () => await x.DisposeAsync(),
+					TaskCreationOptions.LongRunning))
+				.ToArray();
+			Task.WaitAll(tasks);
 		}
 	}
 }
