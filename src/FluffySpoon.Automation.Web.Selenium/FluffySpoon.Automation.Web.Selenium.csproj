@@ -21,4 +21,14 @@
     <ProjectReference Include="..\FluffySpoon.Automation.Web\FluffySpoon.Automation.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Polyfills\DragDropHelper.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

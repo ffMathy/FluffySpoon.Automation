@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Selenium.Properties;
 
 namespace FluffySpoon.Automation.Web.Selenium
 {
@@ -51,7 +52,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var nativeElements = GetWebDriverElementsFromDomElements(new[] { from, to });
 			var nativeFromElement = nativeElements[0];
 			var nativeToElement = nativeElements[1];
-
+			
 			Actions
 				.MoveToElement(
 					nativeFromElement,
