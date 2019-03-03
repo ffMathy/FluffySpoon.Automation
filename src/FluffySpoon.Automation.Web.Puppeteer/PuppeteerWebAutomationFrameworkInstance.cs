@@ -252,9 +252,6 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
 		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
 		{
-			if (_pendingNavigationRequestCount > 0)
-				throw new NavigationUnderwayException();
-
 			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
 				methodChainOffset,
 				selectors);
