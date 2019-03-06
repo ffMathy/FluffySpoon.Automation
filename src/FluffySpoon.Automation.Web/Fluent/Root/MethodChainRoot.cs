@@ -96,7 +96,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			return Wait(async () =>
 			{
 				while(MethodChainContext.Frameworks.Any(x => x.IsNavigating))
-					await Task.Delay(1);
+					await Task.Delay(100);
 
 				var methodChainContext = new MethodChainContext(MethodChainContext.Frameworks, MethodChainContext.AutomationEngine);
 				var expectNode = methodChainContext.Enqueue(new ExpectMethodChainEntryPoint());

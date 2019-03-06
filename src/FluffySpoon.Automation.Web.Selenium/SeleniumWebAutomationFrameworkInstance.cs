@@ -142,7 +142,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 				_driver.Navigated -= DriverNavigated;
 
 				while (GetReadyState() != "complete")
-					await Task.Delay(10);
+					await Task.Delay(100);
 
 				navigatedWaitHandle.Release(1);
 			}

@@ -31,7 +31,7 @@ namespace FluffySpoon.Automation.Web.Tests
 			var testCases = new List<TestCase>
 			{
 				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync)),
-				new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetFirefoxDriverAsync)),
+				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetFirefoxDriverAsync)),
 				//new TestCase(p => p.AddPuppeteerWebAutomationFrameworkInstance(AutomationEngineFactory.GetPuppeteerDriverAsync)),
 				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetChromeDriverAsync)),
 				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync))
