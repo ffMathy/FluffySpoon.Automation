@@ -50,7 +50,7 @@ namespace FluffySpoon.Automation.Web.Tests
 
 					await RunDragAndDropTest(serviceProvider, server);
 
-					await RunTestAsync(
+                    await RunTestAsync(
 						serviceProvider,
 						async engine =>
 						{
@@ -72,18 +72,6 @@ namespace FluffySpoon.Automation.Web.Tests
 
 							await engine.Expect
 								.Text("hover").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/focus.html");
-
-							await engine.Focus.On("input");
-
-							await engine.Expect
-								.Text("focused").In("label");
 						});
 
 					await RunTestAsync(
@@ -242,6 +230,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						{
 							await engine.OpenTest(server, "engine/wait-until.html");
 
+                            await engine.Click.On("button");
+
 							await engine.Wait(until => until
 								.Text("loaded").In("button"));
 						});
@@ -271,7 +261,19 @@ namespace FluffySpoon.Automation.Web.Tests
 							Assert.AreEqual(3, bMatches.Count);
 							Assert.AreEqual(2, cMatches.Count);
 						});
-				}
+
+                    await RunTestAsync(
+                        serviceProvider,
+                        async engine =>
+                        {
+                            await engine.OpenTest(server, "engine/focus.html");
+
+                            await engine.Focus.On("input");
+
+                            await engine.Expect
+                                .Text("focused").In("label");
+                        });
+                }
 			}
 		}
 
