@@ -148,11 +148,11 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			var pages = await _browser.PagesAsync();
 			_page = pages.Single();
 
-			_page.Request += PageRequest;
+            await _page.SetCacheEnabledAsync(false);
+
+            _page.Request += PageRequest;
 			_page.RequestFinished += PageRequestFinished;
 			_page.RequestFailed += PageRequestFinished;
-
-			await _page.SetCacheEnabledAsync(false);
 		}
 
 		private void PageRequestFinished(object sender, RequestEventArgs e)

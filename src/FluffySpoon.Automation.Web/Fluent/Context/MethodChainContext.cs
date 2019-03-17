@@ -108,9 +108,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 								methodChainQueue.PendingNodesToRun.Peek() :
 								null;
 
-							tasks.Add(Task.Factory.StartNew(
-								async () => await next.ExecuteAsync(framework),
-								TaskCreationOptions.LongRunning));
+							tasks.Add(next.ExecuteAsync(framework));
 						}
 
 						await Task.WhenAll(tasks);

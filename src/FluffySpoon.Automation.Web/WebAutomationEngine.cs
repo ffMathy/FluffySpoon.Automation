@@ -52,9 +52,7 @@ namespace FluffySpoon.Automation.Web
 			_isInitializing = true;
 
 			var tasks = _frameworks
-				.Select(x => Task.Factory.StartNew(
-					async () => await x.InitializeAsync(),
-					TaskCreationOptions.LongRunning))
+				.Select(x => x.InitializeAsync())
 				.ToArray();
 
 			await Task.WhenAll(
@@ -116,9 +114,7 @@ namespace FluffySpoon.Automation.Web
 		public void Dispose()
 		{
 			var tasks = _frameworks
-				.Select(x => Task.Factory.StartNew(
-					async () => await x.DisposeAsync(),
-					TaskCreationOptions.LongRunning))
+				.Select(x => x.DisposeAsync())
 				.ToArray();
 			Task.WaitAll(tasks);
 		}
