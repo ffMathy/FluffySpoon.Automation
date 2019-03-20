@@ -30,7 +30,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             _domTunnel = domTunnel;
         }
 
-        public string UserAgentName => GetType().Name;
+        public string UserAgentName => nameof(Puppeteer);
 
         public bool IsNavigating => _pendingNavigationRequestCount > 0;
 

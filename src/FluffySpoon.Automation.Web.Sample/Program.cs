@@ -26,9 +26,8 @@ namespace FluffySpoon.Automation.Web.Sample
 				serviceCollection.AddJQueryDomSelector();
 
                 serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
+
                 serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
-                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
