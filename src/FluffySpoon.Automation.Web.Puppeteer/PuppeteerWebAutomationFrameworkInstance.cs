@@ -22,6 +22,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
         private readonly Func<Task<Browser>> _driverConstructor;
         private readonly IJavaScriptTunnel _domTunnel;
 
+        private bool _isDisposed;
+
         public PuppeteerWebAutomationFrameworkInstance(
             Func<Task<Browser>> driverConstructor,
             IJavaScriptTunnel domTunnel)
@@ -44,18 +46,20 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             return await _page.QuerySelectorAllAsync(selector);
         }
 
-        public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int? offsetX, int? offsetY)
         {
             foreach (var element in elements)
             {
                 await _page.Mouse.ClickAsync(
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY);
+                    (element.BoundingClientRectangle.Left + offsetX) ?? element.BoundingClientRectangle.Center.X,
+                    (element.BoundingClientRectangle.Top + offsetY) ?? element.BoundingClientRectangle.Center.Y);
             }
         }
 
         public Task DisposeAsync()
         {
+            _isDisposed = true;
+
             if (_page != null)
             {
                 _page.Request -= PageRequest;
@@ -70,13 +74,13 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             return Task.CompletedTask;
         }
 
-        public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int? offsetX, int? offsetY)
         {
             foreach (var element in elements)
             {
                 await _page.Mouse.ClickAsync(
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
+                    (element.BoundingClientRectangle.Left + offsetX) ?? element.BoundingClientRectangle.Center.X,
+                    (element.BoundingClientRectangle.Top + offsetY) ?? element.BoundingClientRectangle.Center.Y,
                     new ClickOptions()
                     {
                         ClickCount = 2
@@ -86,11 +90,11 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
         public async Task DragDropAsync(
             IDomElement from,
-            int fromOffsetX,
-            int fromOffsetY,
+            int? fromOffsetX,
+            int? fromOffsetY,
             IDomElement to,
-            int toOffsetX,
-            int toOffsetY)
+            int? toOffsetX,
+            int? toOffsetY)
         {
             var javascriptScope = _domTunnel.DeclareScope(this);
             try
@@ -98,8 +102,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
                 var dataTransferObjectVariableName = await javascriptScope.CreateNewVariableAsync("new DataTransfer()");
 
                 await _page.Mouse.MoveAsync(
-                    (int)Math.Ceiling(from.BoundingClientRectangle.Left) + fromOffsetX,
-                    (int)Math.Ceiling(from.BoundingClientRectangle.Top) + fromOffsetY);
+                    (from.BoundingClientRectangle.Left + fromOffsetX) ?? from.BoundingClientRectangle.Center.X,
+                    (from.BoundingClientRectangle.Top + fromOffsetY) ?? from.BoundingClientRectangle.Center.Y);
                 await _page.Mouse.DownAsync();
 
                 await _domTunnel.DispatchDomElementDragEventAsync(
@@ -115,8 +119,8 @@ namespace FluffySpoon.Automation.Web.Puppeteer
                     dataTransferObjectVariableName);
 
                 await _page.Mouse.MoveAsync(
-                    (int)Math.Ceiling(to.BoundingClientRectangle.Left) + toOffsetX,
-                    (int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY);
+                    (to.BoundingClientRectangle.Left + toOffsetX) ?? to.BoundingClientRectangle.Center.X,
+                    (to.BoundingClientRectangle.Top + toOffsetY) ?? to.BoundingClientRectangle.Center.Y);
 
                 await _domTunnel.DispatchDomElementDragEventAsync(
                     this,
@@ -173,13 +177,30 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
         public async Task<string> EvaluateJavaScriptExpressionAsync(string code)
         {
-            var blob = await _page.EvaluateExpressionAsync(code);
-            return blob?.ToString();
+            while (true)
+            {
+                try
+                {
+                    while (IsNavigating)
+                        await Task.Delay(100);
+
+                    var blob = await _page.EvaluateExpressionAsync(code);
+                    return blob?.ToString();
+                }
+                catch (PuppeteerException)
+                {
+                    if(!IsNavigating)
+                        throw;
+                }
+            }
         }
 
-        public Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector)
+        public async Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector)
         {
-            return _domTunnel.GetDomElementsFromSelector(this,
+            if (_isDisposed)
+                return new List<IDomElement>();
+
+            return await _domTunnel.GetDomElementsFromSelector(this,
                 methodChainOffset,
                 selector);
         }
@@ -204,11 +225,11 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             return await _page.QuerySelectorAsync(domElement.CssSelector);
         }
 
-        public async Task HoverAsync(IDomElement domElement, int offsetX, int offsetY)
+        public async Task HoverAsync(IDomElement domElement, int? offsetX, int? offsetY)
         {
             await _page.Mouse.MoveAsync(
-                (int)Math.Ceiling(domElement.BoundingClientRectangle.Left) + offsetX,
-                (int)Math.Ceiling(domElement.BoundingClientRectangle.Top) + offsetY);
+                (domElement.BoundingClientRectangle.Left + offsetX) ?? domElement.BoundingClientRectangle.Center.X,
+                (domElement.BoundingClientRectangle.Top + offsetY) ?? domElement.BoundingClientRectangle.Center.Y);
         }
 
         public async Task InitializeAsync()
@@ -246,13 +267,13 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             await _page.GoToAsync(uri);
         }
 
-        public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int? offsetX, int? offsetY)
         {
             foreach (var element in elements)
             {
                 await _page.Mouse.ClickAsync(
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
+                    (element.BoundingClientRectangle.Left + offsetX) ?? element.BoundingClientRectangle.Center.X,
+                    (element.BoundingClientRectangle.Top + offsetY) ?? element.BoundingClientRectangle.Center.Y,
                     new ClickOptions()
                     {
                         Button = MouseButton.Right

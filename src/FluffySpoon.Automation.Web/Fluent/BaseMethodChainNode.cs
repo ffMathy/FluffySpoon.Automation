@@ -81,19 +81,13 @@ namespace FluffySpoon.Automation.Web.Fluent
             if (Elements == null || Elements.Count <= 0)
                 return;
 
-            try
-            {
-                var selectors = Elements
-                    .Select(x => x.CssSelector)
-                    .ToArray();
-                var refreshedElements = await framework.FindDomElementsByCssSelectorsAsync(
-                    MethodChainOffset,
-                    selectors);
-                Elements = refreshedElements;
-            } catch(Exception)
-            {
-                //we ignore elements that may become detached.
-            }
+            var selectors = Elements
+                .Select(x => x.CssSelector)
+                .ToArray();
+            var refreshedElements = await framework.FindDomElementsByCssSelectorsAsync(
+                MethodChainOffset,
+                selectors);
+            Elements = refreshedElements;
         }
 
         public void SetParent(IBaseMethodChainNode parent)
