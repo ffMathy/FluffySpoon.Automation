@@ -53,9 +53,9 @@ namespace FluffySpoon.Automation.Web.Tests
                 new TestCase(
                     DriverType.SeleniumFirefox,
                     p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetFirefoxDriverAsync)),
-                new TestCase(
-                    DriverType.SeleniumEdge,
-                    p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync)),
+                //new TestCase(
+                //    DriverType.SeleniumEdge,
+                //    p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync)),
             };
 
 			using (var server = WebServerHelper.CreateWebServer())
