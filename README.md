@@ -1,30 +1,29 @@
-# FluffySpoon.Automation
 An abstraction that makes Selenium or Puppeteer testing fun, stable and fast.
 
 <b>This is still not ready for production-use and is experimental! There are still open issues on it, and it is not 100% bug-free.</b>
 
-## Selectors
+# Selectors
 A selector determines how to select elements. Right now, only jQuery selectors are supported.
 
-### jQuery
+## jQuery
 ```
 install-package FluffySpoon.Automation.JQuery
 ```
 
-## Automation frameworks
+# Automation frameworks
 An automation framework decides how the automation is done. Can use either Selenium or Puppeteer currently.
 
-### Selenium
+## Selenium
 ```
 install-package FluffySpoon.Automation.Selenium
 ```
 
-### Puppeteer
+## Puppeteer
 ```
 install-package FluffySpoon.Automation.Puppeteer
 ```
 
-## Example
+# Example
 The following test searches for something in Google and asserts that the results are present in both Chrome, Edge and Firefox on Selenium, and Chromium on Puppeteer.
 
 ```csharp
@@ -63,3 +62,8 @@ using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationE
 	Console.WriteLine("Test done!");
 }
 ```
+
+# Performance issues
+There is a [known bug in .NET Core](https://github.com/SeleniumHQ/selenium/issues/6597) that will slow down Selenium, which has a workaround described.
+
+If you see performance issues outside .NET Core or what you are seeing is unrelated, please open an issue.
