@@ -1,12 +1,26 @@
 ﻿namespace FluffySpoon.Automation.Web.Dom
 {
-	public class DomRectangle : IDomRectangle
+    public class DomCoordinate : IDomCoordinate
+    {
+        public decimal X { get; }
+        public decimal Y { get; }
+
+        public DomCoordinate(
+            decimal x,
+            decimal y)
+        {
+            X = x;
+            Y = y;
+        }
+    }
+
+    public class DomRectangle : IDomRectangle
 	{
 		public DomRectangle(
-			double left,
-			double top,
-			double right,
-			double bottom)
+            decimal left,
+            decimal top,
+            decimal right,
+            decimal bottom)
 		{
 			Left = left;
 			Top = top;
@@ -14,16 +28,24 @@
 			Bottom = bottom;
 		}
 
-		public double Left { get; }
-		public double Top { get; }
+		public decimal Left { get; }
+		public decimal Top { get; }
 
-		public double Right { get; }
-		public double Bottom { get; }
+		public decimal Right { get; }
+		public decimal Bottom { get; }
 
-		public double X => Left;
-		public double Y => Top;
+		public decimal X => Left;
+		public decimal Y => Top;
 
-		public double Width => Right - Left;
-		public double Height => Bottom - Top;
-	}
+		public decimal Width => Right - Left;
+		public decimal Height => Bottom - Top;
+
+        public IDomCoordinate RelativeCenter => new DomCoordinate(
+            Width / 2,
+            Height / 2);
+
+        public IDomCoordinate Center => new DomCoordinate(
+            Left + Width / 2,
+            Top + Height / 2);
+    }
 }

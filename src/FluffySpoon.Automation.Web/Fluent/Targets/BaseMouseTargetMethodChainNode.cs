@@ -22,8 +22,8 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 		where TCurrentMethodChainNode : IBaseMethodChainNode
 		where TParentMethodChainNode : IBaseMethodChainNode
 	{
-		public int OffsetX { get; private set; }
-		public int OffsetY { get; private set; }
+		public int? OffsetX { get; private set; }
+		public int? OffsetY { get; private set; }
 
 		protected TNextMethodChainNode Delegate(int x, int y)
 		{

@@ -29,7 +29,6 @@ namespace FluffySpoon.Automation.Web.Sample
                 serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
                 serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetOperaDriverAsync);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
@@ -42,10 +41,10 @@ namespace FluffySpoon.Automation.Web.Sample
 					await automationEngine
 						.Enter("this is a very long test that works").In("input[type=text]:visible")
 						.Wait(until =>
-							until.Exists("input[type=submit]:visible"));
+							until.Exists("input[name=btnK][type=submit]:visible"));
 
                     var elements = await automationEngine
-						.Click.On("input[type=submit]:visible:first")
+						.Click.On("input[name=btnK][type=submit]:visible:first")
 						.Wait(until =>
 							until.Exists("#rso .g:visible"))
 						.Expect
@@ -79,7 +78,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				DefaultViewport = new ViewPortOptions()
 				{
 					Width = 1100,
-					Height = 500
+					Height = 700
 				}
 			});
         }
