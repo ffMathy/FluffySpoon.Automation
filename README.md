@@ -123,7 +123,7 @@ var elementsTypedIn = await automationEngine.Enter("some text").In("selector");
 ```
 
 ## Finding elements
-```
+```csharp
 var elements = await automationEngine.Find("selector");
 ```
 
