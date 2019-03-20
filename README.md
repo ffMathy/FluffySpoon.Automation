@@ -151,7 +151,7 @@ await automationEngine.Select.ByIndices(0, 2, ...).From("selector");
 await automationEngine.Select.ByValues("value1", "value2", ...).From("selector");
 ```
 
-```
+```csharp
 await automationEngine.Select.ByValues(1337, 1338, ...).From("selector");
 ```
 
