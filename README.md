@@ -174,7 +174,7 @@ await automationEngine.Select.ByIndex(0).From("selector");
 await automationEngine.Select.ByValue("value").From("selector");
 ```
 
-```
+```csharp
 await automationEngine.Select.ByValue(1337).From("selector");
 ```
 
