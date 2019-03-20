@@ -8,10 +8,12 @@
         function onMouseDown(e) {
             if (e.which === 3)
                 document.querySelector('button').textContent = 'clicked';
+
+            e.preventPropagation();
         }
     </script>
 </head>
 <body>
-	<button onmousedown="onMouseDown(event)">not</button>
+	<button onmousedown="onMouseDown(event)" oncontextmenu="return false;">not</button>
 </body>
 </html>

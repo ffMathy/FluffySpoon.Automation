@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluffySpoon.Automation.Web.Dom;
 using System.Linq;
+using System.Diagnostics;
 
 namespace FluffySpoon.Automation.Web.Fluent
 {
@@ -34,7 +35,8 @@ namespace FluffySpoon.Automation.Web.Fluent
 			}
 		}
 
-		public virtual IReadOnlyList<IDomElement> Elements
+        [DebuggerHidden]
+        public virtual IReadOnlyList<IDomElement> Elements
 		{
 			get => _elements;
 			protected internal set => _elements = value;
@@ -93,6 +95,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 
 		public abstract IBaseMethodChainNode Clone();
 
+        [DebuggerHidden]
 		public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{
 			return MethodChainContext

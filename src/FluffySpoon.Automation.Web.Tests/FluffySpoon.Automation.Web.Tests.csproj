@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\FluffySpoon.Automation.Web.Css\FluffySpoon.Automation.Web.Css.csproj" />
 		<ProjectReference Include="..\FluffySpoon.Automation.Web.JQuery\FluffySpoon.Automation.Web.JQuery.csproj" />
 		<ProjectReference Include="..\FluffySpoon.Automation.Web.Puppeteer\FluffySpoon.Automation.Web.Puppeteer.csproj" />
 		<ProjectReference Include="..\FluffySpoon.Automation.Web.Selenium\FluffySpoon.Automation.Web.Selenium.csproj" />
@@ -67,11 +68,14 @@
 	<ItemGroup>
 		<None Include="..\FluffySpoon.Automation.Web.Sample\chromedriver.exe">
 			<Link>Drivers\chromedriver.exe</Link>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Include="..\FluffySpoon.Automation.Web.Sample\geckodriver.exe">
 			<Link>Drivers\geckodriver.exe</Link>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\FluffySpoon.Automation.Web.Sample\MicrosoftWebDriver.exe" Link="Drivers\MicrosoftWebDriver.exe">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 

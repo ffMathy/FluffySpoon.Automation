@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.Puppeteer", "FluffySpoon.Automation.Web.Puppeteer\FluffySpoon.Automation.Web.Puppeteer.csproj", "{0E7E845F-0D68-4A5E-BD53-17EF2C9A95F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Tests", "FluffySpoon.Automation.Web.Tests\FluffySpoon.Automation.Web.Tests.csproj", "{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffySpoon.Automation.Web.Tests", "FluffySpoon.Automation.Web.Tests\FluffySpoon.Automation.Web.Tests.csproj", "{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffySpoon.Automation.Web.Css", "FluffySpoon.Automation.Web.Css\FluffySpoon.Automation.Web.Css.csproj", "{C7727E57-E8D5-48AE-8132-3069F9C5BF29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{575D45A1-296A-40C6-AEF9-0BDCAEA0D4DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7727E57-E8D5-48AE-8132-3069F9C5BF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7727E57-E8D5-48AE-8132-3069F9C5BF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7727E57-E8D5-48AE-8132-3069F9C5BF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7727E57-E8D5-48AE-8132-3069F9C5BF29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

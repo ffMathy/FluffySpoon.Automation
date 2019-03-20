@@ -10,6 +10,7 @@ namespace FluffySpoon.Automation.Web.Dom
         public string TextContent { get; }
         public string InnerText { get; }
         public string Value { get; }
+        public string TagName { get; }
 
         public int ClientLeft { get; }
         public int ClientTop { get; }
@@ -25,6 +26,7 @@ namespace FluffySpoon.Automation.Web.Dom
             string textContent,
             string innerText,
             string value,
+            string tagName,
             int clientLeft,
             int clientTop,
             int clientWidth,
@@ -38,6 +40,7 @@ namespace FluffySpoon.Automation.Web.Dom
             TextContent = textContent;
             InnerText = innerText;
             Value = value;
+            TagName = tagName;
 
             ClientLeft = clientLeft;
             ClientTop = clientTop;

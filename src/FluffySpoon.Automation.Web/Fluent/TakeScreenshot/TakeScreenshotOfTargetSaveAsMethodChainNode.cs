@@ -1,17 +1,20 @@
 ﻿using FluffySpoon.Automation.Web.Fluent.Root;
 using SkiaSharp;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
+    public delegate string GetScreenshotFilePathDelegate(IWebAutomationFrameworkInstance framework, int elementIndex);
+
 	class TakeScreenshotOfTargetSaveAsMethodChainNode : MethodChainRoot<TakeScreenshotOfTargetMethodChainNode>, ITakeScreenshotOfTargetSaveAsMethodChainNode
 	{
-		private readonly string _jpegFilePath;
+		private readonly GetScreenshotFilePathDelegate _jpegFilePath;
 
 		protected override bool MayCauseElementSideEffects => false;
 
-		public TakeScreenshotOfTargetSaveAsMethodChainNode(string jpegFileName)
+		public TakeScreenshotOfTargetSaveAsMethodChainNode(GetScreenshotFilePathDelegate jpegFileName)
 		{
 			_jpegFilePath = jpegFileName;
 		}
@@ -20,20 +23,11 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 		{
 			var fileOffset = -1;
 
-			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_jpegFilePath);
-			var jpegFileNameWithoutExtension = framework.UserAgentName + "_" + fileNameWithoutExtension;
-
-			var filePathWithoutExtension =
-				Path.GetDirectoryName(_jpegFilePath) +
-				Path.DirectorySeparatorChar +
-				jpegFileNameWithoutExtension;
 			foreach (var screenshotBitmap in Parent.Screenshots)
 			{
 				++fileOffset;
 
-				var fileName = Parent.Screenshots.Count > 1 ?
-					$"{filePathWithoutExtension}-{fileOffset}.jpg" :
-					filePathWithoutExtension + ".jpg";
+                var fileName = _jpegFilePath(framework, fileOffset);
 
 				using (screenshotBitmap)
 				using (var screenshotImage = SKImage.FromBitmap(screenshotBitmap))

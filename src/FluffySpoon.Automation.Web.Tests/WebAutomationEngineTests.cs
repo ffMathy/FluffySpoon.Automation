@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using FluffySpoon.Automation.Web.Selenium;
 using Microsoft.AspNetCore.Hosting;
+using FluffySpoon.Automation.Web.Exceptions;
+using System.Diagnostics;
 
 namespace FluffySpoon.Automation.Web.Tests
 {
@@ -16,26 +18,45 @@ namespace FluffySpoon.Automation.Web.Tests
 	{
 		private class TestCase
 		{
-			public Action<IServiceCollection> EngineConfiguration { get; }
+            public Action<IServiceCollection> EngineConfiguration { get; }
 
-			public TestCase(
+            public DriverType DriverType { get; }
+
+            public TestCase(
+                DriverType driverType,
 				Action<IServiceCollection> selectorConfiguration)
 			{
-				EngineConfiguration = selectorConfiguration;
+                DriverType = driverType;
+                EngineConfiguration = selectorConfiguration;
 			}
 		}
+
+        private enum DriverType
+        {
+            SeleniumEdge,
+            SeleniumFirefox,
+            SeleniumChrome,
+            Puppeteer
+        }
 
 		[TestMethod]
 		public async Task WebAutomationEngineTest()
 		{
 			var testCases = new List<TestCase>
-			{
-				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync)),
-				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetFirefoxDriverAsync)),
-				//new TestCase(p => p.AddPuppeteerWebAutomationFrameworkInstance(AutomationEngineFactory.GetPuppeteerDriverAsync)),
-				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetChromeDriverAsync)),
-				//new TestCase(p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync))
-			};
+            {
+                new TestCase(
+                    DriverType.SeleniumChrome,
+                    p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetChromeDriverAsync)),
+                new TestCase(
+                    DriverType.Puppeteer,
+                    p => p.AddPuppeteerWebAutomationFrameworkInstance(AutomationEngineFactory.GetPuppeteerDriverAsync)),
+                new TestCase(
+                    DriverType.SeleniumFirefox,
+                    p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetFirefoxDriverAsync)),
+                new TestCase(
+                    DriverType.SeleniumEdge,
+                    p => p.AddSeleniumWebAutomationFrameworkInstance(AutomationEngineFactory.GetEdgeDriverAsync)),
+            };
 
 			using (var server = WebServerHelper.CreateWebServer())
 			{
@@ -48,34 +69,124 @@ namespace FluffySpoon.Automation.Web.Tests
 
 					var serviceProvider = serviceCollection.BuildServiceProvider();
 
-					await RunDragAndDropTest(serviceProvider, server);
+                    //HACK: commented out because Selenium won't work with drag and drop.
+                    //https://stackoverflow.com/questions/29381233/how-to-simulate-html5-drag-and-drop-in-selenium-webdriver/29381532
+                    if (testCase.DriverType == DriverType.Puppeteer)
+                    {
+                        //Commented out until Puppeteer stops freezing until mouse move
+
+                        //await RunTestAsync(
+                        //    testCase.DriverType,
+                        //    serviceProvider,
+                        //    async engine =>
+                        //    {
+                        //        await engine.OpenTest(server, "engine/drag.html");
+
+                        //        await engine.Drag.From(".draggable.a").To(".draggable.b");
+
+                        //        await engine.Expect
+                        //            .Text("draggable-a").In("#result");
+                        //    });
+                    }
 
                     await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
+                        testCase.DriverType,
+                        serviceProvider,
+                        async engine =>
+                        {
+                            await engine.OpenTest(server, "engine/focus.html");
 
-							await engine.Select.ByTexts("Bar", "Baz").From("select");
+                            await engine.Focus.On("input");
 
-							await engine.Expect
-								.Text("2, 3").In("label");
-						});
+                            await engine.Expect
+                                .Text("focused").In("label");
+                        });
+
+                    await RunTestAsync(
+                        testCase.DriverType,
+                        serviceProvider,
+                        async engine =>
+                        {
+                            await engine.OpenTest(server, "engine/hover.html");
+
+                            await engine.Hover.On("div");
+
+                            await engine.Expect
+                                .Text("hover").In("label");
+                        });
+
+                    //Selenium webdriver doesn't support multi-select properly: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/20638074/
+                    if (testCase.DriverType != DriverType.SeleniumEdge)
+                    {
+                        await RunTestAsync(
+                            testCase.DriverType,
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest(server, "engine/multi-select.html");
+
+                                await engine.Select.ByTexts("Bar", "Baz").From("select");
+
+                                await engine.Expect
+                                    .Text("2, 3").In("label");
+                            });
+
+                        await RunTestAsync(
+                            testCase.DriverType,
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest(server, "engine/multi-select.html");
+
+                                await engine.Select.ByIndices(1, 2).From("select");
+
+                                await engine.Expect
+                                    .Text("2, 3").In("label");
+                            });
+
+                        await RunTestAsync(
+                            testCase.DriverType,
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest(server, "engine/multi-select.html");
+
+                                await engine.Select.ByValues("2", "3").From("select");
+
+                                await engine.Expect
+                                    .Text("2, 3").In("label");
+                            });
+
+                        await RunTestAsync(
+                            testCase.DriverType,
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest(server, "engine/multi-select.html");
+
+                                await engine.Select.ByValues(2, 3).From("select");
+
+                                await engine.Expect
+                                    .Text("2, 3").In("label");
+                            });
+
+                        await RunTestAsync(
+                            testCase.DriverType,
+                            serviceProvider,
+                            async engine =>
+                            {
+                                await engine.OpenTest(server, "engine/multi-select.html");
+
+                                await engine.Select.ByValues((object)2, (object)3).From("select");
+
+                                await engine.Expect
+                                    .Text("2, 3").In("label");
+                            });
+                    }
 
 					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/hover.html");
-
-							await engine.Hover.On("div");
-
-							await engine.Expect
-								.Text("hover").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/enter.html");
@@ -87,7 +198,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/select.html");
@@ -99,7 +211,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/select.html");
@@ -111,7 +224,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/select.html");
@@ -123,7 +237,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/select.html");
@@ -135,7 +250,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/select.html");
@@ -147,55 +263,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
-
-							await engine.Select.ByIndices(1, 2).From("select");
-
-							await engine.Expect
-								.Text("2, 3").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
-
-							await engine.Select.ByValues("2", "3").From("select");
-
-							await engine.Expect
-								.Text("2, 3").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
-
-							await engine.Select.ByValues(2, 3).From("select");
-
-							await engine.Expect
-								.Text("2, 3").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
-						async engine =>
-						{
-							await engine.OpenTest(server, "engine/multi-select.html");
-
-							await engine.Select.ByValues((object)2, (object)3).From("select");
-
-							await engine.Expect
-								.Text("2, 3").In("label");
-						});
-
-					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/double-click.html");
@@ -210,7 +279,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/right-click.html");
@@ -225,7 +295,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/wait-until.html");
@@ -237,7 +308,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async engine =>
 						{
 							await engine.OpenTest(server, "engine/click.html");
@@ -248,7 +320,8 @@ namespace FluffySpoon.Automation.Web.Tests
 						});
 
 					await RunTestAsync(
-						serviceProvider,
+                        testCase.DriverType,
+                        serviceProvider,
 						async x =>
 						{
 							await x.OpenTest(server, "engine/find.html");
@@ -261,47 +334,27 @@ namespace FluffySpoon.Automation.Web.Tests
 							Assert.AreEqual(3, bMatches.Count);
 							Assert.AreEqual(2, cMatches.Count);
 						});
-
-                    await RunTestAsync(
-                        serviceProvider,
-                        async engine =>
-                        {
-                            await engine.OpenTest(server, "engine/focus.html");
-
-                            await engine.Focus.On("input");
-
-                            await engine.Expect
-                                .Text("focused").In("label");
-                        });
                 }
 			}
 		}
 
-		private async Task RunDragAndDropTest(ServiceProvider serviceProvider, IWebHost server)
+        [DebuggerHidden]
+		private async Task RunTestAsync(
+            DriverType driverType,
+            IServiceProvider serviceProvider, 
+            Func<IWebAutomationEngine, Task> run)
 		{
-			//HACK: commented out because Selenium does not yet support HTML5.
-			//https://stackoverflow.com/questions/29381233/how-to-simulate-html5-drag-and-drop-in-selenium-webdriver/29381532
-
-			//await RunTestAsync(
-			//	serviceProvider,
-			//	async engine =>
-			//	{
-			//		await engine.OpenTest(server, "engine/drag.html");
-
-			//		await engine.Drag.From(".draggable.a").To(".draggable.b");
-
-			//		await engine.Expect
-			//			.Text("draggable-a").In("#result");
-			//	});
-		}
-
-		private async Task RunTestAsync(IServiceProvider serviceProvider, Func<IWebAutomationEngine, Task> run)
-		{
-			using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>())
-			{
-				await automationEngine.InitializeAsync();
-				await run(automationEngine);
-			}
+            try
+            {
+                using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>())
+                {
+                    await automationEngine.InitializeAsync();
+                    await run(automationEngine);
+                }
+            } catch(ExpectationNotMetException ex)
+            {
+                throw new Exception(driverType.ToString() + " failure.", ex);
+            }
 		}
 	}
 }

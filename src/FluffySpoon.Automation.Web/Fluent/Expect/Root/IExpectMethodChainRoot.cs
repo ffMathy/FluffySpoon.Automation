@@ -27,6 +27,6 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
         IExpectExistsMethodChainNode Exists(IDomElement element);
 		IExpectExistsMethodChainNode Exists(IReadOnlyList<IDomElement> elements);
 
-		IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueInTargetsMethodChainNode> Value(string value);
+		IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueOfTargetsMethodChainNode> Value(string value);
     }
 }

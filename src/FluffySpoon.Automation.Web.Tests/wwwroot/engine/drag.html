@@ -20,19 +20,10 @@
 			margin: 10px;
 		}
 	</style>
-	<script>
-		function stringify(t, e) {
-			return JSON.stringify({
-				t,
-				x: e.clientX,
-				y: e.clientY
-			});
-		}
-	</script>
 </head>
-<body onmousemove="document.querySelector('#debug').textContent = stringify('mm', event)" onmousedown="document.querySelector('#debug').textContent = stringify('md', event)" onmouseup="document.querySelector('#debug').textContent = stringify('mu', event)">
-	<div draggable="true" class="draggable a" ondragstart="event.dataTransfer.setData('text/plain', 'draggable-a')"></div>
-	<div draggable="true" class="draggable b" ondragover="event.preventDefault()" ondrop="document.querySelector('#result').textContent = event.dataTransfer.getData('text/plain')"></div>
+<body>
+	<div draggable="true" class="draggable a" ondragenter="event.preventDefault()" ondragover="event.dataTransfer.dropEffect = 'all'; event.preventDefault()" ondragstart="console.log('dragstart', event); event.dataTransfer.setData('text', 'draggable-a'); console.log('after-set', event.dataTransfer.getData('text'));"></div>
+	<div draggable="true" class="draggable b" ondragenter="event.preventDefault()" ondragover="event.dataTransfer.dropEffect = 'all'; event.preventDefault()" ondrop="console.log('ondrop', event); document.querySelector('#result').textContent = event.dataTransfer.getData('text');"></div>
 	<label id="result"></label>
 	<label id="debug"></label>
 </body>

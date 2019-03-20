@@ -5,6 +5,7 @@
 		string CssSelector { get; }
 		string TextContent { get; }
 		string Value { get; }
+        string TagName { get; }
 
 		int ClientLeft { get; }
 		int ClientTop { get; }

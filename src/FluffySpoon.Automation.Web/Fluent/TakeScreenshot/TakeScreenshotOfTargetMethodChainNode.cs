@@ -18,9 +18,9 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			get => Parent.Elements; protected internal set => Parent.Elements = value;
 		}
 
-		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(string jpegFileName)
+		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(GetScreenshotFilePathDelegate jpegFilePathSelector)
 		{
-			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFileName));
+			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFilePathSelector));
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)

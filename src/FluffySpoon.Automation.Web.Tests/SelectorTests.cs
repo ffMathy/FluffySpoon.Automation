@@ -1,13 +1,15 @@
 using FluffySpoon.Automation.Web.JQuery;
 using FluffySpoon.Automation.Web.Puppeteer;
+using FluffySpoon.Automation.Web.Css;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluffySpoon.Automation.Web.Tests;
 
-namespace FluffySpoon.Automation.Web.Tests
+namespace FluffySpoon.Automation.Web
 {
 	[TestClass]
 	public class SelectorTests
@@ -39,8 +41,12 @@ namespace FluffySpoon.Automation.Web.Tests
 				new TestCase(
 					p => p.AddJQueryDomSelector(),
 					"#outer:first",
-					".inner:first")
-			};
+					".inner:first"),
+                new TestCase(
+                    p => p.AddCssDomSelector(),
+                    "#outer",
+                    ".inner")
+            };
 
 			using (var server = WebServerHelper.CreateWebServer())
 			{

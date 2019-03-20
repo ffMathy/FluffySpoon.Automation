@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using FluffySpoon.Automation.Web.Dom;
@@ -57,7 +58,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 			throw new NotImplementedException();
 		}
 
-		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueInTargetsMethodChainNode> Value(string value)
+		public IDomElementInTargetsMethodChainNode<IBaseMethodChainNode, IExpectValueOfTargetsMethodChainNode> Value(string value)
 		{
 			return MethodChainContext.Enqueue(new ExpectValueMethodChainNode(value));
 		}
@@ -65,19 +66,24 @@ namespace FluffySpoon.Automation.Web.Fluent.Expect.Root
 		public new TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
 		{
 			return MethodChainContext
-				.RunAllAsync()
+                .RunAllAsync()
 				.ContinueWith(
-					t => {
-						if(t.Exception != null) { 
-							throw t.Exception.InnerExceptions.Count == 1 ? 
-								t.Exception.InnerExceptions.Single() :
-								t.Exception;
-						}
-
-						return Elements ?? Array.Empty<IDomElement>();
-					},
-					TaskUtilities.ContinuationOptions)
+                    GetAwaiterContinueWith,
+                    TaskUtilities.ContinuationOptions)
 				.GetAwaiter();
 		}
-	}
+
+        [DebuggerHidden]
+        private IReadOnlyList<IDomElement> GetAwaiterContinueWith(System.Threading.Tasks.Task t)
+        {
+            if (t.Exception != null)
+            {
+                throw t.Exception.InnerExceptions.Count == 1 ?
+                    t.Exception.InnerExceptions.Single() :
+                    t.Exception;
+            }
+
+            return Elements ?? Array.Empty<IDomElement>();
+        }
+    }
 }

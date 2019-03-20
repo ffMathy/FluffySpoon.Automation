@@ -14,7 +14,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 			services.AddTransient<IWebAutomationFrameworkInstance>(provider => 
 				new PuppeteerWebAutomationFrameworkInstance(
 					driverConstructor,
-					provider.GetRequiredService<IDomTunnel>()));
+					provider.GetRequiredService<IJavaScriptTunnel>()));
 		}
 	}
 }

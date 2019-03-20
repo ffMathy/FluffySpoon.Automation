@@ -8,7 +8,7 @@ namespace FluffySpoon.Automation.Web
 		public static void AddFluffySpoonAutomationWeb(
 			this IServiceCollection services)
 		{
-			services.AddTransient<IDomTunnel, DomTunnel>();
+			services.AddTransient<IJavaScriptTunnel, JavaScriptTunnel>();
 			services.AddTransient<IWebAutomationEngine, WebAutomationEngine>();
 		}
 	}

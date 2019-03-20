@@ -30,10 +30,31 @@ namespace FluffySpoon.Automation.Web.Tests
 
 		public static Task<IWebDriver> GetEdgeDriverAsync()
 		{
-			var options = new EdgeOptions();
+			var options = new EdgeOptions() {
+                PageLoadStrategy = PageLoadStrategy.Eager,
+                UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+                UseInPrivateBrowsing = true
+            };
 
-			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64", "MicrosoftWebDriver.exe", 52296);
-			var driver = new EdgeDriver(service, options);
+            var pathsToCheck = new[]
+            {
+                Path.Combine("C:", "Windows", "SysWOW64"),
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers")
+            };
+
+            var driverFileName = "MicrosoftWebDriver.exe";
+            var pathToUse = pathsToCheck
+                .First(x => File.Exists(
+                    Path.Combine(x, driverFileName)));
+
+			var service = EdgeDriverService.CreateDefaultService(
+                pathToUse, 
+                driverFileName, 
+                52296);
+
+            var driver = new EdgeDriver(service, options);
 			return Task.FromResult<IWebDriver>(driver);
 		}
 
@@ -46,22 +67,34 @@ namespace FluffySpoon.Automation.Web.Tests
 				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
 			};
 
-			var driver = new FirefoxDriver(
-				Path.Combine(
-					Environment.CurrentDirectory,
-					"Drivers"),
+            var service = FirefoxDriverService.CreateDefaultService(
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers"));
+
+            service.Host = "127.0.0.1";
+            service.HostName = "127.0.0.1";
+
+            var driver = new FirefoxDriver(
+                service,
 				options);
 			return Task.FromResult<IWebDriver>(driver);
 		}
 
 		public static Task<IWebDriver> GetChromeDriverAsync()
 		{
-			var service = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
+			var service = ChromeDriverService.CreateDefaultService(
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers"));
+
 			service.EnableVerboseLogging = false;
 			service.HideCommandPromptWindow = true;
 			service.SuppressInitialDiagnosticInformation = true;
 
-			var options = new ChromeOptions()
+            service.HostName = "127.0.0.1";
+
+            var options = new ChromeOptions()
 			{
 				Proxy = null,
 				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
@@ -69,9 +102,7 @@ namespace FluffySpoon.Automation.Web.Tests
 			};
 
 			var chromeDriver = new ChromeDriver(
-				Path.Combine(
-					Environment.CurrentDirectory,
-					"Drivers"),
+                service,
 				options);
 			chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
 

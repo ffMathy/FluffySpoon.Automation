@@ -24,7 +24,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				serviceCollection.AddJQueryDomSelector();
 
 				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-				//serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
+				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
 
 				serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
@@ -42,7 +42,7 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Wait(until =>
 							until.Exists("input[type=submit]:visible"));
 
-					var elements = await automationEngine
+                    var elements = await automationEngine
 						.Click.On("input[type=submit]:visible:first")
 						.Wait(until =>
 							until.Exists("#rso .g:visible"))

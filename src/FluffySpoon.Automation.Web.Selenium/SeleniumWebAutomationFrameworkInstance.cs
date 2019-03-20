@@ -22,7 +22,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		private readonly Func<Task<IWebDriver>> _driverConstructor;
 
-		private readonly IDomTunnel _domTunnel;
+		private readonly IJavaScriptTunnel _domTunnel;
 
 		private Actions Actions => new Actions(_driver);
 
@@ -32,7 +32,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 		public SeleniumWebAutomationFrameworkInstance(
 			Func<Task<IWebDriver>> driverConstructor,
-			IDomTunnel domTunnel)
+			IJavaScriptTunnel domTunnel)
 		{
 			_driverConstructor = driverConstructor;
 			_domTunnel = domTunnel;
@@ -54,26 +54,26 @@ namespace FluffySpoon.Automation.Web.Selenium
 			var nativeFromElement = nativeElements[0];
 			var nativeToElement = nativeElements[1];
 
-			Actions
-				.MoveToElement(
-					nativeFromElement,
-					fromOffsetX,
-					fromOffsetY)
-				.ClickAndHold()
-				.MoveToElement(
-					nativeToElement,
-					toOffsetX,
-					toOffsetY)
-				.Release()
-				.Build()
-				.Perform();
+            Actions
+                .MoveToElement(
+                    nativeFromElement,
+                    fromOffsetX,
+                    fromOffsetY)
+                .ClickAndHold()
+                .MoveToElement(
+                    nativeToElement,
+                    toOffsetX,
+                    toOffsetY)
+                .Release()
+                .Build()
+                .Perform();
 
-			return Task.CompletedTask;
+            return Task.CompletedTask;
 		}
 
 		public async Task HoverAsync(IDomElement element, int relativeX, int relativeY)
 		{
-			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a, new[] { element }, relativeX, relativeY);
+			await PerformMouseOperationOnElementCoordinatesAsync((a, b) => a.MoveToElement(b), new[] { element }, relativeX, relativeY);
 		}
 
 		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int relativeX, int relativeY)

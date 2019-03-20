@@ -13,7 +13,7 @@ namespace FluffySpoon.Automation.Web.Selenium
 			services.AddTransient<IWebAutomationFrameworkInstance>(provider => 
 				new SeleniumWebAutomationFrameworkInstance(
 					driverConstructor,
-					provider.GetRequiredService<IDomTunnel>()));
+					provider.GetRequiredService<IJavaScriptTunnel>()));
 		}
 	}
 }

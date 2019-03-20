@@ -2,7 +2,7 @@
 
 namespace FluffySpoon.Automation.Web.Fluent.Expect.Value
 {
-	class ExpectValueMethodChainNode : BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, ExpectValueMethodChainNode, ExpectValueInTargetsMethodChainNode>
+	class ExpectValueMethodChainNode : BaseDomElementTargetsMethodChainNode<IBaseMethodChainNode, ExpectValueMethodChainNode, ExpectValueOfTargetsMethodChainNode>
 	{
 		internal string Value { get; }
 

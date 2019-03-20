@@ -12,249 +12,319 @@ using FluffySpoon.Automation.Web.Exceptions;
 
 namespace FluffySpoon.Automation.Web.Puppeteer
 {
-	class PuppeteerWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
-	{
-		private Browser _browser;
-		private Page _page;
+    class PuppeteerWebAutomationFrameworkInstance : IWebAutomationFrameworkInstance
+    {
+        private Browser _browser;
+        private Page _page;
 
-		private int _pendingNavigationRequestCount;
+        private int _pendingNavigationRequestCount;
 
-		private readonly Func<Task<Browser>> _driverConstructor;
-		private readonly IDomTunnel _domTunnel;
+        private readonly Func<Task<Browser>> _driverConstructor;
+        private readonly IJavaScriptTunnel _domTunnel;
 
-		public PuppeteerWebAutomationFrameworkInstance(
-			Func<Task<Browser>> driverConstructor,
-			IDomTunnel domTunnel)
-		{
-			_driverConstructor = driverConstructor;
-			_domTunnel = domTunnel;
-		}
+        public PuppeteerWebAutomationFrameworkInstance(
+            Func<Task<Browser>> driverConstructor,
+            IJavaScriptTunnel domTunnel)
+        {
+            _driverConstructor = driverConstructor;
+            _domTunnel = domTunnel;
+        }
 
-		public string UserAgentName => GetType().Name;
+        public string UserAgentName => GetType().Name;
 
-		public bool IsNavigating => _pendingNavigationRequestCount > 0;
+        public bool IsNavigating => _pendingNavigationRequestCount > 0;
 
-		private async Task<ElementHandle[]> GetElementHandlesFromDomElementsAsync(IReadOnlyList<IDomElement> domElements)
-		{
-			var selector = domElements
-				.Select(x => x.CssSelector)
-				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-				.TrimStart(',', ' ');
+        private async Task<ElementHandle[]> GetElementHandlesFromDomElementsAsync(IReadOnlyList<IDomElement> domElements)
+        {
+            var selector = domElements
+                .Select(x => x.CssSelector)
+                .Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                .TrimStart(',', ' ');
 
-			return await _page.QuerySelectorAllAsync(selector);
-		}
+            return await _page.QuerySelectorAllAsync(selector);
+        }
 
-		public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
-		{
-			foreach (var element in elements)
-			{
-				await _page.Mouse.ClickAsync(
-					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY);
-			}
-		}
+        public async Task ClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        {
+            foreach (var element in elements)
+            {
+                await _page.Mouse.ClickAsync(
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY);
+            }
+        }
 
-		public Task DisposeAsync()
-		{
-			if (_page != null)
-			{
-				_page.Request -= PageRequest;
-				_page.RequestFinished -= PageRequestFinished;
-				_page.RequestFailed -= PageRequestFinished;
+        public Task DisposeAsync()
+        {
+            if (_page != null)
+            {
+                _page.Request -= PageRequest;
+                _page.RequestFinished -= PageRequestFinished;
+                _page.RequestFailed -= PageRequestFinished;
 
-				_page?.Dispose();
-			}
+                _page?.Dispose();
+            }
 
-			_browser?.Dispose();
+            _browser?.Dispose();
 
-			return Task.CompletedTask;
-		}
+            return Task.CompletedTask;
+        }
 
-		public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
-		{
-			foreach (var element in elements)
-			{
-				await _page.Mouse.ClickAsync(
-					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
-					new ClickOptions()
-					{
-						ClickCount = 2
-					});
-			}
-		}
+        public async Task DoubleClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        {
+            foreach (var element in elements)
+            {
+                await _page.Mouse.ClickAsync(
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
+                    new ClickOptions()
+                    {
+                        ClickCount = 2
+                    });
+            }
+        }
 
-		public async Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY)
-		{
-			await _page.Mouse.MoveAsync(
-				(int)Math.Ceiling(from.BoundingClientRectangle.Left) + fromOffsetX,
-				(int)Math.Ceiling(from.BoundingClientRectangle.Top) + fromOffsetY);
-			await _page.Mouse.DownAsync();
+        public async Task DragDropAsync(
+            IDomElement from,
+            int fromOffsetX,
+            int fromOffsetY,
+            IDomElement to,
+            int toOffsetX,
+            int toOffsetY)
+        {
+            var javascriptScope = _domTunnel.DeclareScope(this);
+            try
+            {
+                var dataTransferObjectVariableName = await javascriptScope.CreateNewVariableAsync("new DataTransfer()");
 
-			await _page.Mouse.MoveAsync(
-				(int)Math.Ceiling(to.BoundingClientRectangle.Left) + toOffsetX,
-				(int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY,
-				new MoveOptions()
-				{
-					Steps = 100
-				});
-			await _page.Mouse.UpAsync();
-		}
+                await _page.Mouse.MoveAsync(
+                    (int)Math.Ceiling(from.BoundingClientRectangle.Left) + fromOffsetX,
+                    (int)Math.Ceiling(from.BoundingClientRectangle.Top) + fromOffsetY);
+                await _page.Mouse.DownAsync();
 
-		public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
-		{
-			var handles = await GetElementHandlesFromDomElementsAsync(elements);
-			foreach (var handle in handles)
-			{
-				await handle.TypeAsync(text);
-			}
-		}
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    from,
+                    "dragstart",
+                    dataTransferObjectVariableName);
 
-		public async Task<string> EvaluateJavaScriptAsync(string code)
-		{
-			var blob = await _page.EvaluateExpressionAsync(code);
-			return blob.ToString();
-		}
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    from,
+                    "drag",
+                    dataTransferObjectVariableName);
 
-		public Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector)
-		{
-			return _domTunnel.GetDomElementsFromSelector(this,
-				methodChainOffset,
-				selector);
-		}
+                await _page.Mouse.MoveAsync(
+                    (int)Math.Ceiling(to.BoundingClientRectangle.Left) + toOffsetX,
+                    (int)Math.Ceiling(to.BoundingClientRectangle.Top) + toOffsetY);
 
-		public async Task FocusAsync(IDomElement domElement)
-		{
-			var handle = await GetElementHandleFromDomElementAsync(domElement);
-			await handle.FocusAsync();
-		}
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    to,
+                    "dragenter",
+                    dataTransferObjectVariableName);
 
-		private async Task<ElementHandle> GetElementHandleFromDomElementAsync(IDomElement domElement)
-		{
-			return await _page.QuerySelectorAsync(domElement.CssSelector);
-		}
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    to,
+                    "dragover",
+                    dataTransferObjectVariableName);
 
-		public async Task HoverAsync(IDomElement domElement, int offsetX, int offsetY)
-		{
-			await _page.Mouse.MoveAsync(
-				(int)Math.Ceiling(domElement.BoundingClientRectangle.Left) + offsetX,
-				(int)Math.Ceiling(domElement.BoundingClientRectangle.Top) + offsetY);
-		}
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    from,
+                    "drag",
+                    dataTransferObjectVariableName);
 
-		public async Task InitializeAsync()
-		{
-			_browser = await _driverConstructor();
+                await _page.Mouse.UpAsync();
 
-			var pages = await _browser.PagesAsync();
-			_page = pages.Single();
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    to,
+                    "dragleave",
+                    dataTransferObjectVariableName);
+
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    from,
+                    "dragend",
+                    dataTransferObjectVariableName);
+
+                await _domTunnel.DispatchDomElementDragEventAsync(
+                    this,
+                    to,
+                    "drop",
+                    dataTransferObjectVariableName);
+            }
+            finally
+            {
+                await javascriptScope.DeleteAllVariablesAsync();
+            }
+        }
+
+        public async Task EnterTextInAsync(IReadOnlyList<IDomElement> elements, string text)
+        {
+            var handles = await GetElementHandlesFromDomElementsAsync(elements);
+            foreach (var handle in handles)
+            {
+                await handle.TypeAsync(text);
+            }
+        }
+
+        public async Task<string> EvaluateJavaScriptAsync(string code)
+        {
+            var blob = await _page.EvaluateExpressionAsync(code);
+            return blob?.ToString();
+        }
+
+        public Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector)
+        {
+            return _domTunnel.GetDomElementsFromSelector(this,
+                methodChainOffset,
+                selector);
+        }
+
+        public async Task FocusAsync(IDomElement domElement)
+        {
+            var handle = await GetElementHandleFromDomElementAsync(domElement);
+            await handle.FocusAsync();
+
+            //there is a bug causing Puppeteer to not focus input elements properly - so we invoke their onfocus events manually.
+            if (domElement.TagName == "INPUT" && domElement.Attributes["type"] == "text")
+            {
+                await _domTunnel.DispatchDomElementFocusEventAsync(
+                    this,
+                    domElement,
+                    "focus");
+            }
+        }
+
+        private async Task<ElementHandle> GetElementHandleFromDomElementAsync(IDomElement domElement)
+        {
+            return await _page.QuerySelectorAsync(domElement.CssSelector);
+        }
+
+        public async Task HoverAsync(IDomElement domElement, int offsetX, int offsetY)
+        {
+            await _page.Mouse.MoveAsync(
+                (int)Math.Ceiling(domElement.BoundingClientRectangle.Left) + offsetX,
+                (int)Math.Ceiling(domElement.BoundingClientRectangle.Top) + offsetY);
+        }
+
+        public async Task InitializeAsync()
+        {
+            _browser = await _driverConstructor();
+
+            var pages = await _browser.PagesAsync();
+            _page = pages.Single();
 
             await _page.SetCacheEnabledAsync(false);
 
             _page.Request += PageRequest;
-			_page.RequestFinished += PageRequestFinished;
-			_page.RequestFailed += PageRequestFinished;
-		}
+            _page.RequestFinished += PageRequestFinished;
+            _page.RequestFailed += PageRequestFinished;
+        }
 
-		private void PageRequestFinished(object sender, RequestEventArgs e)
-		{
-			if (!e.Request.IsNavigationRequest)
-				return;
+        private void PageRequestFinished(object sender, RequestEventArgs e)
+        {
+            if (!e.Request.IsNavigationRequest)
+                return;
 
-			Interlocked.Decrement(ref _pendingNavigationRequestCount);
-		}
+            Interlocked.Decrement(ref _pendingNavigationRequestCount);
+        }
 
-		private void PageRequest(object sender, RequestEventArgs e)
-		{
-			if (!e.Request.IsNavigationRequest)
-				return;
+        private void PageRequest(object sender, RequestEventArgs e)
+        {
+            if (!e.Request.IsNavigationRequest)
+                return;
 
-			Interlocked.Increment(ref _pendingNavigationRequestCount);
-		}
+            Interlocked.Increment(ref _pendingNavigationRequestCount);
+        }
 
-		public async Task OpenAsync(string uri)
-		{
-			await _page.GoToAsync(uri);
-		}
+        public async Task OpenAsync(string uri)
+        {
+            await _page.GoToAsync(uri);
+        }
 
-		public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
-		{
-			foreach (var element in elements)
-			{
-				await _page.Mouse.ClickAsync(
-					(int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
-					(int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
-					new ClickOptions()
-					{
-						Button = MouseButton.Right
-					});
-			}
-		}
+        public async Task RightClickAsync(IReadOnlyList<IDomElement> elements, int offsetX, int offsetY)
+        {
+            foreach (var element in elements)
+            {
+                await _page.Mouse.ClickAsync(
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Left) + offsetX,
+                    (int)Math.Ceiling(element.BoundingClientRectangle.Top) + offsetY,
+                    new ClickOptions()
+                    {
+                        Button = MouseButton.Right
+                    });
+            }
+        }
 
-		public async Task SelectByIndicesAsync(IReadOnlyList<IDomElement> elements, int[] byIndices)
-		{
-			foreach (var element in elements)
-			{
-				var selector = byIndices
-					.Select(x => $"{element.CssSelector} > option:nth-child({x + 1})")
-					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-					.TrimStart(',', ' ');
-				var handles = await _page.QuerySelectorAllAsync(selector);
-				var valueTasks = handles.Select(x => _page.EvaluateFunctionAsync("x => x.value", x));
-				var valueTokens = await Task.WhenAll(valueTasks);
-				var values = valueTokens
-					.Cast<JValue>()
-					.Select(x => x.Value)
-					.Cast<string>();
-				await _page.SelectAsync(element.CssSelector, values.ToArray());
-			}
-		}
+        public async Task SelectByIndicesAsync(IReadOnlyList<IDomElement> elements, int[] byIndices)
+        {
+            foreach (var element in elements)
+            {
+                var selector = byIndices
+                    .Select(x => $"{element.CssSelector} > option:nth-child({x + 1})")
+                    .Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                    .TrimStart(',', ' ');
+                var handles = await _page.QuerySelectorAllAsync(selector);
+                var valueTasks = handles.Select(x => _page.EvaluateFunctionAsync("x => x.value", x));
+                var valueTokens = await Task.WhenAll(valueTasks);
+                var values = valueTokens
+                    .Cast<JValue>()
+                    .Select(x => x.Value)
+                    .Cast<string>();
+                await _page.SelectAsync(element.CssSelector, values.ToArray());
+            }
+        }
 
-		public async Task SelectByTextsAsync(IReadOnlyList<IDomElement> elements, string[] byTexts)
-		{
-			var trimmedByTexts = byTexts
-				.Select(x => x.Trim())
-				.ToArray();
-			foreach (var element in elements)
-			{
-				var selector = byTexts
-					.Select(x => $"{element.CssSelector} > option")
-					.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-					.TrimStart(',', ' ');
-				var handles = await _page.QuerySelectorAllAsync(selector);
-				var tasks = handles.Select(x => _page.EvaluateFunctionAsync("x => { return { value: x.value, textContent: x.textContent } }", x));
-				var tokens = await Task.WhenAll(tasks);
-				var values = tokens
-					.Select(x => new
-					{
-						Value = x.Value<string>("value"),
-						TextContent = x.Value<string>("textContent")
-					})
-					.Where(x => trimmedByTexts.Contains(x.TextContent?.Trim()))
-					.Select(x => x.Value);
-				await _page.SelectAsync(element.CssSelector, values.ToArray());
-			}
-		}
+        public async Task SelectByTextsAsync(IReadOnlyList<IDomElement> elements, string[] byTexts)
+        {
+            var trimmedByTexts = byTexts
+                .Select(x => x.Trim())
+                .ToArray();
+            foreach (var element in elements)
+            {
+                var selector = byTexts
+                    .Select(x => $"{element.CssSelector} > option")
+                    .Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                    .TrimStart(',', ' ');
+                var handles = await _page.QuerySelectorAllAsync(selector);
+                var tasks = handles.Select(x => _page.EvaluateFunctionAsync("x => { return { value: x.value, textContent: x.textContent } }", x));
+                var tokens = await Task.WhenAll(tasks);
+                var values = tokens
+                    .Select(x => new
+                    {
+                        Value = x.Value<string>("value"),
+                        TextContent = x.Value<string>("textContent")
+                    })
+                    .Where(x => trimmedByTexts.Contains(x.TextContent?.Trim()))
+                    .Select(x => x.Value);
+                await _page.SelectAsync(element.CssSelector, values.ToArray());
+            }
+        }
 
-		public async Task SelectByValuesAsync(IReadOnlyList<IDomElement> elements, string[] byValues)
-		{
-			var selector = elements
-				.Select(x => x.CssSelector)
-				.Aggregate(string.Empty, (a, b) => $"{a}, {b}")
-				.TrimStart(',', ' ');
-			await _page.SelectAsync(selector, byValues);
-		}
+        public async Task SelectByValuesAsync(IReadOnlyList<IDomElement> elements, string[] byValues)
+        {
+            var selector = elements
+                .Select(x => x.CssSelector)
+                .Aggregate(string.Empty, (a, b) => $"{a}, {b}")
+                .TrimStart(',', ' ');
+            await _page.SelectAsync(selector, byValues);
+        }
 
-		public async Task<SKBitmap> TakeScreenshotAsync()
-		{
-			var bytes = await _page.ScreenshotDataAsync();
-			return SKBitmap.Decode(bytes);
-		}
+        public async Task<SKBitmap> TakeScreenshotAsync()
+        {
+            var bytes = await _page.ScreenshotDataAsync();
+            return SKBitmap.Decode(bytes);
+        }
 
-		public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
-		{
-			return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
-				methodChainOffset,
-				selectors);
-		}
-	}
+        public async Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors)
+        {
+            return await _domTunnel.FindDomElementsByCssSelectorsAsync(this,
+                methodChainOffset,
+                selectors);
+        }
+    }
 }
