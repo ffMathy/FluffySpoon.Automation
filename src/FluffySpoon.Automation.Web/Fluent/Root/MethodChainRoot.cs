@@ -36,7 +36,7 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 		public IExpectMethodChainRoot Expect =>
 			MethodChainContext.Enqueue(new ExpectMethodChainEntryPoint());
 
-		public IDomElementOfTargetMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetMethodChainNode> TakeScreenshot =>
+		public IDomElementOfTargetsMethodChainNode<IBaseMethodChainNode, ITakeScreenshotOfTargetsMethodChainNode> TakeScreenshot =>
 			MethodChainContext.Enqueue(new TakeScreenshotChainNode());
 
 		public IMouseOnTargetsMethodChainNode<IBaseMethodChainNode, IClickOnTargetsMethodChainNode> Click =>

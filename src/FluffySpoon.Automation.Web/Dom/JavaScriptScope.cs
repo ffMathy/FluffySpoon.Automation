@@ -26,7 +26,7 @@ namespace FluffySpoon.Automation.Web.Dom
         {
             var key = "fluffy-spoon-" + Guid.NewGuid().ToString();
             var accessor = GetAccessorFromKey(key);
-            await _automationFrameworkInstance.EvaluateJavaScriptAsync($"{accessor} = {expression}");
+            await _automationFrameworkInstance.EvaluateJavaScriptExpressionAsync($"{accessor} = {expression}");
 
             _variables.Add(key);
             return accessor;
@@ -40,7 +40,7 @@ namespace FluffySpoon.Automation.Web.Dom
         public async Task DeleteAllVariablesAsync()
         {
             foreach (var key in _variables)
-                await _automationFrameworkInstance.EvaluateJavaScriptAsync($"delete {GetAccessorFromKey(key)}");
+                await _automationFrameworkInstance.EvaluateJavaScriptExpressionAsync($"delete {GetAccessorFromKey(key)}");
         }
     }
 }

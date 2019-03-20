@@ -60,7 +60,7 @@ namespace FluffySpoon.Automation.Web.Dom
         {
             var findElementsScript = GenerateFindElementsScriptFromCssSelectors(domElement.CssSelector);
 
-            await automationFrameworkInstance.EvaluateJavaScriptAsync(
+            await automationFrameworkInstance.EvaluateJavaScriptExpressionAsync(
                 WrapJavaScriptInIsolatedFunction($@"
                     var e;
                     try {{
@@ -82,7 +82,7 @@ namespace FluffySpoon.Automation.Web.Dom
         {
             var findElementsScript = GenerateFindElementsScriptFromCssSelectors(domElement.CssSelector);
 
-            await automationFrameworkInstance.EvaluateJavaScriptAsync(
+            await automationFrameworkInstance.EvaluateJavaScriptExpressionAsync(
                 WrapJavaScriptInIsolatedFunction($@"
                     var e = new FocusEvent('{eventName}');
 
@@ -155,7 +155,7 @@ namespace FluffySpoon.Automation.Web.Dom
 				return JSON.stringify(returnValues);
 			");
 
-            var resultJsonBlobs = await automationFrameworkInstance.EvaluateJavaScriptAsync(finalScriptToExecute);
+            var resultJsonBlobs = await automationFrameworkInstance.EvaluateJavaScriptExpressionAsync(finalScriptToExecute);
             Debug.Assert(resultJsonBlobs != null, "result json blobs not null");
 
             var blobs = JsonConvert.DeserializeObject<ElementWrapper[]>(resultJsonBlobs);

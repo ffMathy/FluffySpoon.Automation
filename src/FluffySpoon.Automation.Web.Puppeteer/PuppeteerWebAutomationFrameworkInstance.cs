@@ -171,7 +171,7 @@ namespace FluffySpoon.Automation.Web.Puppeteer
             }
         }
 
-        public async Task<string> EvaluateJavaScriptAsync(string code)
+        public async Task<string> EvaluateJavaScriptExpressionAsync(string code)
         {
             var blob = await _page.EvaluateExpressionAsync(code);
             return blob?.ToString();
@@ -316,7 +316,12 @@ namespace FluffySpoon.Automation.Web.Puppeteer
 
         public async Task<SKBitmap> TakeScreenshotAsync()
         {
-            var bytes = await _page.ScreenshotDataAsync();
+            var bytes = await _page.ScreenshotDataAsync(new ScreenshotOptions()
+            {
+                FullPage = true,
+                Quality = 100,
+                Type = ScreenshotType.Jpeg
+            });
             return SKBitmap.Decode(bytes);
         }
 

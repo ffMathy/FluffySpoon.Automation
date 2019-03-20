@@ -3,13 +3,14 @@ using FluffySpoon.Automation.Web.Fluent.Root;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-	class TakeScreenshotOfTargetMethodChainNode : MethodChainRoot<TakeScreenshotChainNode>, ITakeScreenshotOfTargetMethodChainNode
+	class TakeScreenshotOfTargetsMethodChainNode : MethodChainRoot<TakeScreenshotChainNode>, ITakeScreenshotOfTargetsMethodChainNode
 	{
-		internal IReadOnlyList<SKBitmap> Screenshots { get; private set; }
+		internal IReadOnlyList<(SKBitmap bitmap, IDomElement element)> Screenshots { get; private set; }
 
 		protected override bool MayCauseElementSideEffects => false;
 
@@ -18,17 +19,17 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 			get => Parent.Elements; protected internal set => Parent.Elements = value;
 		}
 
-		public ITakeScreenshotOfTargetSaveAsMethodChainNode SaveAs(GetScreenshotFilePathDelegate jpegFilePathSelector)
+		public ITakeScreenshotOfTargetsSaveAsMethodChainNode SaveAs(GetScreenshotFilePathDelegate jpegFilePathSelector)
 		{
-			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetSaveAsMethodChainNode(jpegFilePathSelector));
+			return MethodChainContext.Enqueue(new TakeScreenshotOfTargetsSaveAsMethodChainNode(jpegFilePathSelector));
 		}
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			var screenshots = new List<SKBitmap>();
+			var screenshots = new List<(SKBitmap bitmap, IDomElement element)>();
 			using (var bodyScreenshot = await framework.TakeScreenshotAsync())
-			{
-				foreach (var element in Elements)
+            {
+                foreach (var element in Elements)
 				{
 					var elementBounds = element.BoundingClientRectangle;
 					if (elementBounds.Width == 0 || elementBounds.Height == 0)
@@ -50,7 +51,7 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 								elementScreenshot.Height)
 						});
 
-					screenshots.Add(elementScreenshot);
+					screenshots.Add((elementScreenshot, element));
 				}
 			}
 
@@ -61,7 +62,8 @@ namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 
 		public override IBaseMethodChainNode Clone()
 		{
-			return new TakeScreenshotOfTargetMethodChainNode();
+			var node = new TakeScreenshotOfTargetsMethodChainNode();
+            return node;
 		}
 	}
 }

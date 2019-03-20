@@ -10,6 +10,8 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using PuppeteerSharp;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace FluffySpoon.Automation.Web.Sample
 {
@@ -23,12 +25,12 @@ namespace FluffySpoon.Automation.Web.Sample
 
 				serviceCollection.AddJQueryDomSelector();
 
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
-				serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
+                serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
+                serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
+                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetEdgeDriverAsync);
+                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetChromeDriverAsync);
 
-				serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
-
-				var serviceProvider = serviceCollection.BuildServiceProvider();
+                var serviceProvider = serviceCollection.BuildServiceProvider();
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
 				using (automationEngine)
 				{
@@ -49,7 +51,13 @@ namespace FluffySpoon.Automation.Web.Sample
 						.Expect
 						.Count(10).Of("#rso .g:visible");
 
-					Console.WriteLine("Test done!");
+                    await automationEngine
+                        .TakeScreenshot
+                        .Of(elements)
+                        .SaveAs((framework, i, element) =>
+                            "screenshot_" + framework.UserAgentName + "_" + i + "_" + element.TagName + ".jpg");
+
+                    Console.WriteLine("Test done!");
 				}
 			}
 			catch (Exception ex)
@@ -74,28 +82,88 @@ namespace FluffySpoon.Automation.Web.Sample
 					Height = 500
 				}
 			});
-		}
+        }
 
-		public static Task<IWebDriver> GetEdgeDriverAsync()
+        public static Task<IWebDriver> GetChromeDriverAsync()
+        {
+            var service = ChromeDriverService.CreateDefaultService(
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers"));
+
+            service.EnableVerboseLogging = false;
+            service.HideCommandPromptWindow = true;
+            service.SuppressInitialDiagnosticInformation = true;
+
+            service.HostName = "127.0.0.1";
+
+            var options = new ChromeOptions()
+            {
+                Proxy = null,
+                UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+                AcceptInsecureCertificates = true
+            };
+
+            var chromeDriver = new ChromeDriver(
+                service,
+                options);
+            chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+
+            return Task.FromResult<IWebDriver>(chromeDriver);
+        }
+
+        public static Task<IWebDriver> GetEdgeDriverAsync()
 		{
-			var options = new EdgeOptions();
+            var options = new EdgeOptions()
+            {
+                PageLoadStrategy = PageLoadStrategy.Eager,
+                UnhandledPromptBehavior = UnhandledPromptBehavior.Accept,
+                UseInPrivateBrowsing = true
+            };
 
-			var service = EdgeDriverService.CreateDefaultService("C:\\Windows\\SysWOW64", "MicrosoftWebDriver.exe", 52296);
-			var driver = new EdgeDriver(service, options);
-			return Task.FromResult<IWebDriver>(driver);
-		}
+            var pathsToCheck = new[]
+            {
+                Path.Combine("C:", "Windows", "SysWOW64"),
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers")
+            };
+
+            var driverFileName = "MicrosoftWebDriver.exe";
+            var pathToUse = pathsToCheck
+                .First(x => File.Exists(
+                    Path.Combine(x, driverFileName)));
+
+            var service = EdgeDriverService.CreateDefaultService(
+                pathToUse,
+                driverFileName,
+                52296);
+
+            var driver = new EdgeDriver(service, options);
+            return Task.FromResult<IWebDriver>(driver);
+        }
 
 		private static Task<IWebDriver> GetFirefoxDriverAsync()
-		{
-			var options = new FirefoxOptions()
-			{
-				PageLoadStrategy = PageLoadStrategy.Eager,
-				AcceptInsecureCertificates = true,
-				UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
-			};
+        {
+            var options = new FirefoxOptions()
+            {
+                PageLoadStrategy = PageLoadStrategy.Eager,
+                AcceptInsecureCertificates = true,
+                UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+            };
 
-			var driver = new FirefoxDriver(Environment.CurrentDirectory, options);
-			return Task.FromResult<IWebDriver>(driver);
-		}
+            var service = FirefoxDriverService.CreateDefaultService(
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers"));
+
+            service.Host = "127.0.0.1";
+            service.HostName = "127.0.0.1";
+
+            var driver = new FirefoxDriver(
+                service,
+                options);
+            return Task.FromResult<IWebDriver>(driver);
+        }
 	}
 }

@@ -66,17 +66,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\FluffySpoon.Automation.Web.Sample\chromedriver.exe">
-			<Link>Drivers\chromedriver.exe</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\FluffySpoon.Automation.Web.Sample\geckodriver.exe">
-			<Link>Drivers\geckodriver.exe</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\FluffySpoon.Automation.Web.Sample\MicrosoftWebDriver.exe" Link="Drivers\MicrosoftWebDriver.exe">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <None Include="..\FluffySpoon.Automation.Web.Sample\Drivers\chromedriver.exe" Link="Drivers\chromedriver.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\FluffySpoon.Automation.Web.Sample\Drivers\geckodriver.exe" Link="Drivers\geckodriver.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\FluffySpoon.Automation.Web.Sample\Drivers\MicrosoftWebDriver.exe" Link="Drivers\MicrosoftWebDriver.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

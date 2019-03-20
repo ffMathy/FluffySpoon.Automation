@@ -3,7 +3,7 @@ using FluffySpoon.Automation.Web.Dom;
 
 namespace FluffySpoon.Automation.Web.Fluent.TakeScreenshot
 {
-	public interface ITakeScreenshotOfTargetSaveAsMethodChainNode: IBaseMethodChainNode, IAwaitable<IReadOnlyList<IDomElement>>
+	public interface ITakeScreenshotOfTargetsSaveAsMethodChainNode: IBaseMethodChainNode, IAwaitable<IReadOnlyList<IDomElement>>
 	{
 	}
 }

@@ -111,10 +111,10 @@ namespace FluffySpoon.Automation.Web.Selenium
 			return Task.CompletedTask;
 		}
 
-		public Task<string> EvaluateJavaScriptAsync(string code)
+		public Task<string> EvaluateJavaScriptExpressionAsync(string code)
 		{
 			var scriptExecutor = GetScriptExecutor();
-			var result = scriptExecutor.ExecuteScript("return " + code);
+			var result = scriptExecutor.ExecuteScript("return " + code.Trim());
 
 			return Task.FromResult(result?.ToString());
 		}
@@ -192,8 +192,8 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 			try
 			{
-				var bodyDimensionsBlob = await EvaluateJavaScriptAsync(@"
-					return JSON.stringify({
+				var bodyDimensionsBlob = await EvaluateJavaScriptExpressionAsync(@"
+					JSON.stringify({
 						document: {
 							width: Math.max(
 								document.body.scrollWidth, 
@@ -224,9 +224,18 @@ namespace FluffySpoon.Automation.Web.Selenium
 
 				_driver.Manage().Window.Size = newDriverDimensions;
 
-				var screenshot = GetScreenshotDriver().GetScreenshot();
-				return SKBitmap.Decode(screenshot.AsByteArray);
-			}
+                var screenshotDriver = GetScreenshotDriver();
+                var screenshot = screenshotDriver.GetScreenshot();
+
+                using (var image = SKBitmap.Decode(screenshot.AsByteArray))
+                {
+                    return image.Resize(
+                        new SKImageInfo(
+                            newDriverDimensions.Width,
+                            newDriverDimensions.Height),
+                        SKFilterQuality.High);
+                }
+            }
 			finally
 			{
 				_driver.Manage().Window.Size = currentDriverDimensions;

@@ -15,7 +15,7 @@ namespace FluffySpoon.Automation.Web
 
 		Task<IReadOnlyList<IDomElement>> FindDomElementsBySelectorAsync(int methodChainOffset, string selector);
 		Task<IReadOnlyList<IDomElement>> FindDomElementsByCssSelectorsAsync(int methodChainOffset, string[] selectors);
-		Task<string> EvaluateJavaScriptAsync(string code);
+		Task<string> EvaluateJavaScriptExpressionAsync(string code);
 
 		Task OpenAsync(string uri);
 		Task DragDropAsync(IDomElement from, int fromOffsetX, int fromOffsetY, IDomElement to, int toOffsetX, int toOffsetY);

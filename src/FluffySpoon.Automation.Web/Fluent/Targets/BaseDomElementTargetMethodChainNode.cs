@@ -50,8 +50,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Targets
 
 		protected override async Task OnExecuteAsync(IWebAutomationFrameworkInstance framework)
 		{
-			if (_delegatedFrom != null)
-				_selector = _delegatedFrom._selector;
+            if (_delegatedFrom != null)
+            {
+                if(_selector == null)
+                    _selector = _delegatedFrom._selector;
+
+                if(Elements == null && _delegatedFrom.Elements != null && _delegatedFrom.Elements.Count > 0)
+                    Elements = _delegatedFrom.Elements;
+            }
 
 			var hasNoElements = Elements == null;
 			if (hasNoElements && _selector == null)
