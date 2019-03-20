@@ -1,5 +1,3 @@
-An abstraction that makes Selenium or Puppeteer testing fun, stable and fast.
-
 # Selectors
 A selector determines how to select elements. Right now, only jQuery selectors are supported.
 
@@ -183,7 +181,7 @@ await automationEngine.Select.ByValue(1337).From("selector");
 await automationEngine.Wait(until => until.???);
 ```
 
-_All methods that are available on the `until` object are the same as are available on the `Expect` object (see "Expectations" below).
+_All methods that are available on the `until` object are the same as are available on the `Expect` object (see "Expectations" below)._
 
 ## Expectations
 Any expecation made that is not met, will throw an `ExpectationNotMetException`. If you want to wait until a specific expectation is met, see "Waiting" above instead.
