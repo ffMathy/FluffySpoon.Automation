@@ -1,17 +1,23 @@
 ﻿namespace FluffySpoon.Automation.Web.Dom
 {
-	public interface IDomRectangle
+    public interface IDomCoordinate
+    {
+        decimal X { get; }
+        decimal Y { get; }
+    }
+
+	public interface IDomRectangle : IDomCoordinate
 	{
-		double Left { get; }
-		double Top { get; }
+		decimal Left { get; }
+        decimal Top { get; }
 
-		double Right { get; }
-		double Bottom { get; }
+        decimal Right { get; }
+        decimal Bottom { get; }
 
-		double X { get; }
-		double Y { get; }
+        decimal Width { get; }
+        decimal Height { get; }
 
-		double Width { get; }
-		double Height { get; }
-	}
+        IDomCoordinate RelativeCenter { get; }
+        IDomCoordinate Center { get; }
+    }
 }
