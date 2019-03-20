@@ -119,9 +119,15 @@ namespace FluffySpoon.Automation.Web.Fluent.Root
 			});
 		}
 
-		public new TaskAwaiter GetAwaiter()
-		{
-			return MethodChainContext.GetAwaiter();
-		}
-	}
+		TaskAwaiter IAwaitable.GetAwaiter()
+        {
+            var awaitable = (IAwaitable)this;
+            return awaitable.AsTask().GetAwaiter();
+        }
+
+        Task IAwaitable.AsTask()
+        {
+            return MethodChainContext.AsTask();
+        }
+    }
 }

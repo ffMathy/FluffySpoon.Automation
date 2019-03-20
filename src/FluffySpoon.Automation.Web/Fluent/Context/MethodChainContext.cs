@@ -187,9 +187,14 @@ namespace FluffySpoon.Automation.Web.Fluent.Context
 		}
 
 		public TaskAwaiter GetAwaiter()
-		{
-			return RunAllAsync()
-				.GetAwaiter();
-		}
-	}
+        {
+            return AsTask()
+                .GetAwaiter();
+        }
+
+        public Task AsTask()
+        {
+            return RunAllAsync();
+        }
+    }
 }

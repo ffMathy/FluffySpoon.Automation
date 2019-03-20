@@ -90,7 +90,8 @@ namespace FluffySpoon.Automation.Web.Fluent
                     MethodChainOffset,
                     selectors);
                 Elements = refreshedElements;
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 //we ignore elements that may become detached.
             }
@@ -103,8 +104,7 @@ namespace FluffySpoon.Automation.Web.Fluent
 
         public abstract IBaseMethodChainNode Clone();
 
-        [DebuggerHidden]
-        public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
+        public Task<IReadOnlyList<IDomElement>> AsTask()
         {
             return MethodChainContext
                 .RunAllAsync()
@@ -120,8 +120,13 @@ namespace FluffySpoon.Automation.Web.Fluent
 
                         return Elements;
                     },
-                    TaskUtilities.ContinuationOptions)
-                .GetAwaiter();
+                    TaskUtilities.ContinuationOptions);
+        }
+
+        [DebuggerHidden]
+        public TaskAwaiter<IReadOnlyList<IDomElement>> GetAwaiter()
+        {
+            return AsTask().GetAwaiter();
         }
 
         public override string ToString()

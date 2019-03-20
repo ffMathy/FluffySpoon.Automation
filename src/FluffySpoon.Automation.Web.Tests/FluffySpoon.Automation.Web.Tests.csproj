@@ -75,6 +75,9 @@
 	  <None Include="..\FluffySpoon.Automation.Web.Sample\Drivers\MicrosoftWebDriver.exe" Link="Drivers\MicrosoftWebDriver.exe">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Include="..\FluffySpoon.Automation.Web.Sample\Drivers\operadriver.exe" Link="Drivers\operadriver.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

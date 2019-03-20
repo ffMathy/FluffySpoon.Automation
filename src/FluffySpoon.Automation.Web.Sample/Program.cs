@@ -12,6 +12,7 @@ using PuppeteerSharp;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using OpenQA.Selenium.Opera;
 
 namespace FluffySpoon.Automation.Web.Sample
 {
@@ -28,6 +29,7 @@ namespace FluffySpoon.Automation.Web.Sample
                 serviceCollection.AddPuppeteerWebAutomationFrameworkInstance(GetPuppeteerDriverAsync);
 
                 serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetFirefoxDriverAsync);
+                //serviceCollection.AddSeleniumWebAutomationFrameworkInstance(GetOperaDriverAsync);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 				var automationEngine = serviceProvider.GetRequiredService<IWebAutomationEngine>();
@@ -35,8 +37,7 @@ namespace FluffySpoon.Automation.Web.Sample
 				{
 					await automationEngine.InitializeAsync();
 
-					await automationEngine
-						.Open("https://google.com");
+                    await automationEngine.Open("https://google.com");
 
 					await automationEngine
 						.Enter("this is a very long test that works").In("input[type=text]:visible")
@@ -142,7 +143,34 @@ namespace FluffySpoon.Automation.Web.Sample
             return Task.FromResult<IWebDriver>(driver);
         }
 
-		private static Task<IWebDriver> GetFirefoxDriverAsync()
+        private static Task<IWebDriver> GetOperaDriverAsync()
+        {
+            var options = new OperaOptions()
+            {
+                AcceptInsecureCertificates = true,
+                UnhandledPromptBehavior = UnhandledPromptBehavior.Accept
+            };
+
+            var service = OperaDriverService.CreateDefaultService(
+                Path.Combine(
+                    Environment.CurrentDirectory,
+                    "Drivers"),
+                Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.LocalApplicationData),
+                    "Programs",
+                    "Opera",
+                    "launcher.exe"));
+
+            service.HostName = "127.0.0.1";
+
+            var driver = new OperaDriver(
+                service,
+                options);
+            return Task.FromResult<IWebDriver>(driver);
+        }
+
+        private static Task<IWebDriver> GetFirefoxDriverAsync()
         {
             var options = new FirefoxOptions()
             {
