@@ -13,7 +13,8 @@ namespace FluffySpoon.Automation.Web.Tests
 			var path = Path.Combine(
 				Directory.GetCurrentDirectory(),
 				"wwwroot");
-			var server = WebHost.CreateDefaultBuilder()
+            var server = WebHost.CreateDefaultBuilder()
+                .UseUrls("http://localhost:14567")
 				.Configure(a => a
 					.UseStaticFiles(new StaticFileOptions()
 					{
