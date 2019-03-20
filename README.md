@@ -10,7 +10,7 @@ A selector determines how to select elements. Right now, only jQuery selectors a
 install-package FluffySpoon.Automation.Css
 ```
 
-```
+```csharp
 serviceCollection.AddJQueryDomSelector();
 ```
 
@@ -19,7 +19,7 @@ serviceCollection.AddJQueryDomSelector();
 install-package FluffySpoon.Automation.JQuery
 ```
 
-```
+```csharp
 serviceCollection.AddCssDomSelector();
 ```
 
@@ -79,12 +79,12 @@ using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationE
 # Features
 
 ## Opening a URL
-```
+```csharp
 await automationEngine.Open("https://example.com");
 ```
 
 ## Taking a screenshot
-```
+```csharp
 await automationEngine
 	.TakeScreenshot
 	.Of("selector")
@@ -95,32 +95,32 @@ await automationEngine
 ## Mouse operations
 
 ### Single clicking
-```
+```csharp
 var elementsClicked = await automationEngine.Click.On("selector");
 ```
 
 ### Double clicking
-```
+```csharp
 var elementsClicked = await automationEngine.DoubleClick.On("selector");
 ```
 
 ### Right clicking
-```
+```csharp
 var elementsClicked = await automationEngine.RightClick.On("selector");
 ```
 
 ### Hovering an element
-```
+```csharp
 var elementsHovered = await automationEngine.Hover.On("selector");
 ```
 
 ## Dragging & dropping
-```
+```csharp
 var elementsDragged = await automationEngine.Drag.From("selector").To("selector");
 ```
 
 ## Typing in elements
-```
+```csharp
 var elementsTypedIn = await automationEngine.Enter("some text").In("selector");
 ```
 
@@ -132,7 +132,7 @@ var elements = await automationEngine.Find("selector");
 ## Focusing an element
 *Currently only supports a single element.*
 
-```
+```csharp
 var elementsFocused = await automationEngine.Focus.On("selector");
 ```
 
@@ -141,17 +141,17 @@ var elementsFocused = await automationEngine.Focus.On("selector");
 ### Multiple selections
 
 #### Selecting by texts
-```
+```csharp
 await automationEngine.Select.ByTexts("Bar", "Baz", ...).From("selector");
 ```
 
 #### Selecting by indices
-```
+```csharp
 await automationEngine.Select.ByIndices(0, 2, ...).From("selector");
 ```
 
 #### Selecting by values
-```
+```csharp
 await automationEngine.Select.ByValues("value1", "value2", ...).From("selector");
 ```
 
@@ -162,17 +162,17 @@ await automationEngine.Select.ByValues(1337, 1338, ...).From("selector");
 ### Single selection
 
 #### Selecting by text
-```
+```csharp
 await automationEngine.Select.ByText("Bar").From("selector");
 ```
 
 #### Selecting by index
-```
+```csharp
 await automationEngine.Select.ByIndex(0).From("selector");
 ```
 
 #### Selecting by value
-```
+```csharp
 await automationEngine.Select.ByValue("value").From("selector");
 ```
 
@@ -181,7 +181,7 @@ await automationEngine.Select.ByValue(1337).From("selector");
 ```
 
 ## Waiting
-```
+```csharp
 await automationEngine.Wait(until => until.???);
 ```
 
@@ -191,27 +191,27 @@ _All methods that are available on the `until` object are the same as are availa
 Any expecation made that is not met, will throw an `ExpectationNotMetException`. If you want to wait until a specific expectation is met, see "Waiting" above instead.
 
 ### Specific class on an element
-```
+```csharp
 await automationEngine.Expect.Class.Of("selector");
 ```
 
 ### Amount of elements that exist
-```
+```csharp
 await automationEngine.Expect.Count(10).Of("selector");
 ```
 
 ### At least one element exists
-```
+```csharp
 await automationEngine.Expect.Exists.Of("selector");
 ```
 
 ### Text in element
-```
+```csharp
 await automationEngine.Expect.Text("my text").In("selector");
 ```
 
 ### Value of element
-```
+```csharp
 await automationEngine.Expect.Value("value").Of("selector");
 ```
 
