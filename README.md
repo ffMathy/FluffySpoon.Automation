@@ -1,39 +1,8 @@
-# Selectors
-A selector determines how to select elements. Right now, only jQuery selectors are supported.
-
-## Css
-```
-install-package FluffySpoon.Automation.Css
-```
-
-```csharp
-serviceCollection.AddJQueryDomSelector();
-```
-
-## jQuery
-```
-install-package FluffySpoon.Automation.JQuery
-```
-
-```csharp
-serviceCollection.AddCssDomSelector();
-```
-
-# Automation frameworks
-An automation framework decides how the automation is done. Can use either Selenium or Puppeteer currently.
-
-## Selenium
-```
-install-package FluffySpoon.Automation.Selenium
-```
-
-## Puppeteer
-```
-install-package FluffySpoon.Automation.Puppeteer
-```
+# Yet another Selenium framework
+But done right this time.
 
 # Example
-The following test searches for something in Google and asserts that the results are present in both Chrome, Edge and Firefox on Selenium, and Chromium on Puppeteer.
+The following test searches for something in Google and asserts that the results are present in both Chrome, Edge and Firefox on Selenium, and Chromium on Puppeteer. All browsers execute their actions in parallel.
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -70,6 +39,40 @@ using (var automationEngine = serviceProvider.GetRequiredService<IWebAutomationE
 
 	Console.WriteLine("Test done!");
 }
+```
+
+# Selectors
+A selector determines how to select elements. Right now, only jQuery selectors are supported.
+
+## Css
+```
+install-package FluffySpoon.Automation.Css
+```
+
+```csharp
+serviceCollection.AddJQueryDomSelector();
+```
+
+## jQuery
+```
+install-package FluffySpoon.Automation.JQuery
+```
+
+```csharp
+serviceCollection.AddCssDomSelector();
+```
+
+# Automation frameworks
+An automation framework decides how the automation is done. Can use either Selenium or Puppeteer currently.
+
+## Selenium
+```
+install-package FluffySpoon.Automation.Selenium
+```
+
+## Puppeteer
+```
+install-package FluffySpoon.Automation.Puppeteer
 ```
 
 # Features
