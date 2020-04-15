@@ -1,5 +1,5 @@
-# Yet another Selenium framework
-But done right this time.
+# Yet another Selenium/Puppeteer framework
+But done right this time. Contributions are welcome.
 
 # Example
 The following test searches for something in Google and asserts that the results are present in both Chrome, Edge and Firefox on Selenium, and Chromium on Puppeteer. All browsers execute their actions in parallel.
